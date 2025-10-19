@@ -1,6 +1,30 @@
-﻿namespace BookManagementApp.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace BookManagementApp.Models
 {
     public class Book
     {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Kitap adı zorunludur.")]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Yazar adı zorunludur.")]
+        [StringLength(100)]
+        public string Author { get; set; } = string.Empty;
+
+        [StringLength(500)]
+        public string? Description { get; set; }
+
+        [Range(0, 9999.99, ErrorMessage = "Fiyat 0 ile 9999 arasında olmalı.")]
+        public decimal Price { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Stok sayısı negatif olamaz.")]
+        public int Stock { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime CreateDate { get; set; } = DateTime.Now;
     }
 }
