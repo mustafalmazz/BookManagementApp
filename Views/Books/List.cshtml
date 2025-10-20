@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Book>
+@{
+    ViewData["Title"] = "Book List";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Author</td>
+                <td>₺@item.Price</td>
+                <td>@item.Description</td>
+                <td>
+                    <a href="/Books/Delete/@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="/Books/Edit/@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

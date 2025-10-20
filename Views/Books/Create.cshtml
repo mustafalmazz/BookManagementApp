@@ -1,0 +1,34 @@
+﻿@model Book
+
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<hr />
+
+<form method="post" asp-action="Create">
+    <input type="hidden" asp-for="Id"/>
+    <div class="mb-2">
+        <label class="form-label" asp-for="Name">Book Name</label>
+        <input class="form-control" asp-for="Name" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label" asp-for="Author">Book Author</label>
+        <input class="form-control" asp-for="Author" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label" asp-for="Description">Book Description</label>
+        <input class="form-control" asp-for="Description" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label" asp-for="Price">Book Price</label>
+        <input class="form-control" asp-for="Price" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label" asp-for="Stock">Book Stock</label>
+        <input class="form-control" asp-for="Stock" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>

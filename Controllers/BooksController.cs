@@ -58,10 +58,11 @@ namespace BookManagementApp.Controllers
         [HttpPost]
         public IActionResult Edit(Book model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return View(model);
             }
+           
             var book = _context.Books.FirstOrDefault(b => b.Id == model.Id);
             if (book == null)
             {
@@ -74,7 +75,7 @@ namespace BookManagementApp.Controllers
             book.Stock = model.Stock;
             _context.SaveChanges();
 
-            return View();
+            return RedirectToAction("List");
         }
         public IActionResult Create()
         {
@@ -83,7 +84,12 @@ namespace BookManagementApp.Controllers
         [HttpPost]
         public IActionResult Create(Book model)
         {
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(model);
+            //}
             _context.Books.Add(model);
+            _context.SaveChanges();
             return RedirectToAction("List");
         }
         public IActionResult Delete(int? id)
@@ -101,7 +107,5 @@ namespace BookManagementApp.Controllers
             _context.SaveChanges();
             return RedirectToAction("List");
         }
-        
-        
     }
 }
