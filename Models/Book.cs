@@ -26,5 +26,8 @@ namespace BookManagementApp.Models
 
         [DataType(DataType.Date)]
         public DateTime CreateDate { get; set; } = DateTime.Now;
+        [Display(Name = "Kategori")]
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 }

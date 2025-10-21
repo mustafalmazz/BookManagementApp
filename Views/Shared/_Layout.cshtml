@@ -22,9 +22,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        <form class="d-flex ms-auto" asp-controller="Books" asp-action="Search" method="get">
+                            <input class="form-control me-2" type="search" name="q" placeholder="Kitap veya yazar ara..." aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit">
+                                Ara</button>
+                        </form>
+
+
                     </ul>
                 </div>
             </div>

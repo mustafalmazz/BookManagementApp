@@ -1,5 +1,6 @@
 ﻿using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
 
 namespace BookManagementApp.Controllers
 {
@@ -15,19 +16,20 @@ namespace BookManagementApp.Controllers
             var books = _context.Books.ToList();
             return View(books);
         }
-        public IActionResult Search(int? id)
+        public IActionResult Search(string q)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(q))
             {
-                return NotFound();
+                return RedirectToAction("List");
             }
-            var book = _context.Books.FirstOrDefault(b => b.Id == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-            return View(book);
+
+            var books = _context.Books
+                .Where(a => a.Name.Contains(q) || a.Author.Contains(q))
+                .ToList();
+
+            return View("List", books);
         }
+
         public IActionResult Details(int? id)
         {
             if (id == null)
