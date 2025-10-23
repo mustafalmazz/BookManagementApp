@@ -6,6 +6,7 @@
 
 <h1 class="text-center">Category List</h1>
 <hr />
+<a href="/category/create" class="btn btn-outline-success mb-2">Add New</a>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -19,7 +20,6 @@
         @foreach (var item in Model)
         {
             <tr>
-
                 <td>@item.Id</td>
                 <td>@item.CategoryName</td>
                 <td>
@@ -29,5 +29,4 @@
             </tr>
         }
     </tbody>
-
 </table>
