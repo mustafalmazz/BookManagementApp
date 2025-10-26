@@ -8,7 +8,7 @@
 
 <hr />
 
-<form method="post" asp-action="Create">
+<form method="post" asp-action="Create" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id"/>
     <div class="mb-2">
         <label class="form-label" asp-for="Name">Book Name</label>
@@ -29,6 +29,16 @@
     <div class="mb-2">
         <label class="form-label" asp-for="Stock">Book Stock</label>
         <input class="form-control" asp-for="Stock" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label" asp-for="Image">Image</label>
+        <input class="form-control" type="file" name="ImageFile" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Book Category</label>
+        <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
+            <option value="">-- Select Category --</option>
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Add</button>
 </form>

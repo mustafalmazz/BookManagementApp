@@ -2,7 +2,9 @@
 
 @{
     ViewData["Title"] = "Category List";
+
 }
+
 
 <h1 class="text-center">Category List</h1>
 <hr />
@@ -13,6 +15,7 @@
         <tr>
             <th>Category Id</th>
             <th>Category Name</th>
+            <th>Books</th>
             <th style="width:200px;">Operations</th>
         </tr>
     </thead>
@@ -22,6 +25,31 @@
             <tr>
                 <td>@item.Id</td>
                 <td>@item.CategoryName</td>
+                <td>
+                    @if (item.Books != null && item.Books.Any())
+                    {
+                        var booksToShow = item.Books.Take(3).ToList();
+                        for (int i = 0; i < booksToShow.Count; i++)
+                        {
+                            @booksToShow[i].Name
+
+                            @if (i < booksToShow.Count - 1)
+                            {
+                                <text>, </text>
+                            }
+                        }
+
+                        @if (item.Books.Count() > 3)
+                        {
+                            <text>...</text>
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">Bu Kategoriye Henüz Kitap Eklenmemiş</span>
+                    }
+                </td>
+
                 <td>
                     <a class="btn btn-danger" href="/category/delete/@item.Id">Delete</a>
                     <a class="btn btn-success" href="/category/edit/@item.Id">Edit</a>

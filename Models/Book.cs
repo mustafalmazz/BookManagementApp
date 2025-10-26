@@ -10,6 +10,8 @@ namespace BookManagementApp.Models
         [Required(ErrorMessage = "Kitap adı zorunludur.")]
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
+        [Display(Name = "Resim")]
+        public string? Image {  get; set; } 
 
         [Required(ErrorMessage = "Yazar adı zorunludur.")]
         [StringLength(100)]

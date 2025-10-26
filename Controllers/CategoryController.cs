@@ -1,5 +1,6 @@
 ﻿using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 
 namespace BookManagementApp.Controllers
@@ -13,7 +14,7 @@ namespace BookManagementApp.Controllers
         }
         public IActionResult List()
         {
-            var list = _context.Categories.ToList();
+            var list = _context.Categories.Include(x=>x.Books).ToList();
             return View(list);
         }
         public IActionResult Create()
@@ -41,13 +42,19 @@ namespace BookManagementApp.Controllers
             {
                 return NotFound();
             }
-            var category = _context.Categories.FirstOrDefault(x=>x.Id == id);
+            var category = _context.Categories.Include(x => x.Books).FirstOrDefault(x=>x.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
+            var viewModel = new CategoryEditViewModel
+            {
+                Books = _context.Books.ToList(),
+                Category = category
+            };
+            
 
-            return View(category);
+            return View(viewModel);
         }
         [HttpPost]
         public IActionResult Edit(Category category)
