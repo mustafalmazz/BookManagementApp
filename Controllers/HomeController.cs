@@ -1,22 +1,37 @@
 using System.Diagnostics;
 using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookManagementApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly MyDbContext _context;
+        public HomeController(MyDbContext context)
         {
-            _logger = logger;
+             _context = context;
         }
-
         public IActionResult Index()
         {
-            return View();
+            var model = _context.Books.ToList();
+            return View(model);
         }
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var book = _context.Books
+                        .Include(b => b.Category) 
+                        .FirstOrDefault(b => b.Id == id);
+
+            if (book == null)
+                return NotFound();
+
+            return View(book); 
+        }
+
 
         public IActionResult Privacy()
         {

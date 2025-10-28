@@ -31,8 +31,12 @@ namespace BookManagementApp
             app.UseAuthorization();
 
             app.MapControllerRoute(
+              name: "areas",
+              pattern: "{area:exists}/{controller=Books}/{action=List}/{id?}");
+
+            app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Books}/{action=List}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

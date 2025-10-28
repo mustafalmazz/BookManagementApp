@@ -1,8 +1,249 @@
-﻿@{
+﻿@model IEnumerable<Book>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        padding: 60px 0 40px;
+        margin-bottom: 50px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,106.7C1248,96,1344,96,1392,96L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-style: italic;
+            position: relative;
+        }
+
+    .book-card {
+        transition: all 0.4s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: visible;
+        background: #fff9f0;
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.15);
+        position: relative;
+    }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 15px;
+            background: radial-gradient(circle, rgba(255, 215, 130, 0.6) 0%, rgba(205, 164, 94, 0.4) 30%, rgba(139, 111, 71, 0.2) 60%, transparent 100%);
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        book-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 19px 19px rgba(107, 85, 65, 0.1); 
+}
+
+    .book-card:hover::before {
+        width: 110%; 
+        height: 110%; 
+        opacity: 1; 
+       
+    }
+
+    @@keyframes glow-pulse {
+        0%, 100%
+
+    {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    }
+
+    .book-card .card-img-top {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        transition: all 0.4s ease;
+        border-bottom: 3px solid #8b6f47;
+    }
+
+    .book-card .card-body {
+        padding: 25px;
+        background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
+    }
+
+    .card-title {
+        color: #4a3f35;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .author-name {
+        color: #8b6f47;
+        font-size: 1rem;
+        font-style: italic;
+        margin-bottom: 15px;
+        font-weight: 500;
+    }
+
+    .book-price {
+        font-size: 1.8rem;
+        color: #a0785a;
+        font-weight: 700;
+        margin: 15px 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .book-category {
+        display: inline-block;
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(107, 85, 65, 0.3);
+    }
+
+    .details-btn {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        border: none;
+        color: #f5f0e8;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
+    }
+
+        .details-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(107, 85, 65, 0.5);
+            color: #f5f0e8;
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+        }
+
+    .book-icon {
+        font-size: 2rem;
+        margin-right: 15px;
+        vertical-align: middle;
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .container-custom {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    @@media (max-width: 768px) {
+        .page-header h1
+
+    {
+        font-size: 2.5rem;
+    }
+
+    }
+
+    /* Dekoratif ögeler */
+    .decorative-line {
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #8b6f47, transparent);
+        margin: 30px auto;
+        width: 200px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="container">
+        <h1 class="text-center">
+            <span class="book-icon">📚</span>
+            Kitap Koleksiyonumuz
+        </h1>
+        <div class="decorative-line"></div>
+        <p class="text-center">Hayallerinize açılan kapıları keşfedin</p>
+    </div>
+</div>
+
+<div class="container-custom">
+    <div class="row g-4">
+        @foreach (var book in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card book-card shadow-sm">
+                    <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/no-image.png" : book.Image)"
+                         class="card-img-top"
+                         alt="@book.Name">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-center">@book.Name</h5>
+                        <p class="author-name text-center">@book.Author</p>
+
+                        @if (book.Category?.CategoryName != null)
+                        {
+                            <div class="text-center">
+                                <span class="book-category">@book.Category.CategoryName</span>
+                            </div>
+                        }
+
+                        <p class="book-price text-center">@book.Price.ToString("0.00") ₺</p>
+
+                        <div class="mt-auto text-center">
+                            <a href="/Home/Details/@book.Id" class="btn details-btn">
+                                Detayları Gör
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

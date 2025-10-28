@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookManagementApp.Controllers
+namespace BookManagementApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class BooksController : Controller
     {
         private readonly MyDbContext _context;

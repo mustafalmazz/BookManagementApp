@@ -1,0 +1,98 @@
+﻿@*
+    Admin Paneli Layout
+    BookManagementApp – 2025
+*@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            width: 240px;
+            background-color: #343a40;
+            color: white;
+            flex-shrink: 0;
+        }
+
+            .sidebar .nav-link {
+                color: #adb5bd;
+                transition: 0.2s;
+            }
+
+                .sidebar .nav-link.active,
+                .sidebar .nav-link:hover {
+                    color: white;
+                    background-color: #495057;
+                }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: #f1f1f1;
+            border-top: 1px solid #ddd;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column p-3">
+        <h4 class="text-center mb-4">📚 Admin Panel</h4>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+                   asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Books" ? "active" : "")"
+                   asp-area="Admin" asp-controller="Books" asp-action="List">
+                    <i class="bi bi-book"></i> Books
+                </a>
+            </li>
+            <li>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+                   asp-area="Admin" asp-controller="Category" asp-action="List">
+                    <i class="bi bi-folder"></i> Categories
+                </a>
+            </li>
+        </ul>
+
+        <hr />
+
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-light mt-auto">Siteye Dön</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+       
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
