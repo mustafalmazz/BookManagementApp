@@ -86,6 +86,7 @@ namespace BookManagementApp.Areas.Admin.Controllers
             book.Stock = model.Stock;
             book.CategoryId = model.CategoryId;
             book.Image = model.Image;
+            book.TotalPages = model.TotalPages;
             _context.SaveChanges();
 
             return RedirectToAction("List");

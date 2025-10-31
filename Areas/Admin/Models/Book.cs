@@ -11,7 +11,9 @@ namespace BookManagementApp.Models
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
         [Display(Name = "Resim")]
-        public string? Image {  get; set; } 
+        public string? Image {  get; set; }
+        [Display(Name = "Sayfa Sayısı")]
+        public int? TotalPages { get; set; }
 
         [Required(ErrorMessage = "Yazar adı zorunludur.")]
         [StringLength(100)]

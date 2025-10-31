@@ -12,6 +12,10 @@ namespace BookManagementApp.Controllers
         {
              _context = context;
         }
+        private void LoadCategories()
+        {
+            ViewBag.Categories = _context.Categories.ToList();
+        }
         public IActionResult Index()
         {
             var model = _context.Books.ToList();
@@ -31,7 +35,29 @@ namespace BookManagementApp.Controllers
 
             return View(book); 
         }
+        public IActionResult Search(string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                return RedirectToAction("Index");
+            }
 
+            var books = _context.Books
+                .Where(a => a.Name.Contains(q) || a.Author.Contains(q))
+                .ToList();
+
+            return View("Index",books);
+        }
+        public IActionResult List()
+        {
+            var model = _context.Books.ToList();
+            return View(model);
+        }
+        public IActionResult CategoryList()
+        {
+            var books = _context.Categories.Include(a => a.Books).ToList();
+            return View(books);
+        }
 
         public IActionResult Privacy()
         {

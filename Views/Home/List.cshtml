@@ -75,31 +75,27 @@
             opacity: 0;
         }
 
-        book-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 19px 19px rgba(107, 85, 65, 0.1); 
-}
+    book-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 19px 19px rgba(107, 85, 65, 0.1);
+    }
 
     .book-card:hover::before {
-        width: 110%; 
-        height: 110%; 
-        opacity: 1; 
-       
+        width: 110%;
+        height: 110%;
+        opacity: 1;
     }
 
     @@keyframes glow-pulse {
-        0%, 100%
+        0%, 100% {
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(1);
+        }
 
-    {
-        opacity: 0.8;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.05);
-    }
-
+        50% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
     }
 
     .book-card .card-img-top {
@@ -189,13 +185,11 @@
     }
 
     @@media (max-width: 768px) {
-        .page-header h1
-
-    {
-        font-size: 2.5rem;
+        .page-header h1 {
+            font-size: 2.5rem;
+        }
     }
 
-    }
     .decorative-line {
         height: 3px;
         background: linear-gradient(90deg, transparent, #8b6f47, transparent);
@@ -238,7 +232,7 @@
                             </div>
                         }
 
-                        <p class="book-price text-center">Sayfa Sayısı: @book.TotalPages</p>
+                       
 
                         <div class="mt-auto text-center">
                             <a href="/Home/Details/@book.Id" class="btn details-btn">

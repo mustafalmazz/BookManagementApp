@@ -16,6 +16,7 @@
             <th>Price</th>
             <th>Description</th>
             <th>Category</th>
+            <th>TotalPage</th>
             
             <th style="width:150px;">Operations</th>
         </tr>
@@ -30,6 +31,7 @@
                 <td>₺@item.Price</td>
                 <td>@item.Description</td>
                 <td>@item.Category?.CategoryName</td>
+                <td>@item.TotalPages</td>
                 <td>
                     <a  class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
