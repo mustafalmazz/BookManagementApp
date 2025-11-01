@@ -69,5 +69,18 @@ namespace BookManagementApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public async Task<IActionResult> BooksByCategory(int id)
+        {
+            var books = await _context.Books
+                .Include(b => b.Category)
+                .Where(b => b.CategoryId == id)
+                .ToListAsync();
+
+            
+            var category = await _context.Categories.FindAsync(id);
+            ViewData["CategoryName"] = category?.CategoryName ?? "Kategori";
+
+            return View("List", books); 
+        }
     }
 }

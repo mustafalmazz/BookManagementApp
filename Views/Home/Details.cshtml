@@ -4,6 +4,33 @@
 }
 
 <style>
+    /* Küçük versiyon: Devamını Oku butonu */
+    .btn-secondary-mini {
+        background: transparent;
+        border: 2px solid #8b6f47;
+        color: #8b6f47;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        text-transform: none;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        text-decoration: none;
+        margin-top: 8px;
+    }
+
+        .btn-secondary-mini:hover {
+            background: #8b6f47;
+            color: #f5f0e8;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(107, 85, 65, 0.3);
+        }
+
     body {
         background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
         font-family: 'Georgia', serif;
@@ -346,10 +373,7 @@
         <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="/Books/List"><i class="bi bi-house-door"></i> Ana Sayfa</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="/Books/List">Kitaplar</a>
+                    <a href="/Home/List">Kitaplar</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
             </ol>
@@ -365,20 +389,7 @@
                              class="book-image"
                              alt="@Model.Name">
 
-                        @if (Model.Stock > 0)
-                        {
-                            <div class="stock-badge">
-                                <i class="bi bi-check-circle-fill"></i>
-                                Stokta (@Model.Stock adet)
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="stock-badge out-of-stock">
-                                <i class="bi bi-x-circle-fill"></i>
-                                Stokta Yok
-                            </div>
-                        }
+                       
                     </div>
                 </div>
 
@@ -387,54 +398,47 @@
                     <h1 class="book-title">@Model.Name</h1>
 
                     <div class="book-author">
-                        <span class="author-icon">✍️</span>
+                        <i class="fa-solid fa-feather"></i>
                         @Model.Author
                     </div>
+
+
+
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        var shortDesc = Model.Description.Length > 260
+                        ? Model.Description.Substring(0, 260) + "..."
+                        : Model.Description;
+                        <div class="description-section">
+                            <h3 class="description-title">
+                                <i class="bi bi-book-half"></i>
+                                Kitap Notlarım
+                            </h3>
+
+                            <p id="shortDesc" class="description-text">@shortDesc</p>
+
+                            @if (Model.Description.Length > 260)
+                            {
+                                <p id="fullDesc" class="description-text" style="display:none;">@Model.Description</p>
+                                <a href="javascript:void(0)" id="toggleDesc" class="btn-secondary-mini">Devamını Oku <i class="fa-solid fa-arrow-right"></i></a>
+
+
+                            }
+                        </div>
+                    }
 
                     @if (Model.Category != null)
                     {
                         <span class="book-category-badge">
-                            <i class="bi bi-tag-fill"></i> @Model.Category.CategoryName
+                            Kategori:  @Model.Category.CategoryName
                         </span>
-                    }
-
-                    <div class="price-section">
-                        <div class="price-label">Fiyat</div>
-                        <div class="price-value">@Model.Price.ToString("0.00") ₺</div>
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(Model.Description))
-                    {
-                        <div class="description-section">
-                            <h3 class="description-title">
-                                <i class="bi bi-book-half"></i>
-                                Açıklama
-                            </h3>
-                            <p class="description-text">@Model.Description</p>
-                        </div>
                     }
 
                     <div class="decorative-divider"></div>
 
-                    <!-- Info Grid -->
                     <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="bi bi-box-seam"></i> Stok Durumu
-                            </div>
-                            <div class="info-value">
-                                @if (Model.Stock > 0)
-                                {
-                                    <i class="bi bi-check-circle-fill" style="color: #48bb78;"></i>
-                                    <span>@Model.Stock adet mevcut</span>
-                                }
-                                else
-                                {
-                                    <i class="bi bi-x-circle-fill" style="color: #f56565;"></i>
-                                    <span>Tükendi</span>
-                                }
-                            </div>
-                        </div>
+                       
 
                         <div class="info-item">
                             <div class="info-label">
@@ -446,31 +450,30 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Action Buttons -->
-                    <div class="action-buttons">
-                        @if (Model.Stock > 0)
-                        {
-                            <a href="#" class="btn-primary-custom">
-                                <i class="bi bi-cart-plus"></i>
-                                Sepete Ekle
-                            </a>
-                        }
-                        else
-                        {
-                            <button class="btn-primary-custom" disabled style="opacity: 0.6; cursor: not-allowed;">
-                                <i class="bi bi-x-circle"></i>
-                                Stokta Yok
-                            </button>
-                        }
-
-                        <a href="/Books/List" class="btn-secondary-custom">
-                            <i class="bi bi-arrow-left-circle"></i>
-                            Geri Dön
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById("toggleDesc");
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", function () {
+                const shortDesc = document.getElementById("shortDesc");
+                const fullDesc = document.getElementById("fullDesc");
+
+                if (fullDesc.style.display === "none") {
+                    fullDesc.style.display = "block";
+                    shortDesc.style.display = "none";
+                    toggleBtn.innerHTML = 'Küçült <i class="fa-solid fa-arrow-up"></i>';
+                } else {
+                    fullDesc.style.display = "none";
+                    shortDesc.style.display = "block";
+                     toggleBtn.innerHTML = 'Devamını Oku <i class="fa-solid fa-arrow-right"></i>';
+                }
+            });
+        }
+    });
+</script>
+

@@ -165,10 +165,9 @@
     }
 
         .details-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(107, 85, 65, 0.5);
+            transform: scale(1.01);
             color: #f5f0e8;
-            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+            background: linear-gradient(#a0785a 0%, #8b6f47 100%);
         }
 
     .book-icon {
@@ -198,10 +197,30 @@
     }
 </style>
 
+
+
+
+@if (ViewData["CategoryName"] != null)
+{
+    <div class="page-header">
+        <div class="container text-center">
+            <h1>
+                <span class="book-icon">📚</span>
+             @ViewData["CategoryName"] 
+                <span class="book-icon">📚</span>
+                <br />
+                <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8;">
+                    Toplam @Model.Count() kitap bulunmaktadır!
+                </small>
+            </h1>
+        </div>
+    </div>
+}
+else
+{
 <div class="page-header">
     <div class="container text-center">
         <h1>
-            <span class="book-icon">📚</span>
             Kitap Koleksiyonumuz
             <br />
             <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8;">
@@ -210,7 +229,7 @@
         </h1>
     </div>
 </div>
-
+}
 
 <div class="container-custom">
     <div class="row g-4">
@@ -225,14 +244,8 @@
                         <h5 class="card-title text-center">@book.Name</h5>
                         <p class="author-name text-center">@book.Author</p>
 
-                        @if (book.Category?.CategoryName != null)
-                        {
-                            <div class="text-center">
-                                <span class="book-category">@book.Category.CategoryName</span>
-                            </div>
-                        }
+                        
 
-                       
 
                         <div class="mt-auto text-center">
                             <a href="/Home/Details/@book.Id" class="btn details-btn">
