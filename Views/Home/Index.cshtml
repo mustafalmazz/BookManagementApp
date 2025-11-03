@@ -1,10 +1,8 @@
 ﻿@model IEnumerable<Book>
-@* site okunulan kitapları dijital olarak bir kütüphanede tuttuğumuz formata ve kitaplar hakkında notlarımız varsa onları da ekleyebildiğimiz bir uygulamaya evrilebilir = Dijital Kütüphanem
- *@
+
 @{
     ViewData["Title"] = "Home Page";
 }
-
 
 <style>
     body {
@@ -49,6 +47,120 @@
             position: relative;
         }
 
+    .container-custom {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        gap: 30px;
+    }
+
+    /* Filtre Paneli */
+    .filter-sidebar {
+        width: 280px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+
+    .filter-card {
+        background: #fff9f0;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.15);
+        margin-bottom: 20px;
+    }
+
+    .filter-title {
+        color: #4a3f35;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #8b6f47;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filter-section {
+        margin-bottom: 25px;
+    }
+
+        .filter-section:last-child {
+            margin-bottom: 0;
+        }
+
+    .filter-label {
+        color: #6b5541;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .filter-option {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .filter-option:hover {
+            background: rgba(139, 111, 71, 0.1);
+        }
+
+        .filter-option input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #8b6f47;
+            cursor: pointer;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            color: #4a3f35;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+    .clear-filters-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        border: none;
+        color: #f5f0e8;
+        padding: 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+        margin-top: 20px;
+    }
+
+        .clear-filters-btn:hover {
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
+        }
+
+    /* Kitap Grid */
+    .books-container {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
     .book-card {
         transition: all 0.4s ease;
         border: none;
@@ -75,45 +187,33 @@
             opacity: 0;
         }
 
-        book-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 19px 19px rgba(107, 85, 65, 0.1); 
-}
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 19px 19px rgba(107, 85, 65, 0.1);
+        }
 
-    .book-card:hover::before {
-        width: 110%; 
-        height: 110%; 
-        opacity: 1; 
-       
-    }
+            .book-card:hover::before {
+                width: 110%;
+                height: 110%;
+                opacity: 1;
+            }
 
-    @@keyframes glow-pulse {
-        0%, 100%
+        .book-card .card-img-top {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: all 0.4s ease;
+            border-bottom: 3px solid #8b6f47;
+            border-radius: 15px 15px 0 0;
+        }
 
-    {
-        opacity: 0.8;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.05);
-    }
-
-    }
-
-    .book-card .card-img-top {
-        width: 100%;
-        height: 400px;
-        object-fit: cover;
-        transition: all 0.4s ease;
-        border-bottom: 3px solid #8b6f47;
-    }
-
-    .book-card .card-body {
-        padding: 15px;
-        background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
-    }
+        .book-card .card-body {
+            padding: 20px;
+            background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
+            border-radius: 0 0 15px 15px;
+            display: flex;
+            flex-direction: column;
+        }
 
     .card-title {
         color: #4a3f35;
@@ -124,6 +224,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        text-align: center;
     }
 
     .author-name {
@@ -132,26 +233,7 @@
         font-style: italic;
         margin-bottom: 15px;
         font-weight: 500;
-    }
-
-    .book-price {
-        font-size: 1.8rem;
-        color: #a0785a;
-        font-weight: 700;
-        margin: 15px 0;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    }
-
-    .book-category {
-        display: inline-block;
-        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
-        color: #f5f0e8;
-        padding: 6px 15px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-bottom: 15px;
-        box-shadow: 0 2px 8px rgba(107, 85, 65, 0.3);
+        text-align: center;
     }
 
     .details-btn {
@@ -166,47 +248,49 @@
         letter-spacing: 1px;
         font-size: 0.9rem;
         box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        margin-top: auto;
     }
 
         .details-btn:hover {
-            transform: scale(1.01);
+            transform: scale(1.05);
             color: #f5f0e8;
-            background: linear-gradient(#a0785a 0%, #8b6f47 100%);
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
         }
 
-    .book-icon {
-        font-size: 2rem;
-        margin-right: 15px;
-        vertical-align: middle;
-        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-    }
-
-    .container-custom {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 20px;
+    /* Responsive */
+    @@media (max-width: 1024px) {
+        .filter-sidebar {
+            width: 240px;
+        }
     }
 
     @@media (max-width: 768px) {
-        .page-header h1
+        .page-header h1 {
+            font-size: 2.5rem;
+        }
 
-    {
-        font-size: 2.5rem;
-    }
+        .container-custom {
+            flex-direction: column;
+        }
 
-    }
-    .decorative-line {
-        height: 3px;
-        background: linear-gradient(90deg, transparent, #8b6f47, transparent);
-        margin: 30px auto;
-        width: 200px;
+        .filter-sidebar {
+            width: 100%;
+            position: relative;
+            top: 0;
+        }
+
+        .books-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
     }
 </style>
 
 <div class="page-header">
     <div class="container text-center">
         <h1>
-
             Kitap Koleksiyonumuz
             <br />
             <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8;">
@@ -216,21 +300,75 @@
     </div>
 </div>
 
-
 <div class="container-custom">
-    <div class="row g-4">
-        @foreach (var book in Model)
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="card book-card shadow-sm">
+    <!-- Filtre Sidebar -->
+    <aside class="filter-sidebar">
+        <div class="filter-card">
+            <h3 class="filter-title">
+                <i class="fa-solid fa-filter"></i> Filtrele
+            </h3>
+
+            <div class="filter-section">
+                <label class="filter-label">Sayfa Sayısı</label>
+
+                <div class="filter-option">
+                    <input type="radio" id="all" name="pageCount" value="all" checked>
+                    <label for="all">Tümü</label>
+                </div>
+
+                <div class="filter-option">
+                    <input type="radio" id="short" name="pageCount" value="0-200">
+                    <label for="short">0 - 200 sayfa</label>
+                </div>
+
+                <div class="filter-option">
+                    <input type="radio" id="medium" name="pageCount" value="201-400">
+                    <label for="medium">201 - 400 sayfa</label>
+                </div>
+
+                <div class="filter-option">
+                    <input type="radio" id="long" name="pageCount" value="401-600">
+                    <label for="long">401 - 600 sayfa</label>
+                </div>
+
+                <div class="filter-option">
+                    <input type="radio" id="verylong" name="pageCount" value="601+">
+                    <label for="verylong">601+ sayfa</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <label class="filter-label">Sıralama</label>
+
+                <div class="filter-option">
+                    <input type="radio" id="asc" name="sortOrder" value="asc" checked>
+                    <label for="asc">Artan </label>
+                </div>
+
+                <div class="filter-option">
+                    <input type="radio" id="desc" name="sortOrder" value="desc">
+                    <label for="desc">Azalan </label>
+                </div>
+            </div>
+
+            <button class="clear-filters-btn" onclick="clearFilters()">
+                Filtreleri Temizle
+            </button>
+        </div>
+    </aside>
+
+    <!-- Kitaplar -->
+    <main class="books-container">
+        <div class="books-grid" id="booksGrid">
+            @foreach (var book in Model)
+            {
+                <div class="book-card" data-pages="@book.TotalPages">
                     <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/no-image.png" : book.Image)"
                          class="card-img-top"
                          alt="@book.Name">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-center">@book.Name</h5>
                         <p class="author-name text-center">@book.Author</p>
-
-
                         <div class="mt-auto text-center">
                             <a href="/Home/Details/@book.Id" class="btn details-btn">
                                 Detayları Gör
@@ -238,7 +376,55 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    </main>
 </div>
+
+@section Scripts {
+    <script>
+        function filterAndSortBooks() {
+            const pageCountFilter = document.querySelector('input[name="pageCount"]:checked').value;
+            const sortOrder = document.querySelector('input[name="sortOrder"]:checked').value;
+            const booksGrid = document.getElementById('booksGrid');
+            const books = Array.from(booksGrid.children);
+
+            // Filtreleme
+            books.forEach(book => {
+                const pages = parseInt(book.dataset.pages);
+                let show = true;
+
+                if (pageCountFilter !== 'all') {
+                    if (pageCountFilter === '0-200') show = pages >= 0 && pages <= 200;
+                    else if (pageCountFilter === '201-400') show = pages >= 201 && pages <= 400;
+                    else if (pageCountFilter === '401-600') show = pages >= 401 && pages <= 600;
+                    else if (pageCountFilter === '601+') show = pages >= 601;
+                }
+
+                book.style.display = show ? 'block' : 'none';
+            });
+
+            // Sıralama
+            const visibleBooks = books.filter(book => book.style.display !== 'none');
+            visibleBooks.sort((a, b) => {
+                const pagesA = parseInt(a.dataset.pages);
+                const pagesB = parseInt(b.dataset.pages);
+                return sortOrder === 'asc' ? pagesA - pagesB : pagesB - pagesA;
+            });
+
+            // Yeniden düzenleme
+            visibleBooks.forEach(book => booksGrid.appendChild(book));
+        }
+
+        function clearFilters() {
+            document.getElementById('all').checked = true;
+            document.getElementById('asc').checked = true;
+            filterAndSortBooks();
+        }
+
+        // Event listeners
+        document.querySelectorAll('input[name="pageCount"], input[name="sortOrder"]').forEach(input => {
+            input.addEventListener('change', filterAndSortBooks);
+        });
+    </script>
+}

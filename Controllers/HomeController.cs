@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BookManagementApp.Areas.Admin.Models;
 using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace BookManagementApp.Controllers
         }
         public IActionResult Index()
         {
-            var model = _context.Books.ToList();
+            var model = _context.Books.OrderByDescending(x => x.CreateDate).ToList();
             return View(model);
         }
         public IActionResult Details(int? id)
@@ -29,11 +30,15 @@ namespace BookManagementApp.Controllers
             var book = _context.Books
                         .Include(b => b.Category) 
                         .FirstOrDefault(b => b.Id == id);
-
+            var relatedBooks = _context.Books.Where(a=>a.CategoryId == book.CategoryId && a.Name != book.Name ).Take(4).ToList();
             if (book == null)
                 return NotFound();
-
-            return View(book); 
+            var viewModel = new BookDetailsViewModel
+            {
+                Book = book,
+                RelatedBooks = relatedBooks
+            };
+            return View(viewModel); 
         }
         public IActionResult Search(string q)
         {

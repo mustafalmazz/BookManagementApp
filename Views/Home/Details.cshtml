@@ -1,10 +1,10 @@
-﻿@model Book
+﻿@using BookManagementApp.Areas.Admin.Models
+@model BookDetailsViewModel
 @{
-    ViewData["Title"] = Model.Name + " - Detaylar";
+    ViewData["Title"] = Model.Book.Name + " - Detaylar";
 }
 
 <style>
-    /* Küçük versiyon: Devamını Oku butonu */
     .btn-secondary-mini {
         background: transparent;
         border: 2px solid #8b6f47;
@@ -159,6 +159,15 @@
         font-style: italic;
         margin-bottom: 25px;
         display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .rating {
+        font-size: 1.5rem;
+        color: #8b6f47;
+        font-style: italic;
+        margin-bottom: 25px;
+        display: inline-flex;
         align-items: center;
         gap: 10px;
     }
@@ -375,7 +384,7 @@
                 <li class="breadcrumb-item">
                     <a href="/Home/List">Kitaplar</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.Book?.Name</li>
             </ol>
         </nav>
 
@@ -385,9 +394,9 @@
                 <!-- Image Section -->
                 <div class="col-lg-5 image-section">
                     <div class="book-image-wrapper">
-                        <img src="@(string.IsNullOrEmpty(Model.Image) ? "/images/no-image.png" : Model.Image)"
+                        <img src="@(string.IsNullOrEmpty(Model.Book.Image) ? "/images/no-image.png" : Model.Book.Image)"
                              class="book-image"
-                             alt="@Model.Name">
+                             alt="@Model.Book.Name">
 
                        
                     </div>
@@ -395,21 +404,12 @@
 
                 <!-- Info Section -->
                 <div class="col-lg-7 info-section">
-                    <h1 class="book-title">@Model.Name</h1>
-
-                    <div class="book-author">
-                        <i class="fa-solid fa-feather"></i>
-                        @Model.Author
-                    </div>
-
-
-
-
-                    @if (!string.IsNullOrEmpty(Model.Description))
+                    <h1 class="book-title">@Model.Book.Name</h1>
+                    @if (!string.IsNullOrEmpty(Model.Book.Description))
                     {
-                        var shortDesc = Model.Description.Length > 260
-                        ? Model.Description.Substring(0, 260) + "..."
-                        : Model.Description;
+                        var shortDesc = Model.Book.Description.Length > 260
+                        ? Model.Book.Description.Substring(0, 260) + "..."
+                        : Model.Book.Description;
                         <div class="description-section">
                             <h3 class="description-title">
                                 <i class="bi bi-book-half"></i>
@@ -418,41 +418,93 @@
 
                             <p id="shortDesc" class="description-text">@shortDesc</p>
 
-                            @if (Model.Description.Length > 260)
+                            @if (Model.Book.Description.Length > 260)
                             {
-                                <p id="fullDesc" class="description-text" style="display:none;">@Model.Description</p>
+                                <p id="fullDesc" class="description-text" style="display:none;">@Model.Book.Description</p>
                                 <a href="javascript:void(0)" id="toggleDesc" class="btn-secondary-mini">Devamını Oku <i class="fa-solid fa-arrow-right"></i></a>
 
 
                             }
                         </div>
                     }
-
-                    @if (Model.Category != null)
-                    {
-                        <span class="book-category-badge">
-                            Kategori:  @Model.Category.CategoryName
-                        </span>
-                    }
-
                     <div class="decorative-divider"></div>
+                    <div class="row">
+                        <div class="book-author col-6">
+                            <i class="fa-solid fa-feather"></i>
+                            @Model.Book.Author
+                        </div>
+                        <div class="book-author col-6">
+                            <i class="fa-solid fa-layer-group"></i> @Model.Book.Category.CategoryName
+                        </div>
+                    </div>
 
-                    <div class="info-grid">
-                       
-
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="bi bi-calendar-check"></i> Eklenme Tarihi
-                            </div>
-                            <div class="info-value">
-                                <i class="bi bi-calendar3"></i>
-                                @Model.CreateDate.ToString("dd MMMM yyyy")
-                            </div>
+                    <div class="row">
+                        <div class="book-author col-6">
+                            <i class="fa-solid fa-calendar"></i>@Model.Book.CreateDate.ToString("dd MMMM yyyy")
+                        </div>
+                        <div class="book-author col-6">
+                            <i class="fa-solid fa-scroll"></i>@Model.Book.TotalPages Sayfa
+                        </div>
+                    </div>
+                    <div >
+                        <div>
+                            <text class="rating">Puanım/ </text>
+                            @if (Model.Book.Rate.HasValue)
+                            {
+                               
+                                    @for (int i = 0; i < Model.Book?.Rate.Value; i++)
+                                    {
+                                      <i style="font-size:30px;" class="fa-solid fa-star text-warning"></i>
+                                    }
+                            }
+                            else
+                            {
+                                <div>
+                                    <span class="text-muted">Henüz puanlanmamış</span>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        @if (Model.RelatedBooks != null && Model.RelatedBooks.Any())
+        {
+            <h2 class="text-center mb-2 my-4" style="color:#4a3f35;">Aynı Kategoriden Kitaplar</h2>
+            <div class="decorative-divider"></div>
+
+            <div class="container-custom">
+                <div class="row g-4">
+                    @foreach (var book in Model.RelatedBooks)
+                    {
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card book-card shadow-sm">
+                                <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/no-image.png" : book.Image)"
+                                     class="card-img-top"
+                                     alt="@book.Name">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title text-center">@book.Name</h5>
+                                    <p class="author-name text-center text-muted">@book.Author</p>
+
+                                    <div class="mt-auto text-center">
+                                        <a href="/Home/Details/@book.Id" class="btn-secondary-mini">
+                                            Detayları Gör <i class="fa-solid fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="text-center mt-4 text-muted">
+                Bu kategorideki tek kitap
+            </div>
+        }
+
     </div>
 </div>
 <script>
