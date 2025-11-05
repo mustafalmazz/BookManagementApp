@@ -14,6 +14,8 @@ namespace BookManagementApp
                 );
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession();
+
 
             var app = builder.Build();
 
@@ -27,6 +29,7 @@ namespace BookManagementApp
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

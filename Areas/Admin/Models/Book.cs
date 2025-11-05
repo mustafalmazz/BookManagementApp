@@ -1,4 +1,4 @@
-﻿using System;
+﻿using BookManagementApp.Areas.Admin.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookManagementApp.Models
@@ -35,5 +35,8 @@ namespace BookManagementApp.Models
         [Display(Name = "Kategori")]
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        [Display(Name = "Kullanıcı")]
+        public int? UserId { get; set; }
+        public User? User { get; set; }
     }
 }

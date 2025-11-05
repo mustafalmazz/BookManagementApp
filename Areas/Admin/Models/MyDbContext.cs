@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BookManagementApp.Areas.Admin.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookManagementApp.Models
 {
@@ -11,6 +12,7 @@ namespace BookManagementApp.Models
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,7 +20,13 @@ namespace BookManagementApp.Models
 
             modelBuilder.Entity<Book>()
                 .Property(b => b.Price)
-                .HasColumnType("decimal(18,2)"); 
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Books)
+                .WithOne(b => b.User)
+                .HasForeignKey(b => b.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
     }

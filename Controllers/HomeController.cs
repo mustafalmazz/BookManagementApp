@@ -19,7 +19,13 @@ namespace BookManagementApp.Controllers
         }
         public IActionResult Index()
         {
-            var model = _context.Books.OrderByDescending(x => x.CreateDate).ToList();
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+               return RedirectToAction("Login", "Account");
+            }
+
+            var model = _context.Books.Where(u=>u.UserId == userId).OrderByDescending(x => x.CreateDate).ToList();
             return View(model);
         }
         public IActionResult Details(int? id)
