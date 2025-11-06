@@ -16,5 +16,6 @@ namespace BookManagementApp.Areas.Admin.Models
         public string? PasswordHash { get; set; }
          
         public ICollection<Book>? Books { get; set; }
+        public ICollection<Category>? Categories { get; set; }
     }
 }

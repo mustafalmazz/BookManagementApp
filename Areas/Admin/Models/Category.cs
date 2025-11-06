@@ -1,9 +1,13 @@
-﻿namespace BookManagementApp.Models
+﻿using BookManagementApp.Areas.Admin.Models;
+
+namespace BookManagementApp.Models
 {
     public class Category
     {
         public int Id { get; set; }
         public string? CategoryName { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
         public ICollection<Book>? Books { get; set; }
     }
 }

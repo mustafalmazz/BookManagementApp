@@ -235,6 +235,16 @@
                             }
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Books">
+                           Panelim
+                        </a>
+                    </li>
+                    <li>
+                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                    </a>
+                    </li>
                 </ul>
                 <form class="book-search-form" asp-controller="Home" asp-action="Search" method="get">
                     <input class="form-control book-search-input" type="search" name="q"
@@ -244,6 +254,9 @@
                         Ara
                     </button>
                 </form>
+             
+                   
+              
             </div>
         </div>
     </nav>

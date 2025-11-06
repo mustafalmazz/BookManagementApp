@@ -8,7 +8,7 @@
 
 <h1 class="text-center">Category List</h1>
 <hr />
-<a href="/category/create" class="btn btn-outline-success mb-2">Add New</a>
+<a asp-area="admin" asp-controller="Category" asp-action="Create" class="btn btn-outline-success mb-2">Add New</a>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -51,8 +51,8 @@
                 </td>
 
                 <td>
-                    <a class="btn btn-danger" href="/category/delete/@item.Id">Delete</a>
-                    <a class="btn btn-success" href="/category/edit/@item.Id">Edit</a>
+                    <a class="btn btn-danger" asp-area="admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-success" asp-area="admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                 </td>
             </tr>
         }
