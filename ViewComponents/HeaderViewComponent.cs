@@ -1,26 +1,26 @@
 ﻿using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 
 namespace BookManagementApp.ViewComponents
 {
     public class HeaderViewComponent : ViewComponent
     {
         private readonly MyDbContext _context;
-
         public HeaderViewComponent(MyDbContext context)
         {
             _context = context;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categories = _context.Categories
-                .OrderBy(c => c.CategoryName)
-                .ToList();
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var categories = await _context.Categories.ToListAsync();
 
+            if (userId != null)
+            {
+                categories = await _context.Categories.Where(c=>c.UserId == userId).ToListAsync();
+            }
             return View(categories);
         }
     }

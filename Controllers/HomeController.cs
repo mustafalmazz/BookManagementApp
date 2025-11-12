@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using BookManagementApp.Areas.Admin.Models;
 using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,17 @@ namespace BookManagementApp.Controllers
         }
         private void LoadCategories()
         {
-            ViewBag.Categories = _context.Categories.ToList();
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId != null)
+            {
+                ViewBag.Categories = _context.Categories.Where(x=>x.UserId == userId).ToList();
+
+            }
+            else
+            {
+                ViewBag.Categories = new List<Category>();
+            }
+
         }
         public IActionResult Index()
         {
@@ -82,9 +92,12 @@ namespace BookManagementApp.Controllers
         }
         public async Task<IActionResult> BooksByCategory(int id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            LoadCategories();
+
             var books = await _context.Books
                 .Include(b => b.Category)
-                .Where(b => b.CategoryId == id)
+                .Where(b => b.CategoryId == id && b.UserId == userId)
                 .ToListAsync();
 
             
@@ -92,6 +105,6 @@ namespace BookManagementApp.Controllers
             ViewData["CategoryName"] = category?.CategoryName ?? "Kategori";
 
             return View("List", books); 
-        }
+        }   
     }
 }
