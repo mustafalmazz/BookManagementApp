@@ -394,7 +394,7 @@
                 <!-- Image Section -->
                 <div class="col-lg-5 image-section">
                     <div class="book-image-wrapper">
-                        <img src="@(string.IsNullOrEmpty(Model.Book.Image) ? "/images/no-image.png" : Model.Book.Image)"
+                        <img src="@(string.IsNullOrEmpty(Model.Book.Image) ? "/images/ResimBulunamadi.png" : Model.Book.Image)"
                              class="book-image"
                              alt="@Model.Book.Name">
 
@@ -421,12 +421,23 @@
                             @if (Model.Book.Description.Length > 260)
                             {
                                 <p id="fullDesc" class="description-text" style="display:none;">@Model.Book.Description</p>
-                                <a href="javascript:void(0)" id="toggleDesc" class="btn-secondary-mini">Devamını Oku <i class="fa-solid fa-arrow-right"></i></a>
-
-
+                                <a href="javascript:void(0)" id="toggleDesc" class="btn-secondary-mini">
+                                    Devamını Oku <i class="fa-solid fa-arrow-right"></i>
+                                </a>
                             }
                         </div>
                     }
+                    else
+                    {
+                        <div class="description-section">
+                            <h3 class="description-title">
+                                <i class="bi bi-book-half"></i>
+                                Kitap Notlarım
+                            </h3>
+                            <p class="description-text text-muted"><em>Henüz bu kitaba ait not eklenmedi.</em></p>
+                        </div>
+                    }
+
                     <div class="decorative-divider"></div>
                     <div class="row">
                         <div class="book-author col-6">

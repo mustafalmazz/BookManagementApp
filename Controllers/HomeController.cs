@@ -104,7 +104,7 @@ namespace BookManagementApp.Controllers
             var category = await _context.Categories.FindAsync(id);
             ViewData["CategoryName"] = category?.CategoryName ?? "Kategori";
 
-            return View("List", books); 
+            return View("Index", books); 
         }   
     }
 }
