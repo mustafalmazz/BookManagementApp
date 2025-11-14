@@ -4,13 +4,130 @@
     ViewData["Title"] = "Edit Book";
 }
 
+<style>
+    /* Sayfa _Layout.cshtml kullanmıyorsa veya
+          body stilini oradan almıyorsa bu gereklidir.
+        */
+    body {
+        background-color: #0a0c1e;
+        color: #e0e0e0;
+    }
+
+    /* Başlık: Neon Mavi Parıltı */
+    h1 {
+        color: #ffffff;
+        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+    }
+
+    /* Ayırıcı Çizgi */
+    hr {
+        border-color: #1f2a52;
+        opacity: 0.5;
+    }
+
+    /* --- Form Stilleri --- */
+
+    /* Formun kendisini bir kart gibi göster (Önceki tasarımlarla uyum için) */
+    form {
+        background: #10152f;
+        border: 1px solid #00aaff;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+        padding: 30px;
+        max-width: 800px; /* Formun çok genişlemesini engelle */
+        margin: 0 auto; /* Ortala */
+    }
+
+    /* Form Etiketleri */
+    .form-label {
+        color: #a0b0d0;
+        font-weight: 500;
+    }
+
+    /* Input ve Select Kutuları */
+    .form-control,
+    .form-select {
+        background-color: #131a38; /* Koyu mavi input alanı */
+        color: #e0e0e0;
+        border: 1px solid #1f2a52; /* Koyu sınır */
+        border-radius: 6px;
+    }
+
+        /* Input/Select Odaklanma (Focus) Efekti */
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #131a38;
+            color: #e0e0e0;
+            border-color: #00d9ff; /* Neon mavi sınır */
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5); /* Neon parıltı */
+            outline: 0;
+        }
+
+    /* Select (Dropdown) okunu temaya uyarla */
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a0b0d0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-position: right 0.75rem center;
+        background-repeat: no-repeat;
+        background-size: 16px 12px;
+    }
+
+    /* Dosya Yükleme (File Input) Butonunu temaya uyarla */
+    .form-control[type="file"] {
+        color: #a0b0d0;
+    }
+
+    .form-control::file-selector-button {
+        background-color: #00c3ff;
+        border: none;
+        color: #0a0c1e; /* Koyu metin */
+        padding: 8px 12px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        margin-right: 15px;
+    }
+
+    .form-control:hover::file-selector-button {
+        background-color: #00a9db;
+        box-shadow: 0 0 8px #00c3ff;
+    }
+
+    /* Mevcut Kitap Resmini Stilize Et (YENİ EKLENDİ) */
+    form img {
+        margin-top: 15px;
+        border-radius: 6px;
+        border: 1px solid #1f2a52;
+    }
+
+
+    /* --- Buton Stilleri --- */
+
+    /* "Save" Butonu (Neon Mavi) */
+    .btn-primary {
+        background-color: #00c3ff;
+        border-color: #00c3ff;
+        color: #0a0c1e; /* Kontrast için koyu metin */
+        transition: all 0.3s ease;
+        font-weight: 600;
+        width: 100%; /* Butonu tam genişlik yap */
+        padding: 10px;
+        font-size: 1.1rem;
+    }
+
+        .btn-primary:hover {
+            background-color: #00a9db;
+            border-color: #00a9db;
+            box-shadow: 0 0 12px #00c3ff;
+        }
+
+</style>
+
+
 <h1 class="text-center">@ViewData["Title"]</h1>
 <hr />
 
 <form method="post" asp-action="Edit" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="Image" />
-    <div class="mb-2">
+    <input type="hidden" asp-for="Image" /> <div class="mb-2">
         <label class="form-label" asp-for="Name">Book Name</label>
         <input class="form-control" asp-for="Name" />
     </div>
@@ -40,7 +157,8 @@
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="Image"></label>
-        <input class="form-control" type="file" name="ImageFile"/>
+        <input class="form-control" type="file" name="ImageFile" />
+
         @if (!string.IsNullOrEmpty(Model.Image))
         {
             <img src="@Model.Image" alt="Book Image" style="max-height:100px;" />
@@ -53,5 +171,5 @@
             <option value="">Select Category</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
 </form>

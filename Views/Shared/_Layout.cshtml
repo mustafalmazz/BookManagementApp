@@ -2,15 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-1.0" />
     <title>@ViewData["Title"] - BookManagementApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookManagementApp.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Bu wrapper, asılı kitapların header'a göre konum almasını sağlar */
+        .header-wrapper {
+            position: relative;
+        }
+
+        .hanging-book-container {
+            position: absolute; /* Header'a göre hizalanacak */
+            top: 100%; /* Header-wrapper'ın tam altına iter */
+            z-index: 1040; /* İçeriğin üstünde */
+            pointer-events: none; /* Tıklamayı engellemesin */
+            transform-origin: top center;
+            perspective: 1000px; /* 3D efekt için */
+        }
+
+        .rope {
+            width: 2px; /* İp kalınlığı */
+            height: 40px; /* İp uzunluğu */
+            background: linear-gradient(to right, #6d4c3a, #8d6e63, #6d4c3a); /* Daha gerçekçi ip rengi ve hafif bir gradient */
+            margin: 0 auto;
+            border-radius: 1px; /* İpi biraz yumuşat */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* İpe hafif gölge */
+        }
+
+        .book-icon {
+            text-align: center;
+            font-size: 1.8rem; /* Kitap boyutu */
+            color: #4a2d1f; /* Daha koyu, gerçekçi kitap rengi (cilt rengi gibi) */
+            line-height: 1; /* Kitap ikonunun dikey hizalamasını düzelt */
+            position: relative;
+            transform-style: preserve-3d; /* 3D dönüşümler için */
+        }
+
+            /* Kitabın kenarları için sahte 3D efekti */
+            .book-icon::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -5px; /* Sol kenar */
+                width: 5px;
+                height: 100%;
+                background-color: #5c3e2e; /* Kenar rengi */
+                transform: rotateY(90deg) translateZ(-5px);
+                transform-origin: left;
+                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.4);
+            }
+
+            .book-icon::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: -5px; /* Sağ kenar */
+                width: 5px;
+                height: 100%;
+                background-color: #5c3e2e; /* Kenar rengi */
+                transform: rotateY(-90deg) translateZ(-5px);
+                transform-origin: right;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.4);
+            }
+
+            /* Kitabın ana rengine gölge ekle */
+            .book-icon .fas.fa-book {
+                /* Kitabın ön yüzüne hafif bir gölge ve 3D derinlik efekti */
+                text-shadow: -1px -1px 0 #3b2419, /* Üst ve sol kenar */
+                1px 1px 0 #5f4236, /* Alt ve sağ kenar */
+                0 5px 10px rgba(0, 0, 0, 0.5); /* Derinlik gölgesi */
+            }
+
+        /* Sol Kitap */
+        .hanging-book-container.left {
+            left: 30px; /* Soldan uzaklık */
+            animation: gentle-swing 6s infinite ease-in-out;
+        }
+
+        /* Sağ Kitap */
+        .hanging-book-container.right {
+            right: 30px; /* Sağdan uzaklık */
+            animation: gentle-swing 6s infinite ease-in-out;
+            animation-delay: -3s; /* Diğeriyle aynı anda sallanmasın */
+        }
+
+        /* Hafif salınım animasyonu */
+        @@keyframes gentle-swing {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(6deg); /* Daha az agresif bir salınım */
+            }
+        }
+    </style>
 </head>
 <body>
-    @await Component.InvokeAsync("Header")
+
+    <div class="header-wrapper">
+        @await Component.InvokeAsync("Header")
+
+        <div class="hanging-book-container left">
+            <div class="rope"></div>
+            <div class="book-icon"><i class="fas fa-book"></i></div>
+        </div>
+        <div class="hanging-book-container right">
+            <div class="rope"></div>
+            <div class="book-icon"><i class="fas fa-book"></i></div>
+        </div>
+    </div>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

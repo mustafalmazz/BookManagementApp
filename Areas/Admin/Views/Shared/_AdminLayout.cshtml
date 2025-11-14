@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
@@ -7,56 +6,106 @@
     <title>@ViewData["Title"] - Admin Panel</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     <style>
         body {
             min-height: 100vh;
             display: flex;
-            background-color: #f8f9fa;
+            /* Ana arka plan koyu lacivert */
+            background-color: #0a0c1e;
+            color: #e0e0e0; /* Varsayılan metin rengi */
         }
 
         .sidebar {
             width: 240px;
-            background-color: #343a40;
+            /* Kart/Form arka planıyla aynı koyu mavi */
+            background-color: #10152f;
             color: white;
             flex-shrink: 0;
+            /* İçerikten ayırmak için neon mavi sınır ve parıltı */
+            border-right: 1px solid #00aaff;
+            box-shadow: 3px 0 15px rgba(0, 170, 255, 0.2);
         }
 
-            .sidebar .nav-link {
-                color: #adb5bd;
-                transition: 0.2s;
+            /* Sidebar Başlığı (Admin Panel) */
+            .sidebar h4 {
+                color: #ffffff;
+                text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+                border-bottom: 1px solid #1f2a52;
+                padding-bottom: 15px;
             }
 
+            /* Link ikonları için boşluk */
+            .sidebar .nav-link i {
+                margin-right: 10px;
+                width: 20px; /* İkonların hizalı durması için */
+            }
+
+            .sidebar .nav-link {
+                /* Pasif link rengi */
+                color: #a0b0d0;
+                transition: all 0.3s ease;
+                border-left: 3px solid transparent; /* Aktif durum için yer tutucu */
+                padding-left: 17px; /* 20px - 3px */
+            }
+
+                /* Aktif ve Hover Durumu */
                 .sidebar .nav-link.active,
                 .sidebar .nav-link:hover {
-                    color: white;
-                    background-color: #495057;
+                    /* Neon Mavi/Cyan */
+                    color: #00d9ff;
+                    /* Hover arka planı */
+                    background-color: #1a2452;
+                    /* Aktif/Hover parıltısı */
+                    text-shadow: 0 0 5px rgba(0, 217, 255, 0.7);
+                    border-left: 3px solid #00d9ff;
+                    padding-left: 17px;
                 }
+
+                /* Aktif durum (Bootstrap 'active' sınıfı) */
+                .sidebar .nav-link.active {
+                    font-weight: 500;
+                }
+
+            /* Sidebar ayırıcı çizgisi */
+            .sidebar hr {
+                border-color: #1f2a52;
+            }
+
+            /* "Siteye Dön" Butonu (Neon Mavi Outline) */
+            .sidebar .btn-outline-light {
+                color: #00c3ff;
+                border-color: #00c3ff;
+                transition: all 0.3s ease;
+            }
+
+                .sidebar .btn-outline-light:hover {
+                    background-color: #00c3ff;
+                    color: #0a0c1e;
+                    box-shadow: 0 0 15px #00c3ff;
+                }
+
 
         .content {
             flex-grow: 1;
-            padding: 20px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background: #f1f1f1;
-            border-top: 1px solid #ddd;
-            font-size: 0.9rem;
+            padding: 30px; /* İçeriğe biraz daha fazla boşluk */
+            height: 100vh;
+            overflow-y: auto; /* İçerik taşarsa kaydırma çubuğu */
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
     <div class="sidebar d-flex flex-column p-3">
-        <h4 class="text-center mb-4">📚 Admin Panel</h4>
+        <h4 class="text-center mb-4"><img src="~/images/admin.png" /> Admin Panel</h4>
         <ul class="nav nav-pills flex-column mb-auto">
+
             <li class="nav-item">
-                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
-                   asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "DashBoard" ? "active" : "")"
+                   asp-area="Admin" asp-controller="DashBoard" asp-action="Index">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
             </li>
@@ -83,12 +132,13 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-
-       
     </div>
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -2,15 +2,134 @@
 
 @{
     ViewData["Title"] = "Category List";
-
 }
 
+<style>
+    /* Sayfa _Layout.cshtml kullanmıyorsa veya
+          body stilini oradan almıyorsa bu gereklidir.
+        */
+    body {
+        background-color: #0a0c1e;
+        color: #e0e0e0;
+    }
 
-<h1 class="text-center">Category List</h1>
+    /* Başlık: Neon Mavi Parıltı */
+    h1 {
+        color: #ffffff;
+        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+    }
+
+    /* Ayırıcı Çizgi */
+    hr {
+        border-color: #1f2a52;
+        opacity: 0.5;
+    }
+
+    /* --- Buton Stilleri --- */
+
+    /* "Add New" Butonu (Neon Yeşil) */
+    .btn-outline-success {
+        color: #00ff6a;
+        border-color: #00ff6a;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-success:hover {
+            background-color: #00ff6a;
+            color: #0a0c1e; /* Neon arka plan üzerinde koyu metin */
+            box-shadow: 0 0 15px #00ff6a;
+        }
+
+    /* "Delete" Butonu (Neon Kırmızı/Pembe) */
+    .btn-danger {
+        background-color: #ff006a;
+        border-color: #ff006a;
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+        .btn-danger:hover {
+            background-color: #e0005c;
+            border-color: #e0005c;
+            box-shadow: 0 0 12px #ff006a;
+        }
+
+    /* "Edit" Butonu (Neon Mavi) - Book List'teki btn-primary ile aynı */
+    .btn-success, .btn-primary {
+        background-color: #00c3ff;
+        border-color: #00c3ff;
+        color: #0a0c1e; /* Kontrast için koyu metin */
+        transition: all 0.3s ease;
+    }
+
+        .btn-success:hover, .btn-primary:hover {
+            background-color: #00a9db;
+            border-color: #00a9db;
+            box-shadow: 0 0 12px #00c3ff;
+        }
+
+    /* "Kitap Eklenmemiş" Uyarısı (Neon Kırmızı/Pembe) */
+    .text-danger {
+        color: #ff006a !important;
+        font-weight: 500;
+        text-shadow: 0 0 5px rgba(255, 0, 106, 0.5);
+    }
+
+
+    /* --- Tablo Stilleri --- */
+
+    .table {
+        color: #e0e0e0;
+        background-color: #10152f;
+        /* Neon çerçeve ve parıltı */
+        border: 1px solid #00aaff;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+    }
+
+        /* Tablo Başlığı */
+        .table thead th {
+            color: #a0b0d0;
+            border-bottom: 2px solid #1f2a52;
+            background-color: #131a38;
+            border-top: none;
+            vertical-align: middle;
+        }
+
+        /* Tablo Hücreleri */
+        .table td, .table th {
+            border-color: #1f2a52;
+            vertical-align: middle;
+        }
+
+    /* Çizgili (Striped) Renkler */
+    .table-striped > tbody > tr:nth-of-type(odd) > * {
+        background-color: #10152f;
+        color: #e0e0e0;
+    }
+
+    .table-striped > tbody > tr:nth-of-type(even) > * {
+        background-color: #131a38;
+        color: #e0e0e0;
+    }
+
+    /* Hover (Dinamiklik) */
+    .table-hover > tbody > tr:hover > * {
+        background-color: #1a2452;
+        color: #ffffff;
+    }
+</style>
+
+
+<h1 class="text-center mb-3">@ViewData["Title"]</h1>
 <hr />
 <a asp-area="admin" asp-controller="Category" asp-action="Create" class="btn btn-outline-success mb-2">Add New</a>
 
-<table class="table table-bordered table-striped">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>Category Id</th>
@@ -51,8 +170,8 @@
                 </td>
 
                 <td>
-                    <a class="btn btn-danger" asp-area="admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    <a class="btn btn-success" asp-area="admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-area="admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-success btn-sm" asp-area="admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                 </td>
             </tr>
         }

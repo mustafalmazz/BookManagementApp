@@ -3,11 +3,130 @@
     ViewData["Title"] = "Book List";
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
+<style>
+    /* Sayfa _Layout.cshtml kullanmıyorsa veya
+          body stilini oradan almıyorsa bu gereklidir.
+        */
+    body {
+        background-color: #0a0c1e;
+        color: #e0e0e0;
+    }
+
+    /* Başlık: Neon Mavi Parıltı */
+    h1 {
+        color: #ffffff;
+        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+    }
+
+    /* Ayırıcı Çizgi */
+    hr {
+        border-color: #1f2a52;
+        opacity: 0.5;
+    }
+
+    /* --- Buton Stilleri --- */
+
+    /* "Add New" Butonu (Neon Yeşil) */
+    .btn-outline-success {
+        color: #00ff6a;
+        border-color: #00ff6a;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-success:hover {
+            background-color: #00ff6a;
+            color: #0a0c1e; /* Neon arka plan üzerinde koyu metin */
+            box-shadow: 0 0 15px #00ff6a;
+        }
+
+    /* "Delete" Butonu (Neon Kırmızı/Pembe) */
+    .btn-danger {
+        background-color: #ff006a;
+        border-color: #ff006a;
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+        .btn-danger:hover {
+            background-color: #e0005c;
+            border-color: #e0005c;
+            box-shadow: 0 0 12px #ff006a;
+        }
+
+    /* "Edit" Butonu (Neon Mavi) */
+    .btn-primary {
+        background-color: #00c3ff;
+        border-color: #00c3ff;
+        color: #0a0c1e; /* Kontrast için koyu metin */
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #00a9db;
+            border-color: #00a9db;
+            box-shadow: 0 0 12px #00c3ff;
+        }
+
+    /* --- Tablo Stilleri --- */
+
+    /* Bootstrap'in .table-bordered sınıfını kullanmak yerine özel bir çerçeve ekliyoruz */
+    .table {
+        color: #e0e0e0;
+        background-color: #10152f;
+        /* Neon çerçeve ve parıltı */
+        border: 1px solid #00aaff;
+        border-radius: 8px; /* Dashboard kartlarıyla uyumlu */
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+        /* border-radius'un çalışması için bu ayarlar önemli */
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden; /* Köşeleri düzgün göstermek için */
+    }
+
+        /* Tablo Başlığı */
+        .table thead th {
+            color: #a0b0d0;
+            border-bottom: 2px solid #1f2a52;
+            background-color: #131a38;
+            border-top: none;
+        }
+
+        /* Tablo Hücreleri */
+        .table td, .table th {
+            border-color: #1f2a52; /* Bootstrap'in açık renkli çizgisini değiştir */
+            vertical-align: middle; /* Resimler ve metinleri hizala */
+        }
+
+    /* Çizgili (Striped) Renkler */
+    .table-striped > tbody > tr:nth-of-type(odd) > * {
+        background-color: #10152f;
+        color: #e0e0e0;
+    }
+
+    .table-striped > tbody > tr:nth-of-type(even) > * {
+        background-color: #131a38;
+        color: #e0e0e0;
+    }
+
+    /* Hover (Dinamiklik) */
+    .table-hover > tbody > tr:hover > * {
+        background-color: #1a2452;
+        color: #ffffff;
+    }
+
+    /* İstenildiği gibi resim boyutuna DOKUNULMADI, sadece köşeler yumuşatıldı */
+    .table img {
+        border-radius: 4px;
+    }
+
+</style>
+
+<h1 class="text-center mb-3">@ViewData["Title"]</h1>
 <hr />
 <a asp-area="Admin" asp-action="Create" class="btn btn-outline-success mb-2">Add New</a>
 
-<table class="table table-bordered table-striped">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>Image</th>
@@ -17,7 +136,7 @@
             <th>Description</th>
             <th>Category</th>
             <th>TotalPage</th>
-            
+
             <th style="width:150px;">Operations</th>
         </tr>
     </thead>
@@ -25,7 +144,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td><img src="@item.Image" style="width:100px"/></td>
+                <td><img src="@item.Image" style="width:100px" /></td>
                 <td>@item.Name</td>
                 <td>@item.Author</td>
                 <td>₺@item.Rate</td>
@@ -33,12 +152,10 @@
                 <td>@item.Category?.CategoryName</td>
                 <td>@item.TotalPages</td>
                 <td>
-                    <a  class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-

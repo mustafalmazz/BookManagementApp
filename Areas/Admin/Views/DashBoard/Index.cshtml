@@ -1,0 +1,407 @@
+﻿@using BookManagementApp.Areas.Admin.Models
+@model BookManagementApp.Areas.Admin.Models.DashBoardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var totalBooks = Model.Books?.Count ?? 0;
+    var totalCategories = Model.Categories?.Count ?? 0;
+}
+
+<style>
+    body {
+        background-color: #0a0c1e; /* Koyu lacivert */
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .dashboard-container {
+        padding: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .page-title-section {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
+        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+    }
+
+    .page-subtitle {
+        color: #a0b0d0; /* Açık mavi/gri */
+        font-size: 1.1rem;
+        margin-top: 10px;
+        font-style: normal;
+        font-weight: 400;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    .stat-card {
+        /* Kart arka planı koyulaştırıldı */
+        background: #10152f; /* Gövdeden biraz daha açık koyu mavi */
+        border-radius: 8px;
+        padding: 25px;
+        /* Gölge, neon mavi bir parıltı (glow) ile değiştirildi */
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease;
+        animation: slideInUp 0.6s ease-out both;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        /* Neon çerçeve eklendi */
+        border: 1px solid #00aaff;
+    }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            /* Hover durumunda parıltı ve çerçeve güçlendirildi */
+            box-shadow: 0 0 25px rgba(0, 200, 255, 0.6);
+            border-color: #00d9ff;
+        }
+
+    .card-icon {
+        flex-shrink: 0;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+    }
+
+        /* Kitap ikonu için neon mavi tema */
+        .card-icon.books-icon {
+            background-color: rgba(0, 150, 255, 0.1); /* Yarı saydam mavi */
+            color: #00c3ff; /* Neon cyan */
+            text-shadow: 0 0 8px #00c3ff;
+        }
+
+        /* Kategori ikonu için neon yeşil tema (kontrast için) */
+        .card-icon.categories-icon {
+            background-color: rgba(0, 255, 100, 0.1); /* Yarı saydam yeşil */
+            color: #00ff6a; /* Neon yeşil */
+            text-shadow: 0 0 8px #00ff6a;
+        }
+
+    .card-content {
+        flex-grow: 1;
+    }
+
+    .stat-number-wrapper {
+        text-align: left;
+        margin-bottom: 5px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        /* Metin rengi parlak beyaza değiştirildi */
+        color: #ffffff;
+        line-height: 1.1;
+    }
+
+    .stat-description-title {
+        /* Metin rengi koyu temaya uyarlandı */
+        color: #e0e0e0;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+    .stat-description-text {
+        /* Metin rengi koyu temaya uyarlandı */
+        color: #90a0c0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        font-style: normal;
+        margin-top: 8px;
+    }
+
+    /* Animasyonlar (Değişiklik yok) */
+    @@keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* --- "Son Kitaplar" Stilleri Koyu Temaya Uyarlandı --- */
+    .recent-books-card {
+        /* Stat-card ile aynı stil */
+        background: #10152f;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+        margin-top: 40px;
+        animation: slideInUp 0.6s ease-out 0.3s both;
+        border: 1px solid #00aaff;
+    }
+
+    .recent-books-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        /* Başlık rengi beyaza değiştirildi */
+        color: #ffffff;
+        margin-top: 0;
+        margin-bottom: 20px;
+        /* Ayırıcı çizgi rengi koyulaştırıldı */
+        border-bottom: 1px solid #1f2a52;
+        padding-bottom: 15px;
+    }
+
+        /* HTML içindeki inline stili (color: #555) ezmek için */
+        .recent-books-title .fas {
+            color: #00c3ff !important;
+        }
+
+    .recent-books-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .recent-books-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+        min-width: 500px;
+    }
+
+        .recent-books-table th,
+        .recent-books-table td {
+            text-align: left;
+            padding: 12px 15px;
+            /* Tablo ayırıcı çizgisi koyulaştırıldı */
+            border-bottom: 1px solid #1f2a52;
+            white-space: nowrap;
+        }
+
+        .recent-books-table th {
+            /* Başlık metni rengi uyarlandı */
+            color: #a0b0d0;
+            font-weight: 600;
+        }
+
+        .recent-books-table td {
+            /* Veri metni rengi uyarlandı */
+            color: #e0e0e0;
+        }
+
+        .recent-books-table tr:nth-child(even) {
+            /* Çift satır arkaplanı koyulaştırıldı */
+            background-color: #131a38;
+        }
+
+        .recent-books-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .recent-books-table tr:hover {
+            /* Hover rengi temaya uyarlandı */
+            background-color: #1a2452;
+        }
+
+    .no-books-message {
+        /* Mesaj rengi uyarlandı */
+        color: #7080a0;
+        font-style: italic;
+        padding: 20px;
+        text-align: center;
+    }
+    /* --- Stil Değişiklikleri Bitiş --- */
+
+
+    /* Responsive (Değişiklik yok) */
+    @@media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+        }
+
+        .stat-card {
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .card-icon {
+            margin-bottom: 10px;
+        }
+
+        .recent-books-card {
+            padding: 15px;
+        }
+
+        .recent-books-title {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="page-title-section">
+        <h1 class="page-title">Yönetim Paneli</h1>
+        <p class="page-subtitle">Sisteme genel bakış</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="card-icon books-icon">
+                <img src="~/images/book (3).png" />
+            </div>
+            <div class="card-content">
+                <div class="stat-description-title">Toplam Kitap</div>
+                <div class="stat-number-wrapper">
+                    <div class="stat-number" id="bookCount" data-count="@totalBooks">0</div>
+                </div>
+                <p class="stat-description-text">
+                    Sistemde kayıtlı @totalBooks adet kitap bulunmaktadır.
+                </p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="card-icon categories-icon">
+                <img src="~/images/category.png" />
+            </div>
+            <div class="card-content">
+                <div class="stat-description-title">Toplam Kategori</div>
+                <div class="stat-number-wrapper">
+                    <div class="stat-number" id="categoryCount" data-count="@totalCategories">0</div>
+                </div>
+                <p class="stat-description-text">
+                    Kitaplar @totalCategories farklı kategori altında listeleniyor.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-books-card">
+        <h2 class="recent-books-title">
+            <i class="fas fa-history" style="margin-right: 8px; color: #555;"></i>
+            Son Eklenen Kitaplar
+        </h2>
+
+        @{
+            // Varsayım: Model.Books'taki (Book) nesnelerin 'Id', 'Title' ve 'Author' özellikleri var.
+            // 'Author' bir string değilse (örn. bir nesneyse), burayı '@book.Author.Name' olarak güncellemeniz gerekebilir.
+            var recentBooks = Model.Books?
+            .OrderByDescending(b => b.Id)
+            .Take(5)
+            .ToList();
+        }
+
+        @if (recentBooks != null && recentBooks.Any())
+        {
+            <div class="recent-books-table-wrapper">
+                <table class="recent-books-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Başlık</th>
+                            <th>Yazar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in recentBooks)
+                        {
+                            <tr>
+                                <td>#@book.Id</td>
+                                <td>@book.Name</td>
+                                <td>@(book.Author ?? "Bilinmiyor")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="no-books-message">Henüz sisteme eklenmiş kitap bulunmamaktadır.</p>
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sayı animasyonu fonksiyonu
+        function animateCounter(element, target, duration) {
+            if (!element) return;
+
+            let start = 0;
+            const increment = target / (duration / 16);
+
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(start);
+                }
+            }, 16);
+        }
+
+        // Sayıları animasyonlu olarak göster
+        // Başlangıç gecikmesi (animasyonun görünmesi için)
+        setTimeout(() => {
+            const bookCountElement = document.getElementById('bookCount');
+            const categoryCountElement = document.getElementById('categoryCount');
+
+            const bookCount = parseInt(bookCountElement.getAttribute('data-count')) || 0;
+            const categoryCount = parseInt(categoryCountElement.getAttribute('data-count')) || 0;
+
+            animateCounter(bookCountElement, bookCount, 1500); // Süreyi biraz kısalttım
+            animateCounter(categoryCountElement, categoryCount, 1500);
+        }, 300); // Gecikmeyi azalttım
+    });
+</script>
