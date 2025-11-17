@@ -195,7 +195,7 @@ namespace BookManagementApp.Areas.Admin.Controllers
 
             return RedirectToAction("List");
         }
-
+       
         public IActionResult Delete(int? id)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -215,9 +215,29 @@ namespace BookManagementApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            return View(book);
+        }
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult DeleteConfirm(int? id)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var book = _context.Books.FirstOrDefault(b => b.Id == id && b.UserId == userId);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
             _context.Books.Remove(book);
             _context.SaveChanges();
-
             return RedirectToAction("List");
         }
     }

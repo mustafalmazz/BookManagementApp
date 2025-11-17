@@ -1,0 +1,180 @@
+﻿@model Book
+@{
+    ViewData["Title"] = "Delete Book";
+}
+
+<style>
+    /* Genel Sayfa Yapısı */
+    body {
+        background-color: #0a0c1e;
+        color: #e0e0e0;
+    }
+
+    /* --- Kart Yapısı --- */
+    .delete-card {
+        background: #10152f;
+        /* Silme işlemi olduğu için çerçeveyi Neon Kırmızı yapıyoruz */
+        border: 1px solid #ff006a;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(255, 0, 106, 0.2); /* Kırmızı parıltı */
+        padding: 30px;
+        max-width: 900px;
+        margin: 40px auto;
+    }
+
+    /* Başlık */
+    .warning-title {
+        color: #ffffff;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+        /* Kırmızı Neon Yazı */
+        text-shadow: 0 0 10px #ff006a, 0 0 20px #ff006a;
+    }
+
+    .warning-icon {
+        font-size: 3rem;
+        color: #ff006a;
+        display: block;
+        text-align: center;
+        margin-bottom: 15px;
+        animation: pulse 2s infinite;
+    }
+
+    /* Ayırıcı */
+    hr {
+        border-color: #ff006a;
+        opacity: 0.3;
+        margin: 20px 0;
+    }
+
+    /* --- Kitap Görseli --- */
+    .book-image-container {
+        text-align: center;
+        background: #0a0c1e;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #1f2a52;
+    }
+
+    .book-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    /* --- Kitap Bilgileri Metni --- */
+    .book-info h3 {
+        color: #00d9ff; /* İsim Mavi Neon */
+        font-weight: 600;
+    }
+
+    .book-info p {
+        color: #a0b0d0;
+        font-size: 1.1rem;
+    }
+
+    /* --- Butonlar --- */
+    .btn-danger {
+        background-color: #ff006a;
+        border-color: #ff006a;
+        color: #fff;
+        width: 100%;
+        padding: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(255, 0, 106, 0.4);
+    }
+
+        .btn-danger:hover {
+            background-color: #c40052;
+            box-shadow: 0 0 20px #ff006a;
+        }
+
+    .btn-secondary {
+        background-color: transparent;
+        border: 1px solid #a0b0d0;
+        color: #a0b0d0;
+        width: 100%;
+        padding: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #a0b0d0;
+            color: #0a0c1e;
+            box-shadow: 0 0 10px #a0b0d0;
+        }
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="delete-card">
+    <i class="fas fa-exclamation-triangle warning-icon"></i>
+
+    <h1 class="warning-title">Bu kitabı silmek üzeresiniz!</h1>
+
+    <p class="text-center text-muted mb-4">Bu işlem geri alınamaz. <b>"@Model.Name"</b> adlı kitabı sistemden kalıcı olarak silmek istediğinize emin misiniz?</p>
+
+    <hr />
+
+    <div class="row align-items-center">
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="book-image-container">
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    <img src="@Model.Image" class="book-image" alt="@Model.Name" />
+                }
+                else
+                {
+                    <div class="p-5 text-muted"><i class="fas fa-image fa-2x"></i><br>Görsel Yok</div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="book-info mb-4">
+                <h3>@Model.Name</h3>
+                <p><strong>Yazar:</strong> @Model.Author</p>
+                @if (Model.Category != null)
+                {
+                    <span class="badge bg-info text-dark">@Model.Category.CategoryName</span>
+                }
+            </div>
+
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <a asp-controller="Books" asp-action="List" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> İptal Et & Geri Dön
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <form method="post" asp-action="DeleteConfirm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Evet, Kitabı Sil
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
