@@ -10,49 +10,64 @@
         color: #e0e0e0;
     }
 
-    /* --- Kart Yapısı --- */
+    /* --- Kart Yapısı (Sadeleştirildi) --- */
     .delete-card {
         background: #10152f;
-        /* Silme işlemi olduğu için çerçeveyi Neon Kırmızı yapıyoruz */
-        border: 1px solid #ff006a;
-        border-radius: 8px;
-        box-shadow: 0 0 20px rgba(255, 0, 106, 0.2); /* Kırmızı parıltı */
-        padding: 30px;
+        /* Çerçeve opaklığı düşürüldü, daha soft bir sınır */
+        border: 1px solid rgba(255, 0, 106, 0.3);
+        border-radius: 12px;
+        /* Gölge siyah ağırlıklı yapıldı, neon parlaması azaltıldı */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        padding: 40px;
         max-width: 900px;
         margin: 40px auto;
     }
 
-    /* Başlık */
+    /* Başlık (Glow efekti kaldırıldı) */
     .warning-title {
         color: #ffffff;
-        font-weight: 700;
+        font-weight: 600;
         text-align: center;
-        margin-bottom: 30px;
-        /* Kırmızı Neon Yazı */
-        text-shadow: 0 0 10px #ff006a, 0 0 20px #ff006a;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+        /* Neon text-shadow kaldırıldı, temiz beyaz yazı */
     }
 
     .warning-icon {
         font-size: 3rem;
-        color: #ff006a;
+        color: #ff006a; /* Renk korundu */
         display: block;
         text-align: center;
-        margin-bottom: 15px;
-        animation: pulse 2s infinite;
+        margin-bottom: 20px;
+        opacity: 0.8; /* Biraz daha mat */
+        /* Animasyon kaldırıldı: Göz yormaması için */
+    }
+
+    /* Açıklama Metni */
+    .warning-text {
+        color: #8899b0; /* Gri-mavi tonu, okuması kolay */
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1rem;
+    }
+
+    .highlight-name {
+        color: #e0e0e0;
+        font-weight: 700;
     }
 
     /* Ayırıcı */
     hr {
-        border-color: #ff006a;
-        opacity: 0.3;
-        margin: 20px 0;
+        border-color: #3f4c6b; /* Kırmızı yerine koyu mavi/gri */
+        opacity: 0.5;
+        margin: 20px 0 30px 0;
     }
 
     /* --- Kitap Görseli --- */
     .book-image-container {
         text-align: center;
-        background: #0a0c1e;
-        padding: 10px;
+        background: #0d1126; /* Karttan bir tık koyu */
+        padding: 15px;
         border-radius: 8px;
         border: 1px solid #1f2a52;
     }
@@ -60,83 +75,82 @@
     .book-image {
         max-width: 100%;
         height: auto;
+        max-height: 300px;
         border-radius: 4px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
 
-    /* --- Kitap Bilgileri Metni --- */
+    /* --- Kitap Bilgileri --- */
     .book-info h3 {
-        color: #00d9ff; /* İsim Mavi Neon */
-        font-weight: 600;
+        color: #ffffff;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
     }
 
     .book-info p {
         color: #a0b0d0;
-        font-size: 1.1rem;
+        font-size: 1rem;
+        margin-bottom: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding-bottom: 8px;
     }
 
-    /* --- Butonlar --- */
+    .book-info strong {
+        color: #7080a0;
+        margin-right: 10px;
+    }
+
+    /* --- Butonlar (Soft/Outline Tarzı) --- */
+
+    /* Silme Butonu: Varsayılan hali şeffaf, hover olunca doluyor */
     .btn-danger {
-        background-color: #ff006a;
-        border-color: #ff006a;
-        color: #fff;
+        background-color: transparent;
+        border: 1px solid #ff006a;
+        color: #ff006a;
         width: 100%;
         padding: 12px;
         font-weight: 600;
         transition: all 0.3s ease;
-        box-shadow: 0 0 10px rgba(255, 0, 106, 0.4);
     }
 
         .btn-danger:hover {
-            background-color: #c40052;
-            box-shadow: 0 0 20px #ff006a;
+            background-color: #ff006a;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 0, 106, 0.3);
         }
 
+    /* İptal Butonu */
     .btn-secondary {
         background-color: transparent;
-        border: 1px solid #a0b0d0;
+        border: 1px solid #4a5568;
         color: #a0b0d0;
         width: 100%;
         padding: 12px;
-        font-weight: 600;
+        font-weight: 500;
         transition: all 0.3s ease;
     }
 
         .btn-secondary:hover {
-            background-color: #a0b0d0;
-            color: #0a0c1e;
-            box-shadow: 0 0 10px #a0b0d0;
+            border-color: #a0b0d0;
+            color: #ffffff;
+            background-color: rgba(255,255,255,0.05);
         }
 
-    @@keyframes pulse {
-        0% {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        50% {
-            transform: scale(1.1);
-            opacity: 0.8;
-        }
-
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
 </style>
 
 <div class="delete-card">
-    <i class="fas fa-exclamation-triangle warning-icon"></i>
+    <i class="fas fa-trash-alt warning-icon"></i>
 
-    <h1 class="warning-title">Bu kitabı silmek üzeresiniz!</h1>
+    <h1 class="warning-title">Kitap Silme Onayı</h1>
 
-    <p class="text-center text-muted mb-4">Bu işlem geri alınamaz. <b>"@Model.Name"</b> adlı kitabı sistemden kalıcı olarak silmek istediğinize emin misiniz?</p>
+    <p class="warning-text">
+        Bu işlem geri alınamaz. <span class="highlight-name">"@Model.Name"</span> adlı kitabı sistemden kalıcı olarak silmek istediğinize emin misiniz?
+    </p>
 
     <hr />
 
-    <div class="row align-items-center">
-        <div class="col-md-4 mb-3 mb-md-0">
+    <div class="row align-items-start">
+        <div class="col-md-4 mb-4 mb-md-0">
             <div class="book-image-container">
                 @if (!string.IsNullOrEmpty(Model.Image))
                 {
@@ -144,7 +158,7 @@
                 }
                 else
                 {
-                    <div class="p-5 text-muted"><i class="fas fa-image fa-2x"></i><br>Görsel Yok</div>
+                    <div class="p-4 text-muted"><i class="fas fa-image fa-2x mb-2"></i><br>Görsel Yok</div>
                 }
             </div>
         </div>
@@ -153,16 +167,19 @@
             <div class="book-info mb-4">
                 <h3>@Model.Name</h3>
                 <p><strong>Yazar:</strong> @Model.Author</p>
-                @if (Model.Category != null)
+                <p><strong>Fiyat:</strong> @Model.Price ₺</p> @if (Model.Category != null)
                 {
-                    <span class="badge bg-info text-dark">@Model.Category.CategoryName</span>
+                    <div class="mt-3">
+                        <strong>Kategori:</strong>
+                        <span class="badge bg-dark border border-secondary text-light">@Model.Category.CategoryName</span>
+                    </div>
                 }
             </div>
 
-            <div class="row g-2">
+            <div class="row g-3 mt-4">
                 <div class="col-md-6">
                     <a asp-controller="Books" asp-action="List" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> İptal Et & Geri Dön
+                        <i class="fas fa-times"></i> Vazgeç
                     </a>
                 </div>
                 <div class="col-md-6">
@@ -170,7 +187,7 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" asp-for="Id" />
                         <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash-alt"></i> Evet, Kitabı Sil
+                            <i class="fas fa-check"></i> Evet, Sil
                         </button>
                     </form>
                 </div>

@@ -58,13 +58,18 @@ namespace BookManagementApp.Controllers
         }
         public IActionResult Search(string q)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             if (string.IsNullOrWhiteSpace(q))
             {
                 return RedirectToAction("Index");
             }
 
             var books = _context.Books
-                .Where(a => a.Name.Contains(q) || a.Author.Contains(q))
+                .Where(a => a.UserId == userId && (a.Name.Contains(q) || a.Author.Contains(q)) )
                 .ToList();
 
             return View("Index",books);

@@ -140,9 +140,26 @@ namespace BookManagementApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            _context.Categories.Remove(bul);
-            _context.SaveChanges();
+           
 
+            return View(bul);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirm(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+            var find = _context.Categories.FirstOrDefault(c=>c.UserId == userId && c.Id == id);
+            _context.Categories.Remove(find);
+            _context.SaveChanges();
             return RedirectToAction("List");
         }
     }

@@ -5,6 +5,10 @@
     ViewData["Title"] = "Admin Dashboard";
     var totalBooks = Model.Books?.Count ?? 0;
     var totalCategories = Model.Categories?.Count ?? 0;
+
+    // --- YENİ EKLENEN: TOPLAM TUTAR HESAPLAMASI ---
+    // Kitapların fiyatlarını topluyoruz. Stock ile çarpmak isterseniz: .Sum(b => b.Price * b.Stock) yapabilirsiniz.
+    var totalPrice = Model.Books?.Sum(b => b.Price) ?? 0;
 }
 
 <style>
@@ -73,6 +77,11 @@
             animation-delay: 0.2s;
         }
 
+        /* --- YENİ KART İÇİN GECİKME --- */
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
         .stat-card:hover {
             transform: translateY(-5px);
             /* Hover durumunda parıltı ve çerçeve güçlendirildi */
@@ -105,6 +114,13 @@
             text-shadow: 0 0 8px #00ff6a;
         }
 
+        /* --- YENİ EKLENEN: PARA İKONU STİLİ (NEON GOLD/SARI) --- */
+        .card-icon.money-icon {
+            background-color: rgba(255, 215, 0, 0.1); /* Yarı saydam sarı */
+            color: #ffd700; /* Neon Gold */
+            text-shadow: 0 0 8px #ffd700;
+        }
+
     .card-content {
         flex-grow: 1;
     }
@@ -112,6 +128,8 @@
     .stat-number-wrapper {
         text-align: left;
         margin-bottom: 5px;
+        display: flex; /* Para birimi simgesi için yan yana */
+        align-items: baseline;
     }
 
     .stat-number {
@@ -245,8 +263,6 @@
         padding: 20px;
         text-align: center;
     }
-    /* --- Stil Değişiklikleri Bitiş --- */
-
 
     /* Responsive (Değişiklik yok) */
     @@media (max-width: 768px) {
@@ -323,6 +339,22 @@
                 </p>
             </div>
         </div>
+
+        <div class="stat-card">
+            <div class="card-icon money-icon">
+                <img src="~/images/return-on-investment.png" />
+            </div>
+            <div class="card-content">
+                <div class="stat-description-title">Kitap Maliyeti</div>
+                <div class="stat-number-wrapper">
+                    <span style="color: #fff; font-size: 2rem; margin-right:5px;">₺</span>
+                    <div class="stat-number" id="totalPriceCount" data-count="@totalPrice">0</div>
+                </div>
+                <p class="stat-description-text">
+                    Kütüphanedeki kitapların toplam değeri.
+                </p>
+            </div>
+        </div>
     </div>
 
     <div class="recent-books-card">
@@ -332,8 +364,6 @@
         </h2>
 
         @{
-            // Varsayım: Model.Books'taki (Book) nesnelerin 'Id', 'Title' ve 'Author' özellikleri var.
-            // 'Author' bir string değilse (örn. bir nesneyse), burayı '@book.Author.Name' olarak güncellemeniz gerekebilir.
             var recentBooks = Model.Books?
             .OrderByDescending(b => b.Id)
             .Take(5)
@@ -392,16 +422,20 @@
         }
 
         // Sayıları animasyonlu olarak göster
-        // Başlangıç gecikmesi (animasyonun görünmesi için)
         setTimeout(() => {
             const bookCountElement = document.getElementById('bookCount');
             const categoryCountElement = document.getElementById('categoryCount');
+            const totalPriceElement = document.getElementById('totalPriceCount'); // Yeni element
 
             const bookCount = parseInt(bookCountElement.getAttribute('data-count')) || 0;
             const categoryCount = parseInt(categoryCountElement.getAttribute('data-count')) || 0;
+            // Para birimi ondalıklı olabilir, ancak mevcut animasyon mantığı tamsayı (floor) kullanıyor.
+            // Görüntü bütünlüğü için Math.floor mantığını koruyoruz.
+            const totalPrice = parseFloat(totalPriceElement.getAttribute('data-count')) || 0;
 
-            animateCounter(bookCountElement, bookCount, 1500); // Süreyi biraz kısalttım
+            animateCounter(bookCountElement, bookCount, 1500);
             animateCounter(categoryCountElement, categoryCount, 1500);
-        }, 300); // Gecikmeyi azalttım
+            animateCounter(totalPriceElement, totalPrice, 1500); // Yeni animasyon
+        }, 300);
     });
 </script>
