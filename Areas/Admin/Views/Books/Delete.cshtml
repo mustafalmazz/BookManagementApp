@@ -167,19 +167,16 @@
             <div class="book-info mb-4">
                 <h3>@Model.Name</h3>
                 <p><strong>Yazar:</strong> @Model.Author</p>
-                <p><strong>Fiyat:</strong> @Model.Price ₺</p> @if (Model.Category != null)
-                {
-                    <div class="mt-3">
-                        <strong>Kategori:</strong>
-                        <span class="badge bg-dark border border-secondary text-light">@Model.Category.CategoryName</span>
-                    </div>
-                }
+                <p><strong>Kategori:</strong> @Model.Category?.CategoryName</p> 
             </div>
-
+            <br />
+            <br />
+            <br />
+            <br />
             <div class="row g-3 mt-4">
                 <div class="col-md-6">
                     <a asp-controller="Books" asp-action="List" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Vazgeç
+                        <i class="fas fa-times"></i> İptal & Geri Dön
                     </a>
                 </div>
                 <div class="col-md-6">

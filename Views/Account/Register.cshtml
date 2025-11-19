@@ -1,28 +1,445 @@
 ﻿@using BookManagementApp.Areas.Admin.Models
 @model User
-
 @{
     ViewData["Title"] = "Register";
     Layout = "_LogRegLayout";
 }
 
-<h1 class="text-center mt-5">Kayıt Ol</h1>
-<hr />
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        min-height: 100vh;
+        font-family: 'Georgia', serif;
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
 
-<form method="post">
-    <div class="mb-2">
-        <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
-        <input asp-for="UserName" class="form-control" /> 
-    </div>
-    <div class="mb-2">
-        <label asp-for="Email" class="form-label">Email</label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-    <div class="mb-2">
-        <label asp-for="PasswordHash" class="form-label">Şifre</label>
-        <input asp-for="PasswordHash" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
-</form>
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient( 0deg, transparent, transparent 2px, rgba(139, 111, 71, 0.03) 2px, rgba(139, 111, 71, 0.03) 4px );
+            pointer-events: none;
+            z-index: 0;
+        }
 
+    .register-wrapper {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        width: 100%;
+        max-width: 550px;
+        padding: 20px;
+        animation: fadeInScale 0.8s ease;
+    }
 
+    .register-container {
+        background: #fff9f0;
+        border-radius: 30px;
+        box-shadow: 20px 20px 60px rgba(107, 85, 65, 0.3), -10px -10px 30px rgba(255, 255, 255, 0.8);
+        overflow: hidden;
+        border: 3px solid #e8dcc8;
+        position: relative;
+    }
+
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #8b6f47 0%, #6b5541 50%, #a0785a 100%);
+        }
+
+    .register-header {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        padding: 50px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .register-header::before {
+            content: '📖';
+            position: absolute;
+            font-size: 15rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            /* bookFloat animasyonu kaldırıldı */
+        }
+
+        .register-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%23fff9f0" d="M0,50 Q360,0 720,50 T1440,50 L1440,100 L0,100 Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+    .register-icon {
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 3rem;
+        color: #f5f0e8;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+        z-index: 1;
+        /* iconPulse animasyonu kaldırıldı */
+    }
+
+    .register-title {
+        color: #f5f0e8;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .register-subtitle {
+        color: rgba(245, 240, 232, 0.9);
+        font-size: 1rem;
+        margin-top: 10px;
+        font-style: italic;
+        position: relative;
+        z-index: 1;
+    }
+
+    .register-form {
+        padding: 50px 40px;
+    }
+
+    .form-group {
+        margin-bottom: 28px;
+        position: relative;
+    }
+
+    .form-label {
+        display: block;
+        color: #4a3f35;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .form-label i {
+            color: #8b6f47;
+        }
+
+    .form-input-wrapper {
+        position: relative;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        border: 3px solid #e8dcc8;
+        border-radius: 15px;
+        font-size: 1rem;
+        font-family: 'Georgia', serif;
+        background: #f5ede0;
+        color: #4a3f35;
+        transition: all 0.3s ease;
+        box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1);
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #8b6f47;
+            background: #fff;
+            box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1), 0 0 0 4px rgba(139, 111, 71, 0.1);
+            transform: translateY(-2px);
+        }
+
+    .input-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8b6f47;
+        font-size: 1.2rem;
+        pointer-events: none;
+        z-index: 5; /* DÜZELTME: Input tıklandığında ikonun üstte kalması için eklendi */
+    }
+
+    .btn {
+        width: 100%;
+        padding: 18px 30px;
+        border: none;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: 'Georgia', serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        margin-top: 15px;
+    }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        box-shadow: 0 6px 20px rgba(107, 85, 65, 0.4);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(107, 85, 65, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+    .decorative-element {
+        position: absolute;
+        font-size: 4rem;
+        opacity: 0.05;
+        pointer-events: none;
+        /* floatRandom animasyonu kaldırıldı */
+    }
+
+        .decorative-element.top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .decorative-element.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            /* animation-delay kaldırıldı */
+        }
+
+        .decorative-element.middle-left {
+            top: 50%;
+            left: 10px;
+            /* animation-delay ve font-size ayarı kaldırıldı */
+        }
+
+    /* Animations */
+    @@keyframes fadeInScale {
+        from {
+            opacity: 0;
+            /* Login sayfasındaki gibi merkezi başlangıç */
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    /* Tüm sürekli animasyonlar kaldırılmıştır (bookFloat, iconPulse, floatRandom keyframe'leri silinmiştir) */
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .register-wrapper {
+            padding: 15px;
+            max-width: 95%;
+        }
+
+        .register-header {
+            padding: 40px 30px;
+        }
+
+        .register-title {
+            font-size: 2rem;
+        }
+
+        .register-form {
+            padding: 40px 30px;
+        }
+    }
+
+    @@media (max-height: 700px) {
+        .register-wrapper {
+            position: absolute;
+            top: 20px;
+            transform: translateX(-50%);
+            margin-bottom: 40px;
+        }
+
+        .register-header {
+            padding: 35px 30px;
+        }
+
+        .register-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .register-title {
+            font-size: 2rem;
+        }
+
+        .register-form {
+            padding: 35px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+<div class="register-wrapper">
+    <div class="register-container">
+        <div class="decorative-element top-left">📚</div>
+        <div class="decorative-element middle-left">✍️</div>
+        <div class="decorative-element bottom-right">📖</div>
+
+        <div class="register-header">
+            <div class="register-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1 class="register-title">Kayıt Ol</h1>
+            <p class="register-subtitle">Yeni bir okur hesabı oluşturun</p>
+        </div>
+
+        <div class="register-form">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="UserName" class="form-label">
+                        <i class="fas fa-user"></i>
+                        Kullanıcı Adı
+                    </label>
+                    <div class="form-input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input asp-for="UserName"
+                               class="form-control"
+                               type="text"
+                               placeholder="Kullanıcı adınızı seçiniz"
+                               required
+                               autocomplete="username" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </label>
+                    <div class="form-input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input asp-for="Email"
+                               class="form-control"
+                               type="email"
+                               placeholder="email@example.com"
+                               required
+                               autocomplete="email" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PasswordHash" class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Şifre
+                    </label>
+                    <div class="form-input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input asp-for="PasswordHash"
+                               class="form-control"
+                               type="password"
+                               placeholder="Güçlü bir şifre oluşturun"
+                               required
+                               autocomplete="new-password" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span>
+                        <i class="fas fa-user-check"></i>
+                        Hesap Oluştur
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form input animasyonları
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.form-control');
+
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1.2)';
+                this.parentElement.querySelector('.input-icon').style.color = '#8b6f47';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1)';
+                this.parentElement.querySelector('.input-icon').style.color = '#8b6f47';
+            });
+        });
+
+        // Form validasyon görsel feedback
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('.btn-primary');
+            submitBtn.innerHTML = '<span><i class="fas fa-spinner fa-spin"></i> Kayıt yapılıyor...</span>';
+        });
+    });
+</script>

@@ -138,7 +138,8 @@
 
             @foreach (var item in Model.Books)
             {
-                <li class="list-group-item"><b>@item.Name</b> <i>(@item.Author)</i> </li>
+
+                <li class="list-group-item"><img src="@item.Image" style="width:50px;" /><b>@item.Name</b> <i>(@item.Author)</i> </li>
             }
         </ul>
     </div>

@@ -1,28 +1,433 @@
 ﻿@using BookManagementApp.Areas.Admin.Models
 @model User
-
 @{
     ViewData["Title"] = "Login";
     Layout = "_LogRegLayout";
 }
 
-<h1 class="text-center mt-5">Giriş Yap</h1>
-<hr />
-
-<form method="post">
-    <div class="mb-2">
-        <label  class="form-label">Kullanıcı Adı</label>
-        <input name="username" class="form-control" />
-    </div>
-    <div class="mb-2">
-        <label  class="form-label">Şifre</label>
-        <input name="password" class="form-control" />
-    </div>
-    @if (ViewBag.Error != null)
-    {
-        <p style="color:red">@ViewBag.Error</p>
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        min-height: 100vh;
+        font-family: 'Georgia', serif;
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
     }
-    <button type="submit" class="btn btn-primary">Giriş Yap</button>
-    <a class="btn btn-outline-dark" asp-action="Register">Kayıt Ol</a>
-</form>
 
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient( 0deg, transparent, transparent 2px, rgba(139, 111, 71, 0.03) 2px, rgba(139, 111, 71, 0.03) 4px );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+    .login-wrapper {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* Merkeze sabitleme */
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        width: 100%;
+        max-width: 500px;
+        padding: 20px;
+        animation: fadeInScale 0.8s ease;
+    }
+
+    .login-container {
+        background: #fff9f0;
+        border-radius: 30px;
+        box-shadow: 20px 20px 60px rgba(107, 85, 65, 0.3), -10px -10px 30px rgba(255, 255, 255, 0.8);
+        overflow: hidden;
+        border: 3px solid #e8dcc8;
+        position: relative;
+    }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #8b6f47 0%, #6b5541 50%, #a0785a 100%);
+        }
+
+    .login-header {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        padding: 50px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .login-header::before {
+            position: absolute;
+            font-size: 15rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            /* bookFloat animasyonu kaldırıldı */
+        }
+
+        .login-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%23fff9f0" d="M0,50 Q360,0 720,50 T1440,50 L1440,100 L0,100 Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+    .login-icon {
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 3rem;
+        color: #f5f0e8;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+        z-index: 1;
+        /* iconPulse animasyonu kaldırıldı */
+    }
+
+    .login-title {
+        color: #f5f0e8;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-subtitle {
+        color: rgba(245, 240, 232, 0.9);
+        font-size: 1rem;
+        margin-top: 10px;
+        font-style: italic;
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-form {
+        padding: 50px 40px;
+    }
+
+    .form-group {
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .form-label {
+        display: block;
+        color: #4a3f35;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .form-label i {
+            color: #8b6f47;
+        }
+
+    .form-input-wrapper {
+        position: relative;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        border: 3px solid #e8dcc8;
+        border-radius: 15px;
+        font-size: 1rem;
+        font-family: 'Georgia', serif;
+        background: #f5ede0;
+        color: #4a3f35;
+        transition: all 0.3s ease;
+        box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1);
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #8b6f47;
+            background: #fff;
+            box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1), 0 0 0 4px rgba(139, 111, 71, 0.1);
+            transform: translateY(-2px);
+        }
+
+    .input-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8b6f47;
+        font-size: 1.2rem;
+        pointer-events: none;
+        z-index: 5; /* DÜZELTME: İkonun inputun altında kalmaması için eklendi */
+    }
+
+    .error-message {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(200, 35, 51, 0.05) 100%);
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        /* shakeError animasyonu kaldırıldı */
+    }
+
+        .error-message i {
+            font-size: 1.3rem;
+        }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 35px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 16px 30px;
+        border: none;
+        border-radius: 15px;
+        font-size: 1rem;
+        font-weight: 700;
+        font-family: 'Georgia', serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+        /* .btn::before ve .btn:hover::before kısımları animasyonu kaldırmak için silindi */
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        box-shadow: 0 6px 20px rgba(107, 85, 65, 0.4);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(107, 85, 65, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+    .btn-outline {
+        background: transparent;
+        color: #6b5541;
+        border: 3px solid #8b6f47;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.2);
+    }
+
+        .btn-outline:hover {
+            background: #8b6f47;
+            color: #f5f0e8;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(107, 85, 65, 0.3);
+        }
+
+    .decorative-element {
+        position: absolute;
+        font-size: 4rem;
+        opacity: 0.05;
+        pointer-events: none;
+        /* floatRandom animasyonu kaldırıldı */
+    }
+
+        .decorative-element.top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .decorative-element.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            /* animation-delay kaldırıldı */
+        }
+
+    /* Animations */
+    @@keyframes fadeInScale {
+        from {
+            /* Başlangıç konumu ekranın merkezi */
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    /* Tüm diğer sürekli animasyonlar kaldırıldı */
+
+    /* bookFloat, iconPulse, shakeError, floatRandom keyframe tanımları kaldırılmıştır */
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .login-wrapper {
+            padding: 15px;
+        }
+
+        .login-header {
+            padding: 40px 30px;
+        }
+
+        .login-title {
+            font-size: 2rem;
+        }
+
+        .login-form {
+            padding: 40px 30px;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-container">
+        <div class="decorative-element top-left">📖</div>
+
+        <div class="login-header">
+            <div class="login-icon">
+                <i class="fas fa-book-reader"></i>
+            </div>
+            <h1 class="login-title">Giriş Yap</h1>
+            <p class="login-subtitle">Dijital kütüphanenize hoş geldiniz</p>
+        </div>
+
+        <div class="login-form">
+            <form method="post">
+                @if (ViewBag.Error != null)
+                {
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>@ViewBag.Error</span>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Kullanıcı Adı
+                    </label>
+                    <div class="form-input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input name="username"
+                               class="form-control"
+                               type="text"
+                               placeholder="Kullanıcı adınızı giriniz"
+                               required
+                               autocomplete="username" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Şifre
+                    </label>
+                    <div class="form-input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input name="password"
+                               class="form-control"
+                               type="password"
+                               placeholder="Şifrenizi giriniz"
+                               required
+                               autocomplete="current-password" />
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <span>
+                            <i class="fas fa-sign-in-alt"></i>
+                            Giriş Yap
+                        </span>
+                    </button>
+                    <a class="btn btn-outline" asp-action="Register">
+                        <span>
+                            <i class="fas fa-user-plus"></i>
+                            Kayıt Ol
+                        </span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form input animasyonları
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.form-control');
+
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1.2)';
+                this.parentElement.querySelector('.input-icon').style.color = '#8b6f47';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1)';
+                this.parentElement.querySelector('.input-icon').style.color = '#8b6f47';
+            }); 
+        });
+
+        // Error mesajı varsa otomatik scroll
+        const errorMessage = document.querySelector('.error-message');
+        if (errorMessage) {
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+</script>

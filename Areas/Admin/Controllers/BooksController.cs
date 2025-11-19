@@ -209,7 +209,7 @@ namespace BookManagementApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var book = _context.Books.FirstOrDefault(b => b.Id == id && b.UserId == userId);
+            var book = _context.Books.Include(c => c.Category).FirstOrDefault(b => b.Id == id && b.UserId == userId);
             if (book == null)
             {
                 return NotFound();
@@ -230,7 +230,7 @@ namespace BookManagementApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var book = _context.Books.FirstOrDefault(b => b.Id == id && b.UserId == userId);
+            var book = _context.Books.Include(c=>c.Category).FirstOrDefault(b => b.Id == id && b.UserId == userId);
 
             if (book == null)
             {
