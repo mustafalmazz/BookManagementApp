@@ -122,42 +122,42 @@
 <form method="post" asp-action="Create" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
     <div class="mb-2">
-        <label class="form-label" asp-for="Name">Book Name</label>
+        <label class="form-label" asp-for="Name">Kitap Adı</label>
         <input class="form-control" asp-for="Name" />
     </div>
     <div class="mb-2">
-        <label class="form-label" asp-for="Author">Book Author</label>
+        <label class="form-label" asp-for="Author">Yazar</label>
         <input class="form-control" asp-for="Author" />
     </div>
     <div class="mb-2">
-        <label class="form-label" asp-for="Description">Book Description</label>
+        <label class="form-label" asp-for="Description">Kitap Özeti</label>
         <input class="form-control" asp-for="Description" />
     </div>
     <div class="mb-2">
-        <label class="form-label" asp-for="Price">Book Price</label>
+        <label class="form-label" asp-for="Notes">Kitap Notlarım</label>
+        <input class="form-control" asp-for="Notes" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label" asp-for="Price">Kitap Fiyatı</label>
         <input class="form-control" asp-for="Price" />
     </div>
     <div class="mb-2">
-        <label class="form-label" asp-for="Stock">Book Stock</label>
-        <input class="form-control" asp-for="Stock" />
-    </div>
-    <div class="mb-2">
-        <label class="form-label" asp-for="TotalPages">Total Pages</label>
+        <label class="form-label" asp-for="TotalPages">Toplam Sayfa</label>
         <input class="form-control" asp-for="TotalPages" />
     </div>
     <div class="mb-2">
-        <label class="form-label" asp-for="Rate">Rating</label>
+        <label class="form-label" asp-for="Rate">Puan</label>
         <input class="form-control" asp-for="Rate" />
     </div>
     <div class="mb-2">
-        <label class="form-label" asp-for="Image">Image</label>
+        <label class="form-label" asp-for="Image">Resim</label>
         <input class="form-control" type="file" name="ImageFile" />
     </div>
     <div class="mb-2">
-        <label class="form-label">Book Category</label>
+        <label class="form-label">Kategori</label>
         <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
             <option value="">-- Select Category --</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Add</button>
+    <button type="submit" class="btn btn-primary mt-3">Ekle</button>
 </form>

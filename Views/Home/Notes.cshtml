@@ -1,0 +1,428 @@
+﻿@model Book
+@{
+    ViewData["Title"] = "Notes for " + Model.Name;
+}
+
+<style>
+    .notes-page-wrapper {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+
+    .notes-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px;
+        animation: fadeInUp 0.8s ease;
+    }
+
+    .notes-header {
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+    }
+
+    .book-icon-display {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        font-size: 4rem;
+        color: #f5f0e8;
+        box-shadow: 0 10px 40px rgba(107, 85, 65, 0.4);
+        border: 4px solid #e8dcc8;
+        animation: iconFloat 3s infinite ease-in-out;
+    }
+
+    .notes-title {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #4a3f35;
+        margin: 0 0 15px 0;
+        text-shadow: 2px 2px 4px rgba(107, 85, 65, 0.1);
+        line-height: 1.2;
+    }
+
+        .notes-title::after {
+            content: '';
+            display: block;
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #8b6f47, transparent);
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+
+    .notes-subtitle {
+        color: #8b6f47;
+        font-size: 1.3rem;
+        font-style: italic;
+        margin-top: 10px;
+    }
+
+    .notes-card {
+        background: #fff9f0;
+        border-radius: 25px;
+        padding: 0;
+        box-shadow: 15px 15px 40px rgba(107, 85, 65, 0.3), -5px -5px 20px rgba(255, 255, 255, 0.8);
+        border: 3px solid #e8dcc8;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 40px;
+    }
+
+        .notes-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 100%;
+            background: linear-gradient(180deg, #8b6f47 0%, #6b5541 50%, #a0785a 100%);
+        }
+
+    .notes-card-header {
+        background: linear-gradient(135deg, rgba(139, 111, 71, 0.1) 0%, rgba(107, 85, 65, 0.05) 100%);
+        padding: 25px 40px;
+        border-bottom: 3px solid #e8dcc8;
+        position: relative;
+    }
+
+        .notes-card-header::before {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            opacity: 0.2;
+        }
+
+    .notes-card-title {
+        color: #4a3f35;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .notes-card-title i {
+            color: #8b6f47;
+            font-size: 1.8rem;
+        }
+
+    .notes-content {
+        padding: 40px;
+        background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
+        min-height: 300px;
+        position: relative;
+    }
+
+    .notes-text {
+        color: #4a3f35;
+        font-size: 1.15rem;
+        line-height: 1.9;
+        text-align: justify;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* --- EKLENEN CSS: Textarea'nın kağıt desenine uyum sağlaması için --- */
+    textarea.notes-text {
+        width: 100%;
+        border: none;
+        background: transparent;
+        resize: vertical;
+        outline: none;
+        font-family: 'Georgia', serif;
+        min-height: 400px; /* Yazı alanı yüksekliği */
+        padding: 0;
+        margin: 0;
+    }
+    textarea.notes-text:focus {
+        box-shadow: none;
+    }
+    /* ------------------------------------------------------------------- */
+
+        .notes-text::first-letter {
+            font-size: 3.5rem;
+            font-weight: 700;
+            float: left;
+            line-height: 1;
+            margin: 5px 10px 0 0;
+            color: #8b6f47;
+        }
+
+    .empty-notes {
+        text-align: center;
+        padding: 60px 40px;
+        color: #8b6f47;
+    }
+
+    .empty-notes-icon {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        opacity: 0.3;
+        animation: emptyFloat 3s infinite ease-in-out;
+    }
+
+    .empty-notes-text {
+        font-size: 1.3rem;
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    .empty-notes-subtext {
+        font-size: 1rem;
+        opacity: 0.7;
+    }
+
+    .notebook-lines {
+        position: absolute;
+        top: 0;
+        left: 40px;
+        right: 40px;
+        height: 100%;
+        background-image: repeating-linear-gradient( transparent, transparent 31px, rgba(139, 111, 71, 0.1) 31px, rgba(139, 111, 71, 0.1) 33px );
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .notes-btn {
+        padding: 16px 40px;
+        border: none;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: 'Georgia', serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 6px 20px rgba(107, 85, 65, 0.3);
+    }
+
+        .notes-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .notes-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .notes-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+    .notes-btn-edit {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+    }
+
+        .notes-btn-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(107, 85, 65, 0.4);
+        }
+
+    .notes-btn-back {
+        background: transparent;
+        color: #6b5541;
+        border: 3px solid #8b6f47;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.2);
+    }
+
+        .notes-btn-back:hover {
+            background: #8b6f47;
+            color: #f5f0e8;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(107, 85, 65, 0.3);
+        }
+
+    .decoration-quote {
+        position: absolute;
+        font-size: 8rem;
+        color: #8b6f47;
+        opacity: 0.03;
+        pointer-events: none;
+        font-family: 'Times New Roman', serif;
+        font-weight: 900;
+    }
+
+        .decoration-quote.top-left {
+            top: 20px;
+            left: 60px;
+        }
+
+        .decoration-quote.bottom-right {
+            bottom: 20px;
+            right: 60px;
+            transform: rotate(180deg);
+        }
+
+    /* Animations */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes iconFloat {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(5deg);
+        }
+    }
+
+    @@keyframes emptyFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .notes-container {
+            padding: 0 15px;
+        }
+
+        .notes-title {
+            font-size: 2rem;
+        }
+
+        .book-icon-display {
+            width: 90px;
+            height: 90px;
+            font-size: 3rem;
+        }
+
+        .notes-content {
+            padding: 30px 25px;
+        }
+
+        .notes-text {
+            font-size: 1.05rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .notes-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .decoration-quote {
+            font-size: 5rem;
+        }
+    }
+</style>
+
+<div class="notes-container">
+    <div class="notes-header">
+        <h2 class="notes-title">@Model.Name</h2>
+    </div>
+
+    @* --- GÜNCELLENEN KISIM: Form Başlangıcı --- *@
+    <form method="post">
+        @* Id'yi gizli olarak gönderiyoruz *@
+        <input type="hidden" asp-for="Id" />
+
+        <div class="notes-card">
+            <div class="notes-card-header">
+                <h3 class="notes-card-title">
+                    <i class="fas fa-pencil-alt"></i>
+                    Notlarım
+                </h3>
+            </div>
+
+            <div class="notes-content">
+                <div class="notebook-lines"></div>
+                <div class="decoration-quote top-left">"</div>
+                <div class="decoration-quote bottom-right">"</div>
+
+                @* --- GÜNCELLENEN KISIM: if/else kaldırıldı, yerine Textarea geldi --- *@
+                <textarea asp-for="Notes" class="notes-text" placeholder="Buraya tıklayarak notlarınızı yazmaya başlayabilirsiniz..."></textarea>
+                @* ----------------------------------------------------------------- *@
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            @* --- GÜNCELLENEN KISIM: Link, Submit Butonuna çevrildi --- *@
+            <button type="submit" class="notes-btn notes-btn-edit">
+                <span>
+                    <i class="fas fa-save"></i> @* İkon değişti *@
+                    Değişiklikleri Kaydet
+                </span>
+            </button>
+            
+            @* Geri dön butonu link olarak kaldı *@
+            <a href="#" class="notes-btn notes-btn-back">
+                <span>
+                    <i class="fas fa-arrow-left"></i>
+                    Geri Dön
+                </span>
+            </a>
+        </div>
+    </form>
+    @* --- Form Bitişi --- *@
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.notes-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px)';
+            });
+
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>

@@ -21,8 +21,11 @@ namespace BookManagementApp.Models
         [StringLength(100)]
         public string Author { get; set; } = string.Empty;
 
-        [StringLength(500)]
+        [StringLength(600)]
         public string? Description { get; set; }
+        [Display(Name = "Kitap Notlarım")]
+        public string? Notes { get; set; }
+
 
         [Range(0, 9999.99, ErrorMessage = "Fiyat 0 ile 9999 arasında olmalı.")]
         public decimal Price { get; set; }

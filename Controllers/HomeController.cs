@@ -84,6 +84,40 @@ namespace BookManagementApp.Controllers
             var books = _context.Categories.Include(a => a.Books).ToList();
             return View(books);
         }
+        public IActionResult Notes(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var book = _context.Books.FirstOrDefault(b=>b.UserId == userId && b.Id == id);
+            return View(book);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken] 
+        public IActionResult Notes(Book model)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var existingBook = _context.Books.FirstOrDefault(b => b.Id == model.Id && b.UserId == userId);
+
+            if (existingBook == null)
+            {
+                return NotFound(); 
+            }
+            existingBook.Notes = model.Notes;
+            _context.SaveChanges();
+            return RedirectToAction("Notes", new { id = model.Id });
+        }
 
         public IActionResult Privacy()
         {
