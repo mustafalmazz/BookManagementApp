@@ -5,6 +5,58 @@
 }
 
 <style>
+    /* --- YENİ EKLENEN BUTON STİLLERİ: btnNotes için --- */
+
+    /* Birincil Stil (Daha Dikkat Çekici) */
+    .btn-notes-primary {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        border: none;
+        color: #f5f0e8; /* Krem beyaz metin */
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.4);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+        .btn-notes-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 85, 65, 0.6);
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+            color: #f5f0e8;
+        }
+
+    /* İkincil Stil (Daha Sade, Çizgili) */
+    .btn-notes-secondary {
+        background: transparent;
+        border: 2px solid #a0785a;
+        color: #8b6f47;
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+        .btn-notes-secondary:hover {
+            background: #8b6f47;
+            color: #f5f0e8;
+            transform: translateY(-0.5px);
+            box-shadow: 0 3px 10px rgba(107, 85, 65, 0.3);
+        }
     .btn-secondary-mini {
         background: transparent;
         border: 2px solid #8b6f47;
@@ -476,7 +528,7 @@
                             }
                         </div>
                         <div class="col-5">
-                            <a href="/home/notes/@Model.Book?.Id" class="btn btn-secondary">Aldığım Notlar   <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="/home/notes/@Model.Book?.Id" class="btn-notes-primary">Aldığım Notlar   <i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
