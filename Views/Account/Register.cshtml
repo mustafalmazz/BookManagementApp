@@ -68,7 +68,6 @@
     }
 
         .register-header::before {
-            content: '📖';
             position: absolute;
             font-size: 15rem;
             top: 50%;
@@ -215,9 +214,7 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+           
         }
 
         .btn:hover::before {
@@ -241,7 +238,7 @@
     }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(107, 85, 65, 0.5);
         }
 
@@ -345,10 +342,6 @@
 
 <div class="register-wrapper">
     <div class="register-container">
-        <div class="decorative-element top-left">📚</div>
-        <div class="decorative-element middle-left">✍️</div>
-        <div class="decorative-element bottom-right">📖</div>
-
         <div class="register-header">
             <div class="register-icon">
                 <i class="fas fa-user-plus"></i>
@@ -361,7 +354,6 @@
             <form method="post">
                 <div class="form-group">
                     <label asp-for="UserName" class="form-label">
-                        <i class="fas fa-user"></i>
                         Kullanıcı Adı
                     </label>
                     <div class="form-input-wrapper">
@@ -377,7 +369,6 @@
 
                 <div class="form-group">
                     <label asp-for="Email" class="form-label">
-                        <i class="fas fa-envelope"></i>
                         Email
                     </label>
                     <div class="form-input-wrapper">
@@ -393,7 +384,6 @@
 
                 <div class="form-group">
                     <label asp-for="PasswordHash" class="form-label">
-                        <i class="fas fa-lock"></i>
                         Şifre
                     </label>
                     <div class="form-input-wrapper">
