@@ -14,7 +14,9 @@ namespace BookManagementApp.Areas.Admin.Models
         [Required(ErrorMessage = "Şifre zorunludur."), Display(Name = "Şifre")]
         [StringLength(100)]
         public string? PasswordHash { get; set; }
-         
+        [Compare("PasswordHash", ErrorMessage = "Şifreler eşleşmiyor."), Display(Name = "Şifre Tekrar")]
+        public string? ConfirmPassword { get; set; }
+
         public ICollection<Book>? Books { get; set; }
         public ICollection<Category>? Categories { get; set; }
     }

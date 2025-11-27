@@ -112,13 +112,19 @@
             <li>
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Books" ? "active" : "")"
                    asp-area="Admin" asp-controller="Books" asp-action="List">
-                    <i class="bi bi-book"></i> Books
+                    <i class="bi bi-book"></i> Kitaplar
                 </a>
             </li>
             <li>
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
                    asp-area="Admin" asp-controller="Category" asp-action="List">
-                    <i class="bi bi-folder"></i> Categories
+                    <i class="bi bi-folder"></i> Kategoriler
+                </a>
+            </li>
+            <li>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Account" ? "active" : "")"
+                   asp-area="Admin" asp-controller="Account" asp-action="Index">
+                    <i class="bi bi-person-circle"></i> Hesap Ayarları
                 </a>
             </li>
         </ul>
