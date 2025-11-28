@@ -13,7 +13,25 @@ namespace BookManagementApp.Areas.Admin.Controllers
             _context = context;
         }
 
-  
+        public IActionResult Search(string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                return RedirectToAction("List");
+            }
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            var list = _context.Categories
+                .Where(c => c.UserId == userId && (string.IsNullOrEmpty(q) || c.CategoryName.Contains(q))).Include(x => x.Books)
+                .ToList();
+
+            return View("List",list);
+        }
         public IActionResult List()
         {
             var userId = HttpContext.Session.GetInt32("UserId");

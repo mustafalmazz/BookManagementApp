@@ -120,11 +120,62 @@
         border-radius: 4px;
     }
 
-</style>
+    .search-form {
+        margin-bottom: 20px;
+        padding: 20px;
+        background: #10152f;
+        border: 1px solid #1f2a52;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+    }
 
+        /* Input Alanı */
+        .search-form .form-control {
+            background-color: #131a38;
+            color: #e0e0e0;
+            border: 1px solid #1f2a52;
+        }
+
+            /* Input Odaklanma (Focus) Efekti */
+            .search-form .form-control:focus {
+                border-color: #00d9ff; /* Neon mavi sınır */
+                box-shadow: 0 0 8px rgba(0, 217, 255, 0.5); /* Neon parıltı */
+            }
+
+    /* Arama Butonu (Neon Mavi) */
+    .btn-search {
+        background-color: #00c3ff;
+        border-color: #00c3ff;
+        color: #0a0c1e;
+        transition: all 0.3s ease;
+    }
+
+        .btn-search:hover {
+            background-color: #00a9db;
+            border-color: #00a9db;
+            box-shadow: 0 0 10px #00c3ff;
+            color: #0a0c1e;
+        }
+</style>
 <h1 class="text-center mb-3">Tüm Kitaplarım</h1>
 <hr />
-<a asp-area="Admin" asp-action="Create" class="btn btn-outline-success mb-2">Add New</a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <a asp-area="Admin" asp-action="Create" class="btn btn-outline-success">Add New</a>
+
+    <form asp-action="Search" method="get" class="d-flex search-form p-0 m-0">
+        <input type="text"
+               name="q"
+               class="form-control me-2"
+               placeholder="Kitap veya Yazar Adı..."
+               style="width: 300px;" />
+
+        <button type="submit" class="btn btn-search">
+            <i class="fas fa-search"></i> Ara
+        </button>
+    </form>
+</div>
+
 
 <table class="table table-striped table-hover">
     <thead>

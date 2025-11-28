@@ -119,14 +119,25 @@
             border-color: #00a9db;
             box-shadow: 0 0 12px #00c3ff;
         }
-
+    .alert-neon-success {
+        padding: 15px;
+        margin: 20px auto; 
+        border: 1px solid #00d9ff; 
+        background-color: #0b1e33; 
+        color: #ffffff; 
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 0 10px rgba(0, 217, 255, 0.6);
+        max-width: 800px; 
+    }
 </style>
 
 
 <h1 class="text-center">Hesap Bilgilerim</h1>
 <hr />
 
-<form method="post" asp-action="Index">
+<form method="post" asp-action="Index" asp-area="Admin">
     <input type="hidden" asp-for="Id" />
     <div>
         <label class="form-label" asp-for="UserName">Kullanıcı Adı</label>
@@ -136,6 +147,13 @@
         <label class="form-label" asp-for="PasswordHash">Şifre</label>
         <input class="form-control" asp-for="PasswordHash" />
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Güncelle</button>
+    <button type="submit" class="btn btn-primary mt-3 mb-3">Güncelle</button>
 </form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert-neon-success mb-4" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
 

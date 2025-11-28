@@ -1,6 +1,7 @@
 ﻿using BookManagementApp.Areas.Admin.Models;
 using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using BCrypt.Net; 
 
 namespace BookManagementApp.Areas.Admin.Controllers
 {
@@ -22,9 +23,15 @@ namespace BookManagementApp.Areas.Admin.Controllers
             }
 
             var model = _context.Users.FirstOrDefault(u => u.Id == userId);
-            model.PasswordHash = string.Empty;
+
+            if (model != null)
+            {
+                model.PasswordHash = string.Empty;
+            }
+
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Index(User model)
         {
@@ -32,22 +39,57 @@ namespace BookManagementApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-           var user = _context.Users.FirstOrDefault(u => u.Id == model.Id);
+
+           
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == model.Id);
+
             if (user == null)
             {
                 return NotFound();
             }
-            if (!ModelState.IsValid)
+
+            try
             {
+                user.UserName = model.UserName;
+
+                if (!string.IsNullOrEmpty(model.PasswordHash))
+                {
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.PasswordHash);
+                }
+
+                _context.SaveChanges();
+
+                TempData["SuccessMessage"] = "Hesap bilgileriniz başarıyla güncellendi ✔";
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Güncelleme sırasında beklenmeyen bir hata oluştu.");
                 return View(model);
             }
-            user.UserName = model.UserName;
-            if (!string.IsNullOrEmpty(model.PasswordHash))
+        }
+
+        public IActionResult FixPasswordHash()
+        {
+            int userIdToFix = 1;
+            string currentPlainTextPassword = "123";
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userIdToFix);
+
+            if (user == null)
             {
-                user.PasswordHash = model.PasswordHash;
+                return NotFound("Kullanıcı bulunamadı.");
             }
+
+            string newHashedPassword = BCrypt.Net.BCrypt.HashPassword(currentPlainTextPassword);
+
+            user.PasswordHash = newHashedPassword;
             _context.SaveChanges();
-            return RedirectToAction("Index");
+
+            return Content($"Kullanıcı ID: {userIdToFix} için gerçek HASH oluşturuldu ve kaydedildi. " +
+                           $"Yeni hash: {newHashedPassword.Substring(0, 20)}...");
         }
     }
 }
