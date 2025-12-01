@@ -57,6 +57,7 @@
             transform: translateY(-0.5px);
             box-shadow: 0 3px 10px rgba(107, 85, 65, 0.3);
         }
+
     .btn-secondary-mini {
         background: transparent;
         border: 2px solid #8b6f47;
@@ -214,6 +215,7 @@
         align-items: center;
         gap: 10px;
     }
+
     .rating {
         font-size: 1.5rem;
         color: #8b6f47;
@@ -450,7 +452,7 @@
                              class="book-image"
                              alt="@Model.Book.Name">
 
-                       
+
                     </div>
                 </div>
 
@@ -514,17 +516,28 @@
                             <text class="rating">Puanım/ </text>
                             @if (Model.Book.Rate.HasValue)
                             {
-                               
-                                    @for (int i = 0; i < Model.Book?.Rate.Value; i++)
-                                    {
-                                      <i style="font-size:30px;" class="fa-solid fa-star text-warning"></i>
-                                    }
+                                double rate = Convert.ToDouble(Model.Book.Rate.Value);
+                                int fullStars = (int)Math.Floor(rate);
+                                bool hasHalfStar = (rate - fullStars) >= 0.5;
+
+                                @for (int i = 0; i < fullStars; i++)
+                                {
+                                    <i style="font-size:30px;" class="fa-solid fa-star text-warning"></i>
+                                }
+
+                                @if (hasHalfStar)
+                                {
+                                    <i style="font-size:30px;" class="fa-solid fa-star-half-stroke text-warning"></i>
+                                }
+
+                                @for (int i = 0; i < (5 - fullStars - (hasHalfStar ? 1 : 0)); i++)
+                                {
+                                    <i style="font-size:30px;" class="fa-regular fa-star text-warning"></i>
+                                }
                             }
                             else
                             {
-                           
-                                    <span class="text-muted">Henüz Puanlanmadı</span>
-                               
+                                <span class="text-muted">Henüz Puanlanmadı</span>
                             }
                         </div>
                         <div class="col-5">
@@ -594,4 +607,3 @@
         }
     });
 </script>
-

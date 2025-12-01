@@ -1,4 +1,5 @@
-﻿using BookManagementApp.Models;
+﻿using BookManagementApp.Areas.Admin.Models;
+using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,12 +17,14 @@ namespace BookManagementApp.ViewComponents
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             var categories = await _context.Categories.ToListAsync();
-
+            var viewModel = new CategoryUserViewModel();
             if (userId != null)
             {
-                categories = await _context.Categories.Where(c=>c.UserId == userId).ToListAsync();
+                viewModel.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                viewModel.Categories = await _context.Categories.Where(c=>c.UserId == userId).ToListAsync();
             }
-            return View(categories);
+            return View(viewModel);
         }
     }
 }

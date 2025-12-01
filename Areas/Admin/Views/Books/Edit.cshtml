@@ -130,30 +130,37 @@
     <input type="hidden" asp-for="Image" /> <div class="mb-2">
         <label class="form-label" asp-for="Name">Kitap Adı</label>
         <input class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="Author">Yazar</label>
         <input class="form-control" asp-for="Author" />
+        <span asp-validation-for="Author" class="text-danger"></span>
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="Description">Kitap Özeti</label>
         <input class="form-control" asp-for="Description" />
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="Notes">Kitap Notlarım</label>
         <input class="form-control" asp-for="Notes" />
+        <span asp-validation-for="Notes" class="text-danger"></span>
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="Price">Kitap Fiyatı</label>
         <input class="form-control" asp-for="Price" />
+        <span asp-validation-for="Price" class="text-danger"></span>
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="TotalPages">Toplam Sayfa</label>
         <input class="form-control" asp-for="TotalPages" />
+        <span asp-validation-for="TotalPages" class="text-danger"></span>
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="Rate">Puan</label>
         <input class="form-control" asp-for="Rate" />
+        <span asp-validation-for="Rate" class="text-danger"></span>
     </div>
     <div class="mb-2">
         <label class="form-label" asp-for="Image"></label>

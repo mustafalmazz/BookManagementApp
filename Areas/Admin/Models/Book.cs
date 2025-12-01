@@ -15,7 +15,7 @@ namespace BookManagementApp.Models
         [Display(Name = "Sayfa Sayısı")]
         public int? TotalPages { get; set; }
         [Range(1, 5, ErrorMessage = "Puan 1 ile 5 arasında olmalı."),Display(Name="Puan")]
-        public int? Rate { get; set; }
+        public decimal? Rate { get; set; }
 
         [Required(ErrorMessage = "Yazar adı zorunludur.")]
         [StringLength(100)]

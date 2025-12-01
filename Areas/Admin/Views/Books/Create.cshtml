@@ -121,43 +121,61 @@
 
 <form method="post" asp-action="Create" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
+
     <div class="mb-2">
         <label class="form-label" asp-for="Name">Kitap Adı</label>
         <input class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label" asp-for="Author">Yazar</label>
         <input class="form-control" asp-for="Author" />
+        <span asp-validation-for="Author" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label" asp-for="Description">Kitap Özeti</label>
-        <input class="form-control" asp-for="Description" />
+        <textarea class="form-control" asp-for="Description"></textarea> <span asp-validation-for="Description" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label" asp-for="Notes">Kitap Notlarım</label>
         <input class="form-control" asp-for="Notes" />
+        <span asp-validation-for="Notes" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label" asp-for="Price">Kitap Fiyatı</label>
-        <input class="form-control" asp-for="Price" />
+        <input class="form-control" asp-for="Price" type="number" step="0.01" />
+        <span asp-validation-for="Price" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label" asp-for="TotalPages">Toplam Sayfa</label>
-        <input class="form-control" asp-for="TotalPages" />
+        <input class="form-control" asp-for="TotalPages" type="number" />
+        <span asp-validation-for="TotalPages" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label" asp-for="Rate">Puan</label>
-        <input class="form-control" asp-for="Rate" />
+        <input class="form-control" asp-for="Rate" type="number" min="1" max="5" step="0.1" placeholder="1.0 - 5.0" />
+        <span asp-validation-for="Rate" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label" asp-for="Image">Resim</label>
         <input class="form-control" type="file" name="ImageFile" />
+        <span asp-validation-for="Image" class="text-danger"></span>
     </div>
+
     <div class="mb-2">
         <label class="form-label">Kategori</label>
         <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
-            <option value="">-- Select Category --</option>
+            <option value="">-- Kategori Seçiniz --</option>
         </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
+
     <button type="submit" class="btn btn-primary mt-3">Ekle</button>
 </form>

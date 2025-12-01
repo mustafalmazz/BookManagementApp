@@ -1,5 +1,6 @@
-﻿@using BookManagementApp.Models
-@model IEnumerable<Category>
+﻿@using BookManagementApp.Areas.Admin.Models
+@using BookManagementApp.Models
+@model CategoryUserViewModel
 
 <style>
     .book-navbar {
@@ -206,21 +207,16 @@
             </button>
             <div class="navbar-collapse collapse" id="navbarContent">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="List">
-                            <i class="bi bi-book"></i> Kitaplar
-                        </a>
-                    </li>
-                    <span class="nav-item-decorator d-none d-lg-inline">|</span>
+                   
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-tags"></i> Kategoriler
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                            @if (Model != null && Model.Any())
+                            @if (Model != null && Model.Categories.Any())
                             {
-                                foreach (var cat in Model)
+                                foreach (var cat in Model.Categories)
                                 {
                                     <li>
                                         <a class="dropdown-item" asp-controller="Home" asp-action="BooksByCategory" asp-route-id="@cat.Id">
@@ -240,10 +236,19 @@
                            Panelim
                         </a>
                     </li>
-                    <li>
-                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">
-                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
-                    </a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                            @(Model.User != null ? Model.User.UserName : "Hesabım")
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item logout-item" asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
                 <form class="book-search-form" asp-controller="Home" asp-action="Search" method="get">
@@ -254,9 +259,6 @@
                         Ara
                     </button>
                 </form>
-             
-                   
-              
             </div>
         </div>
     </nav>

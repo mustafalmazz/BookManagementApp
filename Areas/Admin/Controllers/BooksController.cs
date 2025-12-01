@@ -114,18 +114,41 @@ namespace BookManagementApp.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(Book model, IFormFile ImageFile)
         {
+            // 1. Yetki Kontrolü
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
                 return RedirectToAction("Login", "Account", new { area = "" });
             }
 
+            // 2. ModelState Temizliği (Hatalı uyarıları engellemek için)
+            // UserId formdan gelmiyor, session'dan alıyoruz. Hata vermesin diye siliyoruz.
+            ModelState.Remove("UserId");
+
+            // Edit işleminde resim seçmek zorunlu değildir (eskisi kalabilir). 
+            // Bu yüzden resim için hata vermesini engelliyoruz.
+            ModelState.Remove("Image");
+            ModelState.Remove("ImageFile");
+
+            // 3. VALIDATION KONTROLÜ
+            if (!ModelState.IsValid)
+            {
+                // Eğer validation hatası varsa (örn: Puan 6 girilmişse),
+                // Dropdown'ın (Kategorilerin) tekrar dolması gerekir, yoksa hata alırız.
+                // Burayı kendi kategori çekme kodunuza göre düzenleyin:
+                // ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+
+                return View(model); // Hataları göstermek için sayfayı geri yükle
+            }
+
+            // 4. Veritabanından Kitabı Bulma
             var book = _context.Books.FirstOrDefault(b => b.Id == model.Id && b.UserId == userId);
             if (book == null)
             {
                 return NotFound();
             }
 
+            // 5. Resim Güncelleme İşlemi (Varsa)
             if (ImageFile != null && ImageFile.Length > 0)
             {
                 var fileName = Path.GetFileName(ImageFile.FileName);
@@ -134,9 +157,11 @@ namespace BookManagementApp.Areas.Admin.Controllers
                 {
                     ImageFile.CopyTo(stream);
                 }
-                book.Image = "/images/" + fileName;
+                book.Image = "/images/" + fileName; // Sadece yeni resim yüklenirse güncelle
             }
+            // Resim yüklenmediyse 'book.Image'a dokunmuyoruz, eski resim kalıyor.
 
+            // 6. Diğer Bilgilerin Güncellenmesi
             book.Author = model.Author;
             book.Name = model.Name;
             book.Description = model.Description;
@@ -151,7 +176,6 @@ namespace BookManagementApp.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
-  
         public IActionResult Create()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -178,6 +202,11 @@ namespace BookManagementApp.Areas.Admin.Controllers
             {
                 return RedirectToAction("Login", "Account", new { area = "" });
             }
+            ModelState.Remove("UserId");
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
             if (ImageFile != null && ImageFile.Length > 0)
             {
@@ -190,13 +219,12 @@ namespace BookManagementApp.Areas.Admin.Controllers
                 model.Image = "/images/" + fileName;
             }
 
-            model.UserId = userId.Value; 
+            model.UserId = userId.Value;
             _context.Books.Add(model);
             _context.SaveChanges();
 
             return RedirectToAction("List");
         }
-       
         public IActionResult Delete(int? id)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
