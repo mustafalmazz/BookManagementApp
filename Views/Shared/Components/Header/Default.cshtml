@@ -64,7 +64,7 @@
         font-size: 1.1rem;
         font-weight: 500;
         padding: 10px 20px !important;
-        margin: 0 5px;
+        margin: 0 30px;
         border-radius: 10px;
         transition: all 0.3s ease;
         position: relative;
@@ -181,6 +181,8 @@
 
     .navbar-nav {
         align-items: center;
+        justify-content: center; /* <--- YENİ EKLENEN: Elemanları tam ortaya çeker */
+        width: 100%;
     }
 
     .nav-item-decorator {
@@ -191,6 +193,61 @@
 
     .book-navbar .container-fluid {
         max-width: 1400px;
+    }
+    @@media (min-width: 992px) {
+        .book-navbar .dropdown-menu
+
+    {
+        /* Menüyü ebeveynin tam ortasına getir */
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        /* Tasarım Güzelleştirmeleri */
+        margin-top: 15px !important; /* Butondan biraz aşağıda dursun */
+        border-radius: 15px !important;
+        border: none !important;
+        box-shadow: 0 10px 30px rgba(107, 85, 65, 0.2);
+        text-align: center; /* İçindeki yazıları ortala */
+        min-width: 200px; /* Çok dar olmasın */
+        /* Ufak bir animasyon */
+        animation: fadeInDropdown 0.3s ease;
+    }
+
+    /* Yukarı doğru küçük ok işareti ekleyelim (Opsiyonel ama şık durur) */
+    .book-navbar .dropdown-menu::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid #fff;
+    }
+
+    }
+
+    /* Dropdown açılma animasyonu */
+    @@keyframes fadeInDropdown {
+        from
+
+    {
+        opacity: 0;
+        transform: translate(-50%, 10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    }
+
+    /* Dropdown item'larının hover rengini de temaya uyduralım */
+    .dropdown-item:active, .dropdown-item:hover {
+        background-color: rgba(139, 111, 71, 0.1) !important;
+        color: #8b6f47 !important;
+        border-radius: 10px;
     }
 </style>
 
@@ -231,11 +288,11 @@
                             }
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-                           Panelim
-                        </a>
-                    </li>
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"> *@
+                    @*        Panelim *@
+                    @*     </a> *@
+                    @* </li> *@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -244,10 +301,16 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li>
-                                <a class="dropdown-item logout-item" asp-area="" asp-controller="Account" asp-action="Logout">
-                                    <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                                <a class="dropdown-item logout-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                    Kütüphaneyi Yönet
                                 </a>
                             </li>
+                            <li>
+                                <a class="dropdown-item logout-item text-danger" asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="fa-solid fa-right-from-bracket text-danger"></i> Çıkış Yap
+                                </a>
+                            </li>
+                           
                         </ul>
                     </li>
                 </ul>

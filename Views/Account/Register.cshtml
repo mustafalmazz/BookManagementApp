@@ -6,6 +6,89 @@
 }
 
 <style>
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        font-weight: 600;
+        display: block;
+        padding-left: 10px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .field-validation-error {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .field-validation-error::before {
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+
+   @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 20px 0;
+        color: #8b6f47;
+        font-style: italic;
+        font-size: 0.9rem;
+    }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(139, 111, 71, 0.3);
+        }
+
+        .divider::before {
+            margin-right: .5em;
+        }
+
+        .divider::after {
+            margin-left: .5em;
+        }
+
+    .btn-google {
+        background: #fff;
+        color: #4a3f35;
+        border: 2px solid #e8dcc8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-decoration: none; /* Link olduğu için altı çizili olmasın */
+        transition: all 0.3s ease;
+    }
+
+        .btn-google:hover {
+            background: #f5ede0;
+            border-color: #8b6f47;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.15);
+        }
+
+        .btn-google i {
+            color: #DB4437; /* Google kırmızısı */
+        }
     body {
         background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
         min-height: 100vh;
@@ -352,6 +435,8 @@
 
         <div class="register-form">
             <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 20px; text-align: center; font-size: 1rem;"></div>
+
                 <div class="form-group">
                     <label asp-for="UserName" class="form-label">
                         Kullanıcı Adı
@@ -362,9 +447,9 @@
                                class="form-control"
                                type="text"
                                placeholder="Kullanıcı adınızı seçiniz"
-                               required
                                autocomplete="username" />
                     </div>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
@@ -377,9 +462,9 @@
                                class="form-control"
                                type="email"
                                placeholder="email@example.com"
-                               required
                                autocomplete="email" />
                     </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
@@ -392,10 +477,11 @@
                                class="form-control"
                                type="password"
                                placeholder="Güçlü bir şifre oluşturun"
-                               required
                                autocomplete="new-password" />
                     </div>
+                    <span asp-validation-for="PasswordHash" class="text-danger"></span>
                 </div>
+
                 <div class="form-group">
                     <label asp-for="ConfirmPassword" class="form-label">
                         Şifre Tekrar
@@ -406,9 +492,9 @@
                                class="form-control"
                                type="password"
                                placeholder="Şifrenizi tekrar girin"
-                               required
                                autocomplete="new-password" />
                     </div>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
@@ -417,6 +503,20 @@
                         Hesap Oluştur
                     </span>
                 </button>
+                <div class="divider">veya</div>
+
+                <a asp-action="GoogleLogin" asp-controller="Account" class="btn btn-google">
+                    <span>
+                        <i class="fab fa-google"></i>
+                        Google ile Kaydol
+                    </span>
+                </a>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="color: #6b5541; font-size: 0.9rem;">
+                        Zaten bir hesabınız var mı?
+                        <a asp-action="Login" style="color: #8b6f47; font-weight: bold; text-decoration: none;">Giriş Yap</a>
+                    </p>
+                </div>
             </form>
         </div>
     </div>

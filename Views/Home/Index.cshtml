@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    // Veri var mı kontrolü
+    bool hasBooks = Model != null && Model.Any();
 }
 
 <style>
@@ -10,6 +12,7 @@
         font-family: 'Georgia', serif;
     }
 
+    /* --- MEVCUT HEADER STİLLERİ --- */
     .page-header {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         color: #f5f0e8;
@@ -40,13 +43,86 @@
             position: relative;
         }
 
-        .page-header p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            font-style: italic;
-            position: relative;
+    /* --- YENİ EKLENEN BOŞ DURUM (EMPTY STATE) STİLLERİ --- */
+    .empty-state-wrapper {
+        text-align: center;
+        padding: 60px 20px;
+        animation: fadeIn 1s ease;
+    }
+
+    .empty-card {
+        background: rgba(255, 249, 240, 0.6);
+        border: 4px dashed #e8dcc8;
+        border-radius: 40px;
+        padding: 50px;
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .empty-icon {
+        font-size: 6rem;
+        color: #d4c5b0;
+        margin-bottom: 30px;
+        display: inline-block;
+    }
+
+    .empty-title {
+        color: #8b6f47;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .empty-text {
+        color: #6b5541;
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        font-style: italic;
+        line-height: 1.6;
+    }
+
+    .add-book-btn-lg {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        padding: 20px 50px;
+        border-radius: 50px;
+        font-size: 1.3rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 10px 25px rgba(107, 85, 65, 0.3);
+        border: 2px solid transparent;
+    }
+
+        .add-book-btn-lg:hover {
+            transition: 0.5s;
+            transform: translateY(-1px);
+            box-shadow: 0 15px 35px rgba(107, 85, 65, 0.4);
+            background: #fff;
+            color: #8b6f47;
+            border-color: #8b6f47;
         }
 
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* --- MEVCUT LİSTELEME STİLLERİ (Filtre, Grid vb.) --- */
     .container-custom {
         max-width: 1400px;
         margin: 0 auto;
@@ -55,7 +131,6 @@
         gap: 30px;
     }
 
-    /* Filtre Paneli */
     .filter-sidebar {
         width: 280px;
         flex-shrink: 0;
@@ -87,10 +162,6 @@
     .filter-section {
         margin-bottom: 25px;
     }
-
-        .filter-section:last-child {
-            margin-bottom: 0;
-        }
 
     .filter-label {
         color: #6b5541;
@@ -149,7 +220,6 @@
             box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
         }
 
-    /* Kitap Grid */
     .books-container {
         flex: 1;
         min-width: 0;
@@ -285,146 +355,189 @@
         .books-grid {
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         }
+        /* Empty State Responsive */
+        .empty-card {
+            padding: 30px;
+        }
+
+        .empty-title {
+            font-size: 2rem;
+        }
+
+        .add-book-btn-lg {
+            width: 100%;
+            justify-content: center;
+        }
     }
 </style>
 
 <div class="page-header">
     <div class="container text-center">
         <h1>
-            Kitap Koleksiyonumuz
+            Kitap Koleksiyonum
             <br />
-            <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8;">
-                Toplam @Model.Count() kitap bulunmaktadır!
-            </small>
+            @if (hasBooks)
+            {
+                <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8;">
+                    Toplam @Model.Count() kitap bulunmaktadır!
+                </small>
+            }
+            else
+            {
+                <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8; font-style:italic;">
+                    Raflarımız henüz sessiz...
+                </small>
+            }
         </h1>
     </div>
 </div>
 
-<div class="container-custom">
-    <!-- Filtre Sidebar -->
-    <aside class="filter-sidebar">
-        <div class="filter-card">
-            <h3 class="filter-title">
-                <i class="fa-solid fa-filter"></i> Filtrele
-            </h3>
-
-            <div class="filter-section">
-                <label class="filter-label">Sayfa Sayısı</label>
-
-                <div class="filter-option">
-                    <input type="radio" id="all" name="pageCount" value="all" checked>
-                    <label for="all">Tümü</label>
-                </div>
-
-                <div class="filter-option">
-                    <input type="radio" id="short" name="pageCount" value="0-200">
-                    <label for="short">0 - 200 sayfa</label>
-                </div>
-
-                <div class="filter-option">
-                    <input type="radio" id="medium" name="pageCount" value="201-400">
-                    <label for="medium">201 - 400 sayfa</label>
-                </div>
-
-                <div class="filter-option">
-                    <input type="radio" id="long" name="pageCount" value="401-600">
-                    <label for="long">401 - 600 sayfa</label>
-                </div>
-
-                <div class="filter-option">
-                    <input type="radio" id="verylong" name="pageCount" value="601+">
-                    <label for="verylong">601+ sayfa</label>
-                </div>
+@if (!hasBooks)
+{
+    <div class="container empty-state-wrapper">
+        <div class="empty-card">
+            <div class="empty-icon">
+                <i class="fa-solid fa-book-open-reader"></i>
             </div>
 
-            <div class="filter-section">
-                <label class="filter-label">Sıralama</label>
+            <h2 class="empty-title">Kütüphaneniz Henüz Boş</h2>
 
-                <div class="filter-option">
-                    <input type="radio" id="asc" name="sortOrder" value="asc" checked>
-                    <label for="asc">Artan </label>
-                </div>
+            <p class="empty-text">
+                Henüz koleksiyonunuza eklenmiş bir eser bulunmuyor.<br>
+                İlk kitabı ekleyerek bu büyülü yolculuğu başlatın ve rafları bilgiyle doldurun.
+            </p>
 
-                <div class="filter-option">
-                    <input type="radio" id="desc" name="sortOrder" value="desc">
-                    <label for="desc">Azalan </label>
-                </div>
-            </div>
-
-            <button class="clear-filters-btn" onclick="clearFilters()">
-                Filtreleri Temizle
-            </button>
+            <a href="/Admin/Books/Create" class="add-book-btn-lg">
+                <i class="fa-solid fa-plus"></i> Şimdi Kitap Ekle
+            </a>
         </div>
-    </aside>
+    </div>
+}
+else
+{
+    <div class="container-custom">
+        <aside class="filter-sidebar">
+            <div class="filter-card">
+                <h3 class="filter-title">
+                    <i class="fa-solid fa-filter"></i> Filtrele
+                </h3>
 
-    <!-- Kitaplar -->
-    <main class="books-container">
-        <div class="books-grid" id="booksGrid">
-            @foreach (var book in Model)
-            {
-                <div class="book-card" data-pages="@book.TotalPages">
-                    <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
-                         class="card-img-top"
-                         alt="@book.Name">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-center">@book.Name</h5>
-                        <p class="author-name text-center">@book.Author</p>
-                        <div class="mt-auto text-center">
-                            <a href="/Home/Details/@book.Id" class="btn details-btn">
-                                Detayları Gör
-                            </a>
-                        </div>
+                <div class="filter-section">
+                    <label class="filter-label">Sayfa Sayısı</label>
+                    <div class="filter-option">
+                        <input type="radio" id="all" name="pageCount" value="all" checked>
+                        <label for="all">Tümü</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="short" name="pageCount" value="0-200">
+                        <label for="short">0 - 200 sayfa</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="medium" name="pageCount" value="201-400">
+                        <label for="medium">201 - 400 sayfa</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="long" name="pageCount" value="401-600">
+                        <label for="long">401 - 600 sayfa</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="verylong" name="pageCount" value="601+">
+                        <label for="verylong">601+ sayfa</label>
                     </div>
                 </div>
-            }
-        </div>
-    </main>
-</div>
+
+                <div class="filter-section">
+                    <label class="filter-label">Sıralama</label>
+                    <div class="filter-option">
+                        <input type="radio" id="asc" name="sortOrder" value="asc" checked>
+                        <label for="asc">Artan </label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="desc" name="sortOrder" value="desc">
+                        <label for="desc">Azalan </label>
+                    </div>
+                </div>
+
+                <button class="clear-filters-btn" onclick="clearFilters()">
+                    Filtreleri Temizle
+                </button>
+            </div>
+        </aside>
+
+        <main class="books-container">
+            <div class="books-grid" id="booksGrid">
+                @foreach (var book in Model)
+                {
+                    <div class="book-card" data-pages="@book.TotalPages">
+                        <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
+                             class="card-img-top"
+                             alt="@book.Name">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-center">@book.Name</h5>
+                            <p class="author-name text-center">@book.Author</p>
+                            <div class="mt-auto text-center">
+                                <a href="/Home/Details/@book.Id" class="btn details-btn">
+                                    Detayları Gör
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </main>
+    </div>
+}
 
 @section Scripts {
-    <script>
-        function filterAndSortBooks() {
-            const pageCountFilter = document.querySelector('input[name="pageCount"]:checked').value;
-            const sortOrder = document.querySelector('input[name="sortOrder"]:checked').value;
-            const booksGrid = document.getElementById('booksGrid');
-            const books = Array.from(booksGrid.children);
+    @if (hasBooks)
+    {
+        <script>
+            function filterAndSortBooks() {
+                const pageCountFilter = document.querySelector('input[name="pageCount"]:checked').value;
+                const sortOrder = document.querySelector('input[name="sortOrder"]:checked').value;
+                const booksGrid = document.getElementById('booksGrid');
+                // booksGrid null olabilir kontrolü
+                if (!booksGrid) return;
 
-            // Filtreleme
-            books.forEach(book => {
-                const pages = parseInt(book.dataset.pages);
-                let show = true;
+                const books = Array.from(booksGrid.children);
 
-                if (pageCountFilter !== 'all') {
-                    if (pageCountFilter === '0-200') show = pages >= 0 && pages <= 200;
-                    else if (pageCountFilter === '201-400') show = pages >= 201 && pages <= 400;
-                    else if (pageCountFilter === '401-600') show = pages >= 401 && pages <= 600;
-                    else if (pageCountFilter === '601+') show = pages >= 601;
-                }
+                // Filtreleme
+                books.forEach(book => {
+                    const pages = parseInt(book.dataset.pages);
+                    let show = true;
 
-                book.style.display = show ? 'block' : 'none';
+                    if (pageCountFilter !== 'all') {
+                        if (pageCountFilter === '0-200') show = pages >= 0 && pages <= 200;
+                        else if (pageCountFilter === '201-400') show = pages >= 201 && pages <= 400;
+                        else if (pageCountFilter === '401-600') show = pages >= 401 && pages <= 600;
+                        else if (pageCountFilter === '601+') show = pages >= 601;
+                    }
+
+                    book.style.display = show ? 'block' : 'none';
+                });
+
+                // Sıralama
+                const visibleBooks = books.filter(book => book.style.display !== 'none');
+                visibleBooks.sort((a, b) => {
+                    const pagesA = parseInt(a.dataset.pages);
+                    const pagesB = parseInt(b.dataset.pages);
+                    return sortOrder === 'asc' ? pagesA - pagesB : pagesB - pagesA;
+                });
+
+                // Yeniden düzenleme
+                visibleBooks.forEach(book => booksGrid.appendChild(book));
+            }
+
+            function clearFilters() {
+                document.getElementById('all').checked = true;
+                document.getElementById('asc').checked = true;
+                filterAndSortBooks();
+            }
+
+            // Event listeners
+            document.querySelectorAll('input[name="pageCount"], input[name="sortOrder"]').forEach(input => {
+                input.addEventListener('change', filterAndSortBooks);
             });
-
-            // Sıralama
-            const visibleBooks = books.filter(book => book.style.display !== 'none');
-            visibleBooks.sort((a, b) => {
-                const pagesA = parseInt(a.dataset.pages);
-                const pagesB = parseInt(b.dataset.pages);
-                return sortOrder === 'asc' ? pagesA - pagesB : pagesB - pagesA;
-            });
-
-            // Yeniden düzenleme
-            visibleBooks.forEach(book => booksGrid.appendChild(book));
-        }
-
-        function clearFilters() {
-            document.getElementById('all').checked = true;
-            document.getElementById('asc').checked = true;
-            filterAndSortBooks();
-        }
-
-        // Event listeners
-        document.querySelectorAll('input[name="pageCount"], input[name="sortOrder"]').forEach(input => {
-            input.addEventListener('change', filterAndSortBooks);
-        });
-    </script>
+        </script>
+    }
 }

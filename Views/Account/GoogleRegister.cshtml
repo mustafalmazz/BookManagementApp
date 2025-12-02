@@ -1,0 +1,166 @@
+﻿@{
+    ViewData["Title"] = "Kaydı Tamamla";
+    Layout = "_LogRegLayout";
+}
+
+<style>
+    /* Register sayfasından miras alınan stiller burada geçerli */
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        min-height: 100vh;
+        font-family: 'Georgia', serif;
+    }
+
+    .register-wrapper {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        max-width: 500px;
+        padding: 20px;
+        animation: fadeInScale 0.8s ease;
+    }
+
+    .register-container {
+        background: #fff9f0;
+        border-radius: 30px;
+        box-shadow: 20px 20px 60px rgba(107, 85, 65, 0.3);
+        border: 3px solid #e8dcc8;
+        overflow: hidden;
+    }
+
+    .register-header {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        padding: 30px;
+        text-align: center;
+        color: #f5f0e8;
+    }
+
+    .register-form {
+        padding: 40px 30px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e8dcc8;
+        border-radius: 12px;
+        background: #f5ede0;
+        font-family: 'Georgia', serif;
+        font-size: 1rem;
+        margin-bottom: 20px;
+        color: #4a3f35;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #8b6f47;
+            background: #fff;
+            transform: translateY(-2px);
+        }
+
+    .btn-primary {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: transform 0.2s;
+        font-family: 'Georgia', serif;
+        font-weight: bold;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.2);
+        }
+
+    .info-text {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #6b5541;
+        font-style: italic;
+    }
+
+    .email-badge {
+        display: inline-block;
+        background: #e8dcc8;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        color: #4a3f35;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+        border: 1px solid #d4c5b0;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 0.9rem;
+        border-left: 5px solid #721c24;
+    }
+
+    @@keyframes fadeInScale {
+        from
+
+    {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    }
+</style>
+
+<div class="register-wrapper">
+    <div class="register-container">
+        <div class="register-header">
+            <i class="fab fa-google" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <h2>Son Bir Adım Kaldı</h2>
+            <p style="opacity: 0.9; font-size: 0.9rem;">Kütüphanemize hoş geldiniz</p>
+        </div>
+
+        <div class="register-form">
+            <div style="text-align: center;">
+                <span class="email-badge">
+                    <i class="fas fa-envelope"></i> @ViewBag.Email
+                </span>
+                <p class="info-text">
+                    Google hesabınız başarıyla doğrulandı.<br>
+                    Lütfen kütüphanede kullanmak istediğiniz <strong>Kullanıcı Adını</strong> belirleyin.
+                </p>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="GoogleRegister" method="post">
+                <label style="font-weight: bold; color: #4a3f35; display: block; margin-bottom: 8px; text-transform: uppercase; font-size: 0.9rem;">Kullanıcı Adı</label>
+                <input type="text" name="username" class="form-control" placeholder="Örn: KitapKurdu1923" required autocomplete="off" />
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> Kaydı Tamamla
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

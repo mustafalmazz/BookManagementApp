@@ -1,8 +1,12 @@
 ﻿using BookManagementApp.Models;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookManagementApp.Areas.Admin.Models
 {
+    [Index(nameof(UserName), IsUnique = true)]
+    [Index(nameof(Email), IsUnique = true)]
     public class User
     {
         public int Id { get; set; }
@@ -15,7 +19,10 @@ namespace BookManagementApp.Areas.Admin.Models
         [StringLength(100)]
         public string? PasswordHash { get; set; }
         [Compare("PasswordHash", ErrorMessage = "Şifreler eşleşmiyor."), Display(Name = "Şifre Tekrar")]
+        [NotMapped]
         public string? ConfirmPassword { get; set; }
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpires { get; set; }
 
         public ICollection<Book>? Books { get; set; }
         public ICollection<Category>? Categories { get; set; }
