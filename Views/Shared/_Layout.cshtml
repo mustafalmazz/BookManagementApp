@@ -10,47 +10,58 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-        /* Bu wrapper, asılı kitapların header'a göre konum almasını sağlar */
-        .header-wrapper {
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
             position: relative;
         }
 
+        .header-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
         .hanging-book-container {
-            position: absolute; /* Header'a göre hizalanacak */
-            top: 100%; /* Header-wrapper'ın tam altına iter */
-            z-index: 1040; /* İçeriğin üstünde */
-            pointer-events: none; /* Tıklamayı engellemesin */
+            position: absolute;
+            top: 100%;
+            /* DÜZELTME BURADA: Header'daki margin boşluğunu kapatmak için ipleri yukarı çektik */
+            margin-top: -6px;
+            z-index: 1040;
+            pointer-events: none;
             transform-origin: top center;
-            perspective: 1000px; /* 3D efekt için */
+            perspective: 1000px;
         }
 
         .rope {
-            width: 2px; /* İp kalınlığı */
-            height: 40px; /* İp uzunluğu */
-            background: linear-gradient(to right, #6d4c3a, #8d6e63, #6d4c3a); /* Daha gerçekçi ip rengi ve hafif bir gradient */
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to right, #6d4c3a, #8d6e63, #6d4c3a);
             margin: 0 auto;
-            border-radius: 1px; /* İpi biraz yumuşat */
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* İpe hafif gölge */
+            border-radius: 1px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .book-icon {
             text-align: center;
-            font-size: 1.8rem; /* Kitap boyutu */
-            color: #4a2d1f; /* Daha koyu, gerçekçi kitap rengi (cilt rengi gibi) */
-            line-height: 1; /* Kitap ikonunun dikey hizalamasını düzelt */
+            font-size: 1.8rem;
+            color: #4a2d1f;
+            line-height: 1;
             position: relative;
-            transform-style: preserve-3d; /* 3D dönüşümler için */
+            transform-style: preserve-3d;
         }
 
-            /* Kitabın kenarları için sahte 3D efekti */
             .book-icon::before {
                 content: '';
                 position: absolute;
                 top: 0;
-                left: -5px; /* Sol kenar */
+                left: -5px;
                 width: 5px;
                 height: 100%;
-                background-color: #5c3e2e; /* Kenar rengi */
+                background-color: #5c3e2e;
                 transform: rotateY(90deg) translateZ(-5px);
                 transform-origin: left;
                 box-shadow: -2px 0 5px rgba(0, 0, 0, 0.4);
@@ -60,49 +71,54 @@
                 content: '';
                 position: absolute;
                 top: 0;
-                right: -5px; /* Sağ kenar */
+                right: -5px;
                 width: 5px;
                 height: 100%;
-                background-color: #5c3e2e; /* Kenar rengi */
+                background-color: #5c3e2e;
                 transform: rotateY(-90deg) translateZ(-5px);
                 transform-origin: right;
                 box-shadow: 2px 0 5px rgba(0, 0, 0, 0.4);
             }
 
-            /* Kitabın ana rengine gölge ekle */
             .book-icon .fas.fa-book {
-                /* Kitabın ön yüzüne hafif bir gölge ve 3D derinlik efekti */
-                text-shadow: -1px -1px 0 #3b2419, /* Üst ve sol kenar */
-                1px 1px 0 #5f4236, /* Alt ve sağ kenar */
-                0 5px 10px rgba(0, 0, 0, 0.5); /* Derinlik gölgesi */
+                text-shadow: -1px -1px 0 #3b2419, 1px 1px 0 #5f4236, 0 5px 10px rgba(0, 0, 0, 0.5);
             }
 
-        /* Sol Kitap */
         .hanging-book-container.left {
-            left: 30px; /* Soldan uzaklık */
+            left: 30px;
             animation: gentle-swing 6s infinite ease-in-out;
         }
 
-        /* Sağ Kitap */
         .hanging-book-container.right {
-            right: 30px; /* Sağdan uzaklık */
+            right: 30px;
             animation: gentle-swing 6s infinite ease-in-out;
-            animation-delay: -3s; /* Diğeriyle aynı anda sallanmasın */
+            animation-delay: -3s;
         }
 
-        /* Hafif salınım animasyonu */
         @@keyframes gentle-swing {
-            0%, 100% {
-                transform: rotate(0deg);
-            }
+            0%, 100%
 
-            50% {
-                transform: rotate(6deg); /* Daha az agresif bir salınım */
-            }
+        {
+            transform: rotate(0deg);
+        }
+
+        50% {
+            transform: rotate(6deg);
+        }
+
+        }
+
+        @@media (max-width: 576px) {
+            .hanging-book-container
+
+        {
+            display: none;
+        }
+
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <div class="header-wrapper">
         @await Component.InvokeAsync("Header")
@@ -117,11 +133,14 @@
         </div>
     </div>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3 pt-4">
             @RenderBody()
         </main>
     </div>
+
+    @await Component.InvokeAsync("Footer")
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

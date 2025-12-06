@@ -11,14 +11,14 @@ namespace BookManagementApp.Controllers
         private readonly MyDbContext _context;
         public HomeController(MyDbContext context)
         {
-             _context = context;
+            _context = context;
         }
         private void LoadCategories()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId != null)
             {
-                ViewBag.Categories = _context.Categories.Where(x=>x.UserId == userId).ToList();
+                ViewBag.Categories = _context.Categories.Where(x => x.UserId == userId).ToList();
 
             }
             else
@@ -32,10 +32,10 @@ namespace BookManagementApp.Controllers
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
-               return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
-            var model = _context.Books.Where(u=>u.UserId == userId).OrderByDescending(x => x.CreateDate).ToList();
+            var model = _context.Books.Where(u => u.UserId == userId).OrderByDescending(x => x.CreateDate).ToList();
             return View(model);
         }
         public IActionResult Details(int? id)
@@ -44,9 +44,9 @@ namespace BookManagementApp.Controllers
                 return NotFound();
 
             var book = _context.Books
-                        .Include(b => b.Category) 
+                        .Include(b => b.Category)
                         .FirstOrDefault(b => b.Id == id);
-            var relatedBooks = _context.Books.Where(a=>a.CategoryId == book.CategoryId && a.Name != book.Name ).Take(4).ToList();
+            var relatedBooks = _context.Books.Where(a => a.CategoryId == book.CategoryId && a.Name != book.Name).Take(4).ToList();
             if (book == null)
                 return NotFound();
             var viewModel = new BookDetailsViewModel
@@ -54,7 +54,7 @@ namespace BookManagementApp.Controllers
                 Book = book,
                 RelatedBooks = relatedBooks
             };
-            return View(viewModel); 
+            return View(viewModel);
         }
         public IActionResult Search(string q)
         {
@@ -69,10 +69,10 @@ namespace BookManagementApp.Controllers
             }
 
             var books = _context.Books
-                .Where(a => a.UserId == userId && (a.Name.Contains(q) || a.Author.Contains(q)) )
+                .Where(a => a.UserId == userId && (a.Name.Contains(q) || a.Author.Contains(q)))
                 .ToList();
 
-            return View("Index",books);
+            return View("Index", books);
         }
         public IActionResult List()
         {
@@ -95,11 +95,11 @@ namespace BookManagementApp.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            var book = _context.Books.FirstOrDefault(b=>b.UserId == userId && b.Id == id);
+            var book = _context.Books.FirstOrDefault(b => b.UserId == userId && b.Id == id);
             return View(book);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken] 
+        [ValidateAntiForgeryToken]
         public IActionResult Notes(Book model)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -112,7 +112,7 @@ namespace BookManagementApp.Controllers
 
             if (existingBook == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
             existingBook.Notes = model.Notes;
             _context.SaveChanges();
@@ -139,11 +139,43 @@ namespace BookManagementApp.Controllers
                 .Where(b => b.CategoryId == id && b.UserId == userId)
                 .ToListAsync();
 
-            
+
             var category = await _context.Categories.FindAsync(id);
             ViewData["CategoryName"] = category?.CategoryName ?? "Kategori";
 
-            return View("Index", books); 
-        }   
+            return View("Index", books);
+        }
+
+        public IActionResult SendMeMessage()
+        {
+            
+            return View();
+        }
+        [HttpPost]
+        public IActionResult SendMeMessage(Contact contact)
+        {
+            if (contact == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(contact);
+            }
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId != null)
+            {
+                contact.UserId = userId;
+            }
+            var user = _context.Contacts.FirstOrDefault(c=>c.UserId == userId);
+            contact.CreatedDate = DateTime.Now;
+            contact.GuestName = user?.User?.UserName;
+            contact.GuestEmail = user?.User?.Email;
+            _context.Contacts.Add(contact);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

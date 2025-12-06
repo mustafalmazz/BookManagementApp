@@ -26,5 +26,6 @@ namespace BookManagementApp.Areas.Admin.Models
 
         public ICollection<Book>? Books { get; set; }
         public ICollection<Category>? Categories { get; set; }
+        public ICollection<Contact>? Contacts { get; set; } 
     }
 }

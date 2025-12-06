@@ -1,0 +1,454 @@
+﻿<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    .book-footer {
+        background: linear-gradient(135deg, #6b5541 0%, #4a3b2a 100%);
+        color: #f5f0e8;
+        padding: 60px 0 0 0;
+        margin-top: 80px;
+        border-top: 5px solid #8b6f47;
+        box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
+        font-family: 'Georgia', serif;
+        position: relative;
+        overflow: hidden;
+    }
+
+        /* Üst dekoratif pattern */
+        .book-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%238b6f47" fill-opacity="0.1" d="M0,40 Q360,80 720,40 T1440,40 L1440,0 L0,0 Z"></path></svg>') repeat-x;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+    .footer-container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .footer-logo {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #ffd782, #f5c35a);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 5px 20px rgba(255, 215, 130, 0.4);
+        font-size: 2rem;
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .footer-brand-text {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #ffd782;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        letter-spacing: 1px;
+    }
+
+    .footer-description {
+        color: rgba(245, 240, 232, 0.85);
+        line-height: 1.8;
+        margin-bottom: 25px;
+        font-size: 1rem;
+    }
+
+    .footer-quote {
+        background: rgba(255, 215, 130, 0.1);
+        border-left: 4px solid #ffd782;
+        padding: 20px;
+        border-radius: 0 12px 12px 0;
+        margin-bottom: 25px;
+        font-style: italic;
+        color: #f5f0e8;
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .footer-quote-text {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    }
+
+    .footer-quote-author {
+        color: #ffd782;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .footer-section-title {
+        color: #ffd782;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+        .footer-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd782, transparent);
+            border-radius: 2px;
+        }
+
+        .footer-section-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .footer-links li {
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+            .footer-links li:hover {
+                transform: translateX(8px);
+            }
+
+        .footer-links a {
+            color: rgba(245, 240, 232, 0.9);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+        }
+
+            .footer-links a:hover {
+                color: #ffd782;
+            }
+
+            .footer-links a i {
+                color: #ffd782;
+                font-size: 0.8rem;
+                transition: transform 0.3s ease;
+            }
+
+            .footer-links a:hover i {
+                transform: translateX(3px);
+            }
+
+    .contact-info {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .contact-info li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 18px;
+            color: rgba(245, 240, 232, 0.9);
+            font-size: 1rem;
+        }
+
+        .contact-info i {
+            color: #ffd782;
+            font-size: 1.1rem;
+            margin-top: 3px;
+            min-width: 20px;
+        }
+
+    .social-section {
+        margin-top: 30px;
+    }
+
+    .social-title {
+        color: #ffd782;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 215, 130, 0.15);
+            color: #ffd782;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 215, 130, 0.2);
+        }
+
+            .social-icons a:hover {
+                background: linear-gradient(135deg, #ffd782, #f5c35a);
+                color: #4a3b2a;
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(255, 215, 130, 0.4);
+                border-color: #ffd782;
+            }
+
+    .footer-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255, 215, 130, 0.3), transparent);
+        margin: 40px 0 30px 0;
+    }
+
+    .copyright-section {
+        padding: 25px 0;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(255, 215, 130, 0.1);
+        position: relative;
+    }
+
+    .copyright-text {
+        color: rgba(245, 240, 232, 0.7);
+        font-size: 0.95rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .copyright-heart {
+        color: #ff6b6b;
+        animation: heartbeat 1.5s infinite;
+    }
+
+    @@keyframes heartbeat {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.2);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    }
+
+    .decorative-book-icon {
+        position: absolute;
+        font-size: 8rem;
+        opacity: 0.05;
+        color: #ffd782;
+        z-index: 0;
+    }
+
+        .decorative-book-icon.left {
+            bottom: 20%;
+            left: 5%;
+            transform: rotate(-15deg);
+        }
+
+        .decorative-book-icon.right {
+            top: 10%;
+            right: 5%;
+            transform: rotate(15deg);
+        }
+
+    @@media (max-width: 768px) {
+        .book-footer
+
+    {
+        padding: 40px 0 0 0;
+        margin-top: 50px;
+    }
+
+    .footer-brand-text {
+        font-size: 1.4rem;
+    }
+
+    .footer-logo {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .footer-section-title {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-links li:hover {
+        transform: translateX(5px);
+    }
+
+    .decorative-book-icon {
+        font-size: 5rem;
+    }
+
+    }
+</style>
+
+<footer class="book-footer">
+  
+
+    <div class="container footer-container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="/images/library.png" style="width:50px;" />
+                    </div>
+                    <div class="footer-brand-text">DijitalKütüphanem</div>
+                </div>
+                <p class="footer-description">
+                    Kitapların büyülü dünyasında kaybolmak isteyenler için dijital bir sığınak.
+                    Okuma tutkunlarını bir araya getiren, bilgiyi paylaşan ve edebiyat sevgisini
+                    yaşatan bir platform.
+                </p>
+                <div class="footer-quote">
+                    <div class="footer-quote-text">
+                        "Bir kitap, içinizdeki donmuş denizi kıracak bir baltadır."
+                    </div>
+                    <div class="footer-quote-author">— Franz Kafka</div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h5 class="footer-section-title">
+                    <i class="fas fa-compass"></i>
+                    Hızlı Erişim
+                </h5>
+                <ul class="footer-links">
+                    <li>
+                        <a href="/Home/Index">
+                            <i class="fas fa-chevron-right"></i>
+                            Ana Sayfa
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Books/List">
+                            <i class="fas fa-chevron-right"></i>
+                            Tüm Kitaplar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Category/List">
+                            <i class="fas fa-chevron-right"></i>
+                            Kategoriler
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Home/About">
+                            <i class="fas fa-chevron-right"></i>
+                            Hakkımızda
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Home/Privacy">
+                            <i class="fas fa-chevron-right"></i>
+                            Gizlilik Politikası
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Home/Contact">
+                            <i class="fas fa-chevron-right"></i>
+                            İletişim
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-12 mb-4">
+                <h5 class="footer-section-title">
+                    <i class="fas fa-address-book"></i>
+                    Bize Ulaşın
+                </h5>
+                <ul class="contact-info">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Kadıköy, İstanbul<br>Türkiye</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>info@dijitalkutuphanem.com</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        <span>+90 (212) 555 00 00</span>
+                    </li>
+                </ul>
+
+                <div class="social-section">
+                    <h6 class="social-title">Sosyal Medyada Bizi Takip Edin</h6>
+                    <div class="social-icons">
+                        <a href="#" title="Instagram" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" title="LinkedIn" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" title="GitHub" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+    </div>
+
+    <div class="copyright-section">
+        <div class="container">
+            <p class="copyright-text">
+                © @DateTime.Now.Year DijitalKütüphanem
+                Tüm hakları saklıdır
+            </p>
+        </div>
+    </div>
+</footer>

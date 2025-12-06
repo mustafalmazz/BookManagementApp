@@ -1,0 +1,296 @@
+﻿@using BookManagementApp.Areas.Admin.Models
+@model Contact
+@{
+    ViewData["Title"] = "Bizimle İletişime Geçin";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+    }
+
+    .contact-container {
+        padding: 60px 0;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .contact-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .contact-title {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #4a3f35;
+        margin-bottom: 15px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .contact-subtitle {
+        font-size: 1.2rem;
+        color: #8b6f47;
+        font-style: italic;
+        margin-bottom: 30px;
+    }
+
+    .title-divider {
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, #8b6f47, #6b5541);
+        margin: 0 auto;
+        border-radius: 2px;
+    }
+
+    .contact-card {
+        background: #fff9f0;
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 10px 40px rgba(107, 85, 65, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #8b6f47, #6b5541);
+        }
+
+    .contact-info-section {
+        background: linear-gradient(135deg, #f5ede0 0%, #e8dcc8 100%);
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+        border-left: 5px solid #8b6f47;
+    }
+
+    .contact-info-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #4a3f35;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .contact-info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .contact-info-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+        color: #4a3f35;
+        font-size: 1rem;
+    }
+
+        .contact-info-item i {
+            color: #8b6f47;
+            font-size: 1.2rem;
+            min-width: 25px;
+        }
+
+    .form-section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #4a3f35;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .form-section-title i {
+            color: #8b6f47;
+            font-size: 1.3rem;
+        }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #4a3f35;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1rem;
+    }
+
+        .form-label i {
+            color: #8b6f47;
+            font-size: 1rem;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 20px;
+        border: 2px solid #e2d5c3;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-family: 'Georgia', serif;
+        background: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #8b6f47;
+            box-shadow: 0 0 0 4px rgba(139, 111, 71, 0.1);
+            background: #fff;
+        }
+
+    textarea.form-control {
+        min-height: 180px;
+        resize: vertical;
+    }
+
+    .validation-error {
+        color: #c53030;
+        font-size: 0.85rem;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .validation-error i {
+            font-size: 0.9rem;
+        }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        border: none;
+        color: #f5f0e8;
+        padding: 16px 40px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 6px 20px rgba(107, 85, 65, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-family: 'Georgia', serif;
+    }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 85, 65, 0.4);
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+        }
+
+    .success-message {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        border: 2px solid #28a745;
+        color: #155724;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+    }
+
+        .success-message i {
+            font-size: 1.5rem;
+        }
+
+    @@media (max-width: 768px) {
+        .contact-card
+
+    {
+        padding: 30px 20px;
+    }
+
+    .contact-title {
+        font-size: 2rem;
+    }
+
+    .contact-subtitle {
+        font-size: 1rem;
+    }
+
+    .form-section-title {
+        font-size: 1.3rem;
+    }
+
+    .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+
+    }
+</style>
+
+<div class="contact-container">
+    <div class="container">
+        <div class="contact-header">
+            <h1 class="contact-title">
+                <i class="fas fa-envelope-open-text" style="color: #8b6f47;"></i>
+                Bizimle İletişime Geçin
+            </h1>
+            <p class="contact-subtitle">
+                Sorularınız, önerileriniz ve geri bildirimleriniz bizim için değerli
+            </p>
+            <div class="title-divider"></div>
+        </div>
+
+        <div class="contact-card ">
+         
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i>
+                    <span>@TempData["SuccessMessage"]</span>
+                </div>
+            }
+
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Subject" class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Konu
+                    </label>
+                    <input asp-for="Subject" class="form-control" placeholder="Mesajınızın konusunu yazın..." />
+                    <span asp-validation-for="Subject" class="validation-error">
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Message" class="form-label">
+                        <i class="fas fa-comment-dots"></i>
+                        Mesaj
+                    </label>
+                    <textarea asp-for="Message" class="form-control" placeholder="Mesajınızı buraya yazın..."></textarea>
+                    <span asp-validation-for="Message" class="validation-error">
+                    </span>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i>
+                    Mesajı Gönder
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
