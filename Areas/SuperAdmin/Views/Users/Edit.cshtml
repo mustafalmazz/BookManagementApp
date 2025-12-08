@@ -1,0 +1,196 @@
+﻿@using BookManagementApp.Areas.Admin.Models
+@model User
+
+@{
+    ViewData["Title"] = "Kullanıcı Düzenle";
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_SuperAdminLayout.cshtml";
+}
+
+<style>
+    /* --- EDIT SAYFASI ÖZEL CSS --- */
+
+    /* Animasyon */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .edit-container {
+        display: flex;
+        justify-content: center; /* Ortala */
+        align-items: flex-start;
+        padding-top: 50px;
+        min-height: 80vh;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .edit-card {
+        background-color: #111;
+        width: 100%;
+        max-width: 600px; /* Kart genişliği */
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        border: 1px solid #333;
+        border-top: 4px solid #ffd700; /* Üst çizgi Gold */
+        position: relative;
+    }
+
+    /* Başlık */
+    .edit-title {
+        color: #ffd700;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+
+    .edit-subtitle {
+        color: #888;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-bottom: 40px;
+        border-bottom: 1px solid #222;
+        padding-bottom: 20px;
+    }
+
+    /* Form Elemanları */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        color: #bbb;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+    }
+
+    .input-gold {
+        background-color: #080808;
+        border: 1px solid #333;
+        color: #fff;
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+        .input-gold:focus {
+            border-color: #ffd700;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+            background-color: #0a0a0a;
+        }
+
+    /* Select Box (Rol Seçimi) */
+    select.input-gold {
+        appearance: none; /* Varsayılan oku gizle */
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffd700%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px top 50%;
+        background-size: 12px auto;
+        cursor: pointer;
+    }
+
+    /* Butonlar */
+    .btn-save {
+        background-color: #ffd700;
+        color: #000;
+        font-weight: 700;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 6px;
+        margin-top: 10px;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .btn-save:hover {
+            background-color: #ffed4a;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+    .btn-cancel {
+        display: block;
+        text-align: center;
+        color: #666;
+        margin-top: 20px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+    }
+
+        .btn-cancel:hover {
+            color: #ccc;
+        }
+
+    /* Readonly alanlar için stil */
+    .input-gold[readonly] {
+        background-color: #1a1a1a;
+        color: #777;
+        border-color: #222;
+        cursor: not-allowed;
+    }
+</style>
+
+<div class="edit-container">
+    <div class="edit-card">
+
+        <h2 class="edit-title">Kullanıcı Düzenle</h2>
+        <p class="edit-subtitle">#@Model.Id nolu kullanıcının bilgilerini güncelliyorsunuz.</p>
+
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
+                <input asp-for="UserName" class="input-gold" placeholder="Kullanıcı adı giriniz..." />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="form-label">E-Posta Adresi</label>
+                <input asp-for="Email" type="email" class="input-gold" placeholder="Email adresi..." />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Role" class="form-label">Kullanıcı Rolü / Yetkisi</label>
+
+                <select asp-for="Role" class="input-gold" asp-items="ViewBag.Roles">
+                    <option value="" disabled>Lütfen bir rol seçiniz</option>
+                </select>
+
+                <small style="color:#555; display:block; margin-top:5px; font-size:0.8rem;">
+                    <i class="bi bi-info-circle"></i> Kullanıcının sistemdeki yetki seviyesini belirler.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Şifre</label>
+                <input type="password" value="********" class="input-gold" readonly title="Şifre buradan değiştirilemez." />
+            </div>
+
+            <button type="submit" class="btn-save">
+                <i class="bi bi-check-circle-fill"></i> Değişiklikleri Kaydet
+            </button>
+
+            <a asp-action="List" class="btn-cancel">
+                Vazgeç ve Listeye Dön
+            </a>
+
+        </form>
+    </div>
+</div>

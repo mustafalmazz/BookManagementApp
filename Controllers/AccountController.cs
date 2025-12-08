@@ -72,7 +72,11 @@ namespace BookManagementApp.Controllers
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
                 await SignInUserAsync(user);
-                return RedirectToAction("Index", "Home");
+                if (user.Role == "SuperAdmin")
+                {
+                    // Eğer SuperAdmin ise özel panele git
+                    return RedirectToAction("Index", "DashBoard", new { area = "SuperAdmin" });
+                }
             }
 
             ViewBag.Error = "Geçersiz kullanıcı adı veya şifre.";
@@ -112,7 +116,10 @@ namespace BookManagementApp.Controllers
             if (user != null)
             {
                 await SignInUserAsync(user);
-                return RedirectToAction("Index", "Home");
+                if (user.Role == "SuperAdmin")
+                {
+                    return RedirectToAction("Index", "DashBoard", new { area = "SuperAdmin" });
+                }
             }
 
             TempData["GoogleEmail"] = email;
@@ -179,11 +186,13 @@ namespace BookManagementApp.Controllers
         private async Task SignInUserAsync(User user)
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName ?? ""),
-                new Claim(ClaimTypes.Email, user.Email ?? ""),
-                new Claim(ClaimTypes.Role, "User")
-            };
+    {
+        new Claim(ClaimTypes.Name, user.UserName ?? ""),
+        new Claim(ClaimTypes.Email, user.Email ?? ""),
+        // ESKİ HALİ: new Claim(ClaimTypes.Role, "User") 
+        // YENİ HALİ: Veritabanındaki rolü al, boşsa "User" kabul et
+        new Claim(ClaimTypes.Role, user.Role ?? "User")
+    };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties { IsPersistent = true };

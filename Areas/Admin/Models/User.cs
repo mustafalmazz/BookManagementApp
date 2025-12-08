@@ -23,6 +23,8 @@ namespace BookManagementApp.Areas.Admin.Models
         public string? ConfirmPassword { get; set; }
         public string? PasswordResetToken { get; set; }
         public DateTime? PasswordResetTokenExpires { get; set; }
+        [StringLength(20)]
+        public string Role { get; set; } = "User";
 
         public ICollection<Book>? Books { get; set; }
         public ICollection<Category>? Categories { get; set; }

@@ -1,0 +1,409 @@
+﻿@using BookManagementApp.Areas.Admin.Models
+@model BookManagementApp.Areas.Admin.Models.DashBoardViewModel
+
+@{
+    ViewData["Title"] = "SuperAdmin Dashboard";
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_SuperAdminLayout.cshtml";
+
+    // Veriler (Model'den geliyor)
+    var totalBooks = Model.Books?.Count ?? 0;
+    var totalCategories = Model.Categories?.Count ?? 0;
+    var totalPrice = Model.Books?.Sum(b => b.Price) ?? 0;
+}
+
+<style>
+    /* --- GOLD TEMA ÖZEL CSS --- */
+
+    /* Genel Animasyonlar */
+    @@keyframes goldFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .dashboard-container {
+        padding: 20px;
+        max-width: 1400px; /* SuperAdmin daha geniş görebilir */
+        margin: 0 auto;
+    }
+
+    /* --- BAŞLIK ALANI --- */
+    .page-title-section {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: goldFadeIn 0.8s ease-out;
+    }
+
+    .page-title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #ffd700; /* SAF ALTIN */
+        margin: 0;
+        /* Gold Neon Parlaması */
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+        letter-spacing: 1px;
+    }
+
+    .page-subtitle {
+        color: #888;
+        font-size: 1.1rem;
+        margin-top: 10px;
+        font-weight: 400;
+    }
+
+    /* --- İSTATİSTİK KARTLARI (GRID) --- */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+    }
+
+    .stat-card {
+        /* Arka plan: Çok koyu gri/siyah */
+        background: #111;
+        border-radius: 12px;
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+        /* Çerçeve ve Gölge: Altın */
+        border: 1px solid #333; /* Varsayılan sınır */
+        border-left: 5px solid #ffd700; /* Sol taraf altın vurgu */
+
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        transition: all 0.4s ease;
+        animation: goldFadeIn 0.6s ease-out both;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+        /* Kartların sırayla gelmesi için gecikme */
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        /* Hover Efekti: Kart Parlar */
+        .stat-card:hover {
+            transform: translateY(-8px);
+            background: #161616;
+            border-color: #ffd700; /* Tüm sınırlar altına döner */
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.15); /* Hafif altın hüzmesi */
+        }
+
+    /* --- İKONLAR --- */
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover .card-icon {
+        transform: rotate(15deg) scale(1.1);
+    }
+
+    /* Altın İkon Stili (Tüm ikonlar gold tabanlı ama tonları farklı olabilir) */
+    .icon-gold {
+        background-color: rgba(255, 215, 0, 0.1);
+        color: #ffd700;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+    }
+
+    .icon-amber {
+        background-color: rgba(255, 191, 0, 0.1);
+        color: #ffbf00;
+        border: 1px solid rgba(255, 191, 0, 0.3);
+    }
+
+    .icon-orange {
+        background-color: rgba(255, 140, 0, 0.1);
+        color: #ff8c00;
+        border: 1px solid rgba(255, 140, 0, 0.3);
+    }
+
+    /* --- SAYILAR VE METİNLER --- */
+    .card-content {
+        flex-grow: 1;
+    }
+
+    .stat-description-title {
+        color: #bbb;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .stat-number-wrapper {
+        display: flex;
+        align-items: baseline;
+        margin-top: 5px;
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .currency-symbol {
+        font-size: 2rem;
+        color: #ffd700;
+        margin-right: 8px;
+        font-weight: 300;
+    }
+
+    .stat-description-text {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    /* --- TABLO ALANI (SON İŞLEMLER / KİTAPLAR) --- */
+    .recent-section {
+        margin-top: 50px;
+        background: #111;
+        border: 1px solid #333;
+        border-top: 3px solid #ffd700; /* Üst çizgi gold */
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        animation: goldFadeIn 0.8s ease-out 0.4s both;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #222;
+        padding-bottom: 15px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        color: #e0e0e0;
+        font-weight: 600;
+    }
+
+        .section-title i {
+            color: #ffd700;
+            margin-right: 10px;
+        }
+
+    /* Tablo Tasarımı */
+    .gold-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        color: #ccc;
+    }
+
+        .gold-table th {
+            text-align: left;
+            padding: 15px;
+            color: #ffd700; /* Başlıklar Altın */
+            font-weight: 600;
+            border-bottom: 1px solid #333;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .gold-table td {
+            padding: 15px;
+            border-bottom: 1px solid #222;
+            transition: background 0.2s;
+        }
+
+        .gold-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .gold-table tr:hover td {
+            background-color: rgba(255, 215, 0, 0.05); /* Hoverda hafif sarı zemin */
+            color: #fff;
+        }
+
+    .badge-gold {
+        background-color: rgba(255, 215, 0, 0.15);
+        color: #ffd700;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    @@media (max-width: 768px) {
+        .stat-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+
+    <div class="page-title-section">
+        <h1 class="page-title">YÖNETİM MERKEZİ</h1>
+        <p class="page-subtitle">Sistem İstatistikleri ve Global Veriler</p>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="card-icon icon-gold">
+                <i class="bi bi-book-half"></i>
+            </div>
+            <div class="card-content">
+                <div class="stat-description-title">Global Kitap Sayısı</div>
+                <div class="stat-number-wrapper">
+                    <div class="stat-number" id="bookCount" data-count="@totalBooks">0</div>
+                </div>
+                <div class="stat-description-text">Tüm sistemdeki aktif kitap envanteri</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="card-icon icon-amber">
+                <i class="bi bi-grid-fill"></i>
+            </div>
+            <div class="card-content">
+                <div class="stat-description-title">Aktif Kategoriler</div>
+                <div class="stat-number-wrapper">
+                    <div class="stat-number" id="categoryCount" data-count="@totalCategories">0</div>
+                </div>
+                <div class="stat-description-text">Listelenen farklı tür sayısı</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="card-icon icon-orange">
+                <i class="bi bi-wallet2"></i>
+            </div>
+            <div class="card-content">
+                <div class="stat-description-title">Envanter Değeri</div>
+                <div class="stat-number-wrapper">
+                    <span class="currency-symbol">₺</span>
+                    <div class="stat-number" id="totalPriceCount" data-count="@totalPrice">0</div>
+                </div>
+                <div class="stat-description-text">Tahmini toplam sistem varlığı</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="bi bi-clock-history"></i> Son Eklenen Kayıtlar
+            </h2>
+            <button class="btn btn-sm btn-outline-light" style="border-color: #444;">Tümünü Gör</button>
+        </div>
+
+        @{
+            var recentBooks = Model.Books?
+            .OrderByDescending(b => b.Id)
+            .Take(5)
+            .ToList();
+        }
+
+        @if (recentBooks != null && recentBooks.Any())
+        {
+            <div class="table-responsive">
+                <table class="gold-table">
+                    <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th>KİTAP ADI</th>
+                            <th>YAZAR</th>
+                            <th>DURUM</th>
+                            <th>FİYAT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in recentBooks)
+                        {
+                            <tr>
+                                <td><span style="color:#666">#@book.Id</span></td>
+                                <td style="font-weight:bold; color: #eee;">@book.Name</td>
+                                <td>@(book.Author ?? "Belirtilmemiş")</td>
+                                <td><span class="badge-gold">Aktif</span></td>
+                                <td>₺@book.Price</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center p-4 text-muted">
+                <i class="bi bi-inbox" style="font-size: 2rem; display:block; margin-bottom:10px;"></i>
+                Henüz veri girişi yapılmamış.
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function animateCounter(element, target, duration) {
+            if (!element) return;
+            let start = 0;
+            const increment = target / (duration / 16);
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    element.textContent = target; // Tam sayıyı göster
+                    // Ondalıklı sayı biçimlendirmesi isterseniz burayı değiştirebiliriz
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(start);
+                }
+            }, 16);
+        }
+
+        setTimeout(() => {
+            const bookCountEl = document.getElementById('bookCount');
+            const catCountEl = document.getElementById('categoryCount');
+            const priceEl = document.getElementById('totalPriceCount');
+
+            const v1 = parseInt(bookCountEl?.getAttribute('data-count')) || 0;
+            const v2 = parseInt(catCountEl?.getAttribute('data-count')) || 0;
+            const v3 = parseFloat(priceEl?.getAttribute('data-count')) || 0;
+
+            animateCounter(bookCountEl, v1, 1500);
+            animateCounter(catCountEl, v2, 1500);
+            animateCounter(priceEl, v3, 1800); // Para biraz daha yavaş artsın, havalı durur
+        }, 300);
+    });
+</script>

@@ -1,0 +1,340 @@
+﻿@using BookManagementApp.Areas.Admin.Models
+@model List<User>
+
+@{
+    ViewData["Title"] = "Kullanıcı Listesi";
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_SuperAdminLayout.cshtml";
+}
+
+<style>
+    /* --- GOLD TEMA CSS --- */
+
+    /* Animasyon */
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-container {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+        animation: slideIn 0.6s ease-out;
+    }
+
+    /* Başlık Alanı */
+    .header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 20px;
+    }
+
+    .page-title {
+        color: #ffd700; /* Gold */
+        font-weight: 700;
+        font-size: 2rem;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        margin: 0;
+    }
+
+    .page-subtitle {
+        color: #888;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    /* Yeni Ekle Butonu */
+    .btn-gold {
+        background-color: #ffd700;
+        color: #000;
+        font-weight: 700;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-gold:hover {
+            background-color: #ffed4a;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transform: translateY(-2px);
+            color: #000;
+        }
+
+    /* Arama Kartı */
+    .search-card {
+        background-color: #111;
+        border: 1px solid #333;
+        border-left: 4px solid #ffd700;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .input-dark {
+        background-color: #050505;
+        border: 1px solid #333;
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 5px;
+        width: 100%;
+        transition: border-color 0.3s;
+    }
+
+        .input-dark:focus {
+            border-color: #ffd700;
+            outline: none;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+        }
+
+    /* Tablo Kartı */
+    .table-card {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 5px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #ccc;
+    }
+
+        .custom-table thead {
+            background-color: #1a1a1a;
+        }
+
+        .custom-table th {
+            text-align: left;
+            padding: 18px;
+            color: #ffd700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #333;
+        }
+
+        .custom-table td {
+            padding: 18px;
+            border-bottom: 1px solid #222;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:hover td {
+            background-color: rgba(255, 215, 0, 0.03);
+            color: #fff;
+        }
+
+    /* Avatar Stili */
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #333;
+        color: #ffd700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border: 1px solid #555;
+        text-transform: uppercase;
+        font-size: 1.1rem;
+    }
+
+    /* Rozetler */
+    .badge-role {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid;
+    }
+
+    .badge-admin {
+        background: rgba(255, 215, 0, 0.1);
+        color: #ffd700;
+        border-color: #ffd700;
+    }
+
+    .badge-user {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ccc;
+        border-color: #555;
+    }
+
+    /* Butonlar */
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+        color: #fff;
+        margin-right: 5px;
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        background: rgba(0, 123, 255, 0.2);
+        color: #4dabf7;
+        border-color: #004085;
+    }
+
+        .btn-edit:hover {
+            background: #007bff;
+            color: white;
+            box-shadow: 0 0 10px #007bff;
+        }
+
+    .btn-delete {
+        background: rgba(220, 53, 69, 0.2);
+        color: #ff6b6b;
+        border-color: #721c24;
+    }
+
+        .btn-delete:hover {
+            background: #dc3545;
+            color: white;
+            box-shadow: 0 0 10px #dc3545;
+        }
+</style>
+
+<div class="page-container">
+
+    <div class="header-wrapper">
+        <div>
+            <h1 class="page-title"><i class="bi bi-people-fill"></i> Kullanıcılar</h1>
+            <p class="page-subtitle">Sistemdeki kayıtlı @(Model?.Count ?? 0) adet üyeyi yönetin</p>
+        </div>
+        <div>
+            <a href="#" class="btn btn-gold">
+                <i class="bi bi-person-plus-fill"></i> Yeni Kullanıcı
+            </a>
+        </div>
+    </div>
+
+    <div class="search-card">
+        <div style="flex-grow: 1;">
+            <input type="text" id="searchInput" class="input-dark" placeholder="Tabloda ara (Kullanıcı Adı, Email)...">
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="custom-table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Kullanıcı</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>İlişkili Veriler</th>
+                        <th style="text-align:right;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var user in Model)
+                        {
+                            // --- GÖRÜNÜM MANTIĞI ---
+
+                            // Kullanıcı adı boşsa '?' koy, değilse ilk harfini al
+                            var userName = !string.IsNullOrEmpty(user.UserName) ? user.UserName : "Bilinmiyor";
+                            var initials = userName.Substring(0, 1).ToUpper();
+
+                            // --- GÜNCELLENEN ROL MANTIĞI ---
+                            // Veritabanındaki gerçek Role değerini kullanıyoruz
+                            var role = user.Role ?? "User";
+
+                            // Eğer rol "SuperAdmin" ise rozet Gold olsun
+                            var badgeClass = (role == "SuperAdmin") ? "badge-admin" : "badge-user";
+
+                            // Ekranda görünecek isim (SuperAdmin ise Süper Yönetici yazsın)
+                            var roleDisplayName = (role == "SuperAdmin") ? "Süper Yönetici" : "Kullanıcı";
+
+                            // İlişkili veri sayısı (Null kontrolü yaparak)
+                            var bookCount = user.Books?.Count ?? 0;
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar">@initials</div>
+                                        <div class="ms-3">
+                                            <div style="font-weight:bold; color:#fff;">@userName</div>
+                                            <div style="font-size:0.8rem; color:#888;">ID: #@user.Id</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <span class="badge-role @badgeClass">@roleDisplayName</span>
+                                </td>
+                                <td>
+                                    <span style="color:#aaa; font-size:0.85rem;">
+                                        <i class="bi bi-book"></i> @bookCount Kitap
+                                    </span>
+                                </td>
+                                <td style="text-align:right;">
+                                    <a asp-action="Edit" asp-route-id="@user.Id" class="action-btn btn-edit" title="Düzenle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    @if(user.Role != "SuperAdmin" )
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@user.Id" class="action-btn btn-delete" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    }
+                                    
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center p-4 text-muted">
+                                <i class="bi bi-inbox" style="font-size: 2rem; display:block; margin-bottom:10px;"></i>
+                                Sistemde kayıtlı kullanıcı bulunamadı.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JS Arama Filtresi
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var value = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#usersTable tbody tr');
+
+        rows.forEach(function(row) {
+            var text = row.textContent.toLowerCase();
+            row.style.display = text.indexOf(value) > -1 ? '' : 'none';
+        });
+    });
+</script>

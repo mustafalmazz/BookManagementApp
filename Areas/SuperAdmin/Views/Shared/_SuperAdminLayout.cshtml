@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - SuperAdmin Panel</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        /* --- GENEL AYARLAR --- */
+        body {
+            min-height: 100vh;
+            display: flex;
+            /* Arka plan: Mavimsi siyah yerine daha nötr, derin siyah (Gold patlasın diye) */
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* --- SIDEBAR (YAN MENÜ) --- */
+        .sidebar {
+            width: 260px;
+            /* Arka plan: Koyu kahve/siyah karışımı yerine çok koyu gri */
+            background-color: #0f0f0f;
+            color: white;
+            flex-shrink: 0;
+            /* SINIR ve GÖLGE: Neon Gold */
+            border-right: 1px solid #ffd700;
+            box-shadow: 3px 0 20px rgba(255, 215, 0, 0.15); /* Altın parıltısı */
+            display: flex;
+            flex-direction: column;
+        }
+
+            /* Sidebar Başlığı */
+            .sidebar h4 {
+                color: #ffd700; /* Saf Altın */
+                text-align: center;
+                margin-top: 10px;
+                /* Neon Gold Yazı Gölgesi */
+                text-shadow: 0 0 5px #ffd700, 0 0 15px #b8860b;
+                border-bottom: 1px solid #333;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+                letter-spacing: 1px;
+                font-weight: bold;
+            }
+
+            /* Link İkonları */
+            .sidebar .nav-link i {
+                margin-right: 12px;
+                width: 20px;
+                text-align: center;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar .nav-link {
+                color: #b0b0b0; /* Pasif renk gri */
+                transition: all 0.3s ease;
+                border-left: 4px solid transparent; /* Sol çizgi */
+                padding: 12px 20px;
+                margin-bottom: 5px;
+                font-size: 15px;
+            }
+
+                /* HOVER ve AKTİF DURUMU (Gold Efekt) */
+                .sidebar .nav-link.active,
+                .sidebar .nav-link:hover {
+                    /* Metin Rengi: Altın */
+                    color: #ffd700;
+                    /* Arka Plan: Çok hafif saydam altın */
+                    background-color: rgba(255, 215, 0, 0.05);
+                    /* Yazı Parlaması */
+                    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+                    /* Sol Çizgi */
+                    border-left: 4px solid #ffd700;
+                }
+
+                    /* İkon animasyonu */
+                    .sidebar .nav-link:hover i {
+                        transform: scale(1.2);
+                        color: #fff; /* İkon hoverda beyaza çalsın */
+                    }
+
+            /* Ayırıcı Çizgi */
+            .sidebar hr {
+                border-color: #333;
+                opacity: 0.5;
+                margin: 20px 0;
+            }
+
+            /* "ÇIKIŞ / SİTEYE DÖN" BUTONU */
+            .sidebar .btn-gold-outline {
+                color: #ffd700;
+                border: 1px solid #ffd700;
+                background: transparent;
+                transition: all 0.3s ease;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+                .sidebar .btn-gold-outline:hover {
+                    background-color: #ffd700;
+                    color: #000; /* Siyah yazı */
+                    box-shadow: 0 0 20px #ffd700; /* Güçlü altın parıltısı */
+                }
+
+        /* --- İÇERİK ALANI --- */
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            height: 100vh;
+            overflow-y: auto;
+            background-image: radial-gradient(circle at top right, #1a1500 0%, #050505 40%); /* Sağ üstte hafif altın ışık süzmesi */
+        }
+
+        /* Kartlar için özel stil (İleride kullanırsanız diye) */
+        .card-super {
+            background-color: #121212;
+            border: 1px solid #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar p-3">
+        <h4>
+            <i class="bi bi-shield-lock-fill"></i> SUPER ADMIN
+        </h4>
+
+        <ul class="nav nav-pills flex-column mb-auto">
+
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "DashBoard" ? "active" : "")"
+                   asp-area="SuperAdmin" asp-controller="DashBoard" asp-action="Index">
+                    <i class="bi bi-speedometer2"></i> Genel Bakış
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Tenants" ? "active" : "")"
+                   asp-area="SuperAdmin" asp-controller="Tenants" asp-action="Index">
+                    <i class="bi bi-buildings"></i> Firmalar
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")"
+                   asp-area="SuperAdmin" asp-controller="Settings" asp-action="Index">
+                    <i class="bi bi-gear-wide-connected"></i> Sistem Ayarları
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Logs" ? "active" : "")"
+                   asp-area="SuperAdmin" asp-controller="Logs" asp-action="Index">
+                    <i class="bi bi-activity"></i> Sistem Logları
+                </a>
+            </li>
+        </ul>
+
+        <div class="mt-auto">
+            <hr />
+            <div class="d-grid gap-2">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-gold-outline">
+                    <i class="bi bi-box-arrow-left"></i> Siteye Dön
+                </a>
+            </div>
+
+            <div class="text-center mt-3 text-muted small">
+                Logged in as <span style="color:#ffd700">SuperUser</span>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

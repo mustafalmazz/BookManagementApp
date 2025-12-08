@@ -169,13 +169,14 @@ namespace BookManagementApp.Controllers
             {
                 contact.UserId = userId;
             }
-            var user = _context.Contacts.FirstOrDefault(c=>c.UserId == userId);
+            var user = _context.Users.FirstOrDefault(c=>c.Id == userId);
             contact.CreatedDate = DateTime.Now;
-            contact.GuestName = user?.User?.UserName;
-            contact.GuestEmail = user?.User?.Email;
+            contact.GuestName = user?.UserName;
+            contact.GuestEmail = user?.Email;
             _context.Contacts.Add(contact);
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            TempData["SuccessMessage"] = "Mesajınız başarıyla gönderildi!";
+            return RedirectToAction("SendMeMessage");
         }
     }
 }

@@ -121,7 +121,7 @@
         margin-bottom: 25px;
     }
 
-    .form-label {
+    .form-label2 {
         font-weight: 600;
         color: #4a3f35;
         margin-bottom: 10px;
@@ -131,12 +131,12 @@
         font-size: 1rem;
     }
 
-        .form-label i {
+        .form-label2 i {
             color: #8b6f47;
             font-size: 1rem;
         }
 
-    .form-control {
+    .form-control2 {
         width: 100%;
         padding: 14px 20px;
         border: 2px solid #e2d5c3;
@@ -243,19 +243,20 @@
 
 <div class="contact-container">
     <div class="container">
+        @TempData["Message"]
         <div class="contact-header">
             <h1 class="contact-title">
                 <i class="fas fa-envelope-open-text" style="color: #8b6f47;"></i>
                 Bizimle İletişime Geçin
             </h1>
-            <p class="contact-subtitle">
-                Sorularınız, önerileriniz ve geri bildirimleriniz bizim için değerli
-            </p>
+           
             <div class="title-divider"></div>
         </div>
 
         <div class="contact-card ">
-         
+            <p class="contact-subtitle text-center">
+                Sorularınız, önerileriniz ve geri bildirimleriniz bizim için değerli
+            </p>
 
             @if (TempData["SuccessMessage"] != null)
             {
@@ -267,21 +268,21 @@
 
             <form method="post">
                 <div class="form-group">
-                    <label asp-for="Subject" class="form-label">
+                    <label asp-for="Subject" class="form-label2">
                         <i class="fas fa-tag"></i>
                         Konu
                     </label>
-                    <input asp-for="Subject" class="form-control" placeholder="Mesajınızın konusunu yazın..." />
+                    <input asp-for="Subject" class="form-control2" placeholder="Mesajınızın konusunu yazın..." />
                     <span asp-validation-for="Subject" class="validation-error">
                     </span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Message" class="form-label">
+                    <label asp-for="Message" class="form-label2">
                         <i class="fas fa-comment-dots"></i>
                         Mesaj
                     </label>
-                    <textarea asp-for="Message" class="form-control" placeholder="Mesajınızı buraya yazın..."></textarea>
+                    <textarea asp-for="Message" class="form-control2" placeholder="Mesajınızı buraya yazın..."></textarea>
                     <span asp-validation-for="Message" class="validation-error">
                     </span>
                 </div>
