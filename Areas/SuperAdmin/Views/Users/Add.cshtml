@@ -1,0 +1,214 @@
+﻿@using BookManagementApp.Areas.Admin.Models
+@model User
+
+@{
+    ViewData["Title"] = "Yeni Kullanıcı Ekle";
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_SuperAdminLayout.cshtml";
+}
+
+<style>
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 30px;
+        min-height: 80vh;
+        animation: fadeInUp 0.6s ease-out;
+        padding-bottom: 50px;
+    }
+
+    .form-card {
+        background-color: #111;
+        width: 100%;
+        max-width: 700px;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        border: 1px solid #333;
+        border-top: 4px solid #ffd700; /* Gold Çizgi */
+    }
+
+    .form-title {
+        color: #ffd700;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+
+    .form-subtitle {
+        color: #888;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #222;
+        padding-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        color: #bbb;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+    }
+
+    .input-gold {
+        background-color: #080808;
+        border: 1px solid #333;
+        color: #fff;
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+        .input-gold:focus {
+            border-color: #ffd700;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+            background-color: #0a0a0a;
+        }
+
+    /* Validasyon Hataları */
+    .text-danger {
+        color: #ff6b6b !important;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* Select Box Oku */
+    select.input-gold {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffd700%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px top 50%;
+        background-size: 12px auto;
+        cursor: pointer;
+    }
+
+    .btn-save {
+        background-color: #ffd700;
+        color: #000;
+        font-weight: 700;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 6px;
+        margin-top: 20px;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .btn-save:hover {
+            background-color: #ffed4a;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+    .btn-cancel {
+        display: block;
+        text-align: center;
+        color: #666;
+        margin-top: 20px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+    }
+
+        .btn-cancel:hover {
+            color: #ccc;
+        }
+</style>
+
+<div class="form-container">
+    <div class="form-card">
+
+        <h2 class="form-title">Yeni Kullanıcı Ekle</h2>
+        <p class="form-subtitle">Sisteme manuel olarak yeni bir yönetici veya üye tanımlayın.</p>
+
+        <form asp-action="Add" method="post">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
+                        <input asp-for="UserName" class="input-gold" placeholder="Örn: admin_user" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">E-Posta Adresi</label>
+                        <input asp-for="Email" type="email" class="input-gold" placeholder="mail@ornek.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Role" class="form-label">Yetki / Rol</label>
+                        <select asp-for="Role" class="input-gold" asp-items="ViewBag.Roles">
+                            <option value="" disabled>Seçiniz...</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PasswordHash" class="form-label">Şifre</label>
+                        <input asp-for="PasswordHash" type="password" class="input-gold" placeholder="********" />
+                        <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="form-label">Şifre Tekrar</label>
+                        <input asp-for="ConfirmPassword" type="password" class="input-gold" placeholder="********" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div style="margin-top: 30px; padding: 15px; background: rgba(255,215,0,0.05); border-radius: 6px; border: 1px dashed #444;">
+                        <small style="color: #bbb;">
+                            <i class="bi bi-shield-lock"></i> <strong>Güvenlik Notu:</strong>
+                            Şifre veritabanına kaydedilirken otomatik olarak <em>BCrypt</em> ile şifrelenecektir.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save">
+                <i class="bi bi-person-plus-fill"></i> Kullanıcıyı Oluştur
+            </button>
+
+            <a asp-action="List" class="btn-cancel">
+                Vazgeç ve Listeye Dön
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

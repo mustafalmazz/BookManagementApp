@@ -14,9 +14,41 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
         {
             _context = context;
         }
+        public IActionResult Add()
+        {
+            var roles = new List<string> { "User", "SuperAdmin" };
+            ViewBag.Roles = new SelectList(roles, "User");
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Add(User model)
+        {
+            if (_context.Users.Any(u => u.UserName == model.UserName))
+            {
+                ModelState.AddModelError("UserName", "Bu kullanıcı adı zaten sistemde kayıtlı.");
+                return View(model);
+            }
+
+            if (_context.Users.Any(u => u.Email == model.Email))
+            {
+                ModelState.AddModelError("Email", "Bu e-posta adresi zaten kullanılıyor.");
+                return View(model);
+            }
+            if (ModelState.IsValid)
+            {
+                if (!string.IsNullOrEmpty(model.PasswordHash))  
+                {
+                    model.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.PasswordHash);
+                }
+                _context.Users.Add(model);
+                _context.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return View(model);
+        }
         public IActionResult List()
         {
-            var userList = _context.Users.ToList();
+            var userList = _context.Users.Include(u => u.Books).Include(c=>c.Categories).ToList();
 
 
             return View(userList);

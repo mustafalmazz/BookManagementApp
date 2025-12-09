@@ -229,7 +229,7 @@
             <p class="page-subtitle">Sistemdeki kayıtlı @(Model?.Count ?? 0) adet üyeyi yönetin</p>
         </div>
         <div>
-            <a href="#" class="btn btn-gold">
+            <a asp-area="SuperAdmin" asp-action="Add" asp-controller="Users" class="btn btn-gold">
                 <i class="bi bi-person-plus-fill"></i> Yeni Kullanıcı
             </a>
         </div>
@@ -276,6 +276,7 @@
 
                             // İlişkili veri sayısı (Null kontrolü yaparak)
                             var bookCount = user.Books?.Count ?? 0;
+                            var categoryCount = user.Categories?.Count ?? 0;
 
                             <tr>
                                 <td>
@@ -293,7 +294,7 @@
                                 </td>
                                 <td>
                                     <span style="color:#aaa; font-size:0.85rem;">
-                                        <i class="bi bi-book"></i> @bookCount Kitap
+                                        @bookCount Kitap , @categoryCount Kategori
                                     </span>
                                 </td>
                                 <td style="text-align:right;">
