@@ -8,7 +8,7 @@
     // Veriler (Model'den geliyor)
     var totalBooks = Model.Books?.Count ?? 0;
     var totalCategories = Model.Categories?.Count ?? 0;
-    var totalPrice = Model.Books?.Sum(b => b.Price) ?? 0;
+    var totalUser = Model.Users?.Count ?? 0;
 }
 
 <style>
@@ -279,6 +279,18 @@
     </div>
 
     <div class="stats-grid">
+        <div class="stat-card">
+            <div class="card-icon icon-orange">
+                <img src="/images/check (1).png" style="width:50px;" />
+            </div>
+            <div class="card-content">
+                <div class="stat-description-title">Kayıtlı Kullanıcı</div>
+                <div class="stat-number-wrapper">
+                    <div class="stat-number" id="totalPriceCount" data-count="@totalUser">0</div>
+                </div>
+                <div class="stat-description-text">Sisteme Kayıtlı toplam kullanıcı sayısı</div>
+            </div>
+        </div>
 
         <div class="stat-card">
             <div class="card-icon icon-gold">
@@ -306,19 +318,7 @@
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="card-icon icon-orange">
-                <i class="bi bi-wallet2"></i>
-            </div>
-            <div class="card-content">
-                <div class="stat-description-title">Envanter Değeri</div>
-                <div class="stat-number-wrapper">
-                    <span class="currency-symbol">₺</span>
-                    <div class="stat-number" id="totalPriceCount" data-count="@totalPrice">0</div>
-                </div>
-                <div class="stat-description-text">Tahmini toplam sistem varlığı</div>
-            </div>
-        </div>
+        
     </div>
 
     <div class="recent-section">

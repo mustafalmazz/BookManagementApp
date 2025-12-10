@@ -18,12 +18,11 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
         {
             var model = new DashBoardViewModel
             {
-                Books = new List<Book>(),
-                Categories = new List<Category>()
+                Books = _context.Books.ToList(),
+                Categories = _context.Categories.ToList(),
+                Users = _context.Users.ToList()
             };
-
             return View(model);
         }
-
     }
 }

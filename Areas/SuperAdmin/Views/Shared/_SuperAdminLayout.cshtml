@@ -151,15 +151,15 @@
 
             <li>
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")"
-                   asp-area="SuperAdmin" asp-controller="Settings" asp-action="Index">
-                    <i class="bi bi-gear-wide-connected"></i> Sistem Ayarları
+                   asp-area="SuperAdmin" asp-controller="Books" asp-action="List">
+                    <i class="bi bi-book"></i> Kitaplar
                 </a>
             </li>
 
             <li>
                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Logs" ? "active" : "")"
-                   asp-area="SuperAdmin" asp-controller="Logs" asp-action="Index">
-                    <i class="bi bi-activity"></i> Sistem Logları
+                   asp-area="SuperAdmin" asp-controller="Categories" asp-action="List">
+                    <i class="bi bi-folder"></i> Kategoriler
                 </a>
             </li>
         </ul>
