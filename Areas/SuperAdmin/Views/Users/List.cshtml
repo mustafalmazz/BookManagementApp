@@ -7,9 +7,23 @@
 }
 
 <style>
-    /* --- GOLD TEMA CSS --- */
-
-    /* Animasyon */
+    .btn-sm {
+        padding: 8px 15px !important;
+        font-size: 0.9rem;
+    }
+    .btn-gold {
+        background-color: #ffd700;
+        color: #000;
+        font-weight: 700;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+    }
     @@keyframes slideIn {
         from {
             opacity: 0;
@@ -229,7 +243,7 @@
             <p class="page-subtitle">Sistemdeki kayıtlı @(Model?.Count ?? 0) adet üyeyi yönetin</p>
         </div>
         <div>
-            <a asp-area="SuperAdmin" asp-action="Add" asp-controller="Users" class="btn btn-gold">
+            <a asp-area="SuperAdmin" asp-action="Add" asp-controller="Users" class="btn-gold btn-sm">
                 <i class="bi bi-person-plus-fill"></i> Yeni Kullanıcı
             </a>
         </div>
@@ -237,7 +251,10 @@
 
     <div class="search-card">
         <div style="flex-grow: 1;">
-            <input type="text" id="searchInput" class="input-dark" placeholder="Tabloda ara (Kullanıcı Adı, Email)...">
+            <form method="get" asp-action="Search" asp-controller="Users" style="display: flex; gap: 10px;">
+                <input type="text" name="q" class="input-dark" placeholder="Tabloda ara (Kullanıcı Adı, Email)...">
+                <button class="btn-gold">  <i class="bi bi-search"></i></button>
+            </form>
         </div>
     </div>
 
@@ -258,23 +275,17 @@
                     {
                         @foreach (var user in Model)
                         {
-                            // --- GÖRÜNÜM MANTIĞI ---
-
-                            // Kullanıcı adı boşsa '?' koy, değilse ilk harfini al
+                           
                             var userName = !string.IsNullOrEmpty(user.UserName) ? user.UserName : "Bilinmiyor";
                             var initials = userName.Substring(0, 1).ToUpper();
 
-                            // --- GÜNCELLENEN ROL MANTIĞI ---
-                            // Veritabanındaki gerçek Role değerini kullanıyoruz
+                      
                             var role = user.Role ?? "User";
 
-                            // Eğer rol "SuperAdmin" ise rozet Gold olsun
                             var badgeClass = (role == "SuperAdmin") ? "badge-admin" : "badge-user";
 
-                            // Ekranda görünecek isim (SuperAdmin ise Süper Yönetici yazsın)
                             var roleDisplayName = (role == "SuperAdmin") ? "Süper Yönetici" : "Kullanıcı";
 
-                            // İlişkili veri sayısı (Null kontrolü yaparak)
                             var bookCount = user.Books?.Count ?? 0;
                             var categoryCount = user.Categories?.Count ?? 0;
 

@@ -14,6 +14,11 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
         {
             _context = context;
         }
+        public IActionResult Search(string q)
+        {
+            var users = _context.Users.Where(u=>u.UserName.Contains(q) || u.Email.Contains(q)).ToList();
+            return View("List" , users);
+        }
         public IActionResult Add()
         {
             var roles = new List<string> { "User", "SuperAdmin" };

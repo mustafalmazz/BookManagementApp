@@ -1,11 +1,12 @@
-﻿@model List<Book>
+﻿@model IEnumerable<Category>
 
 @{
-    ViewData["Title"] = "Kitap Listesi";
+    ViewData["Title"] = "Kategori Listesi";
     Layout = "~/Areas/SuperAdmin/Views/Shared/_SuperAdminLayout.cshtml";
 }
 
 <style>
+    /* --- GOLD TEMA CSS --- */
 
     @@keyframes slideIn {
         from {
@@ -21,11 +22,12 @@
 
     .page-container {
         padding: 20px;
-        max-width: 1400px;
+        max-width: 1200px;
         margin: 0 auto;
         animation: slideIn 0.6s ease-out;
     }
 
+    /* Başlık */
     .header-wrapper {
         display: flex;
         justify-content: space-between;
@@ -49,6 +51,7 @@
         margin-top: 5px;
     }
 
+    /* Butonlar */
     .btn-gold {
         background-color: #ffd700;
         color: #000;
@@ -64,8 +67,8 @@
     }
 
     .btn-sm {
-        padding: 8px 15px !important; 
-        font-size: 0.9rem; 
+        padding: 8px 15px !important;
+        font-size: 0.9rem;
     }
 
     .btn-gold:hover {
@@ -75,6 +78,7 @@
         color: #000;
     }
 
+    /* Arama Kartı */
     .search-card {
         background-color: #111;
         border: 1px solid #333;
@@ -83,7 +87,6 @@
         border-radius: 8px;
         margin-bottom: 30px;
         display: flex;
-        gap: 15px;
         align-items: center;
     }
 
@@ -103,6 +106,7 @@
             box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
         }
 
+    /* Tablo */
     .table-card {
         background: #111;
         border: 1px solid #333;
@@ -143,43 +147,30 @@
             color: #fff;
         }
 
-    .book-thumb {
-        width: 60px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 4px;
-        border: 1px solid #444;
-        transition: transform 0.3s;
+    /* Kategori Adı Stili */
+    .category-name-style {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #fff;
+        display: inline-block;
+        border-left: 3px solid #ffd700;
+        padding-left: 10px;
     }
 
-        .book-thumb:hover {
-            transform: scale(1.5);
-            border-color: #ffd700;
-            z-index: 10;
-            position: relative;
+    /* Kullanıcı Stili */
+    .user-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #aaa;
+        font-size: 0.95rem;
+    }
+
+        .user-badge i {
+            color: #ffd700; /* İkon rengi gold */
         }
 
-    .no-image {
-        width: 50px;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #222;
-        border-radius: 4px;
-        color: #555;
-        font-size: 1.5rem;
-        border: 1px solid #333;
-    }
-
-    .category-tag {
-        background: #333;
-        color: lightgray;
-        padding: 3px 8px;
-        border-radius: 10px;
-        font-size: 1.0rem;
-        border: 2px solid darkgreen;
-    }
+    /* Butonlar */
     .action-btn {
         width: 35px;
         height: 35px;
@@ -223,22 +214,22 @@
 
     <div class="header-wrapper">
         <div>
-            <h1 class="page-title"><i class="bi bi-book-half"></i> Kitap Yönetimi</h1>
-            <p class="page-subtitle">Kütüphanedeki @(Model?.Count ?? 0) adet kitabı yönetin</p>
+            <h1 class="page-title"><i class="bi bi-tags-fill"></i> Kategori Yönetimi</h1>
+            <p class="page-subtitle">Sistemde tanımlı @(Model?.Count() ?? 0) adet kategori bulunmaktadır.</p>
         </div>
         <div>
-            <a href="#" class="btn btn-gold">
-                <i class="bi bi-plus-lg"></i> Yeni Kitap Ekle
+            <a asp-action="Create" class="btn btn-gold">
+                <i class="bi bi-plus-lg"></i> Yeni Kategori
             </a>
         </div>
     </div>
 
     <div class="search-card">
         <div style="flex-grow: 1;">
-            <form method="get" asp-action="Search" asp-controller="Books" style="display: flex; gap: 10px;">
-                <input type="text" name="q" class="input-dark" placeholder="Kitap adı, Yazar veya Kategori ara..." value="@Context.Request.Query["q"]">
-                <button type="submit" class="btn-gold btn-sm">
-                    <i class="bi bi-search"></i> 
+            <form method="get" asp-action="List" style="display: flex; gap: 10px;">
+                <input type="text" id="categorySearchInput" name="q" class="input-dark" placeholder="Kategori veya Kullanıcı ara..." value="@Context.Request.Query["q"]">
+                <button type="button" class="btn-gold btn-sm" style="pointer-events: none;">
+                    <i class="bi bi-search"></i>
                 </button>
             </form>
         </div>
@@ -246,52 +237,39 @@
 
     <div class="table-card">
         <div class="table-responsive">
-            <table class="custom-table" id="booksTable">
+            <table class="custom-table" id="categoriesTable">
                 <thead>
                     <tr>
-                        <th style="width: 50px;">#ID</th>
-                        <th style="width: 80px;">GÖRSEL</th>
-                        <th>BAŞLIK / YAZAR</th>
-                        <th>KATEGORİ</th>
+                        <th style="width: 80px;">#ID</th>
+                        <th>OLUŞTURAN</th>
+                        <th>KATEGORİ ADI</th>
                         <th style="text-align:right;">İŞLEMLER</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        @foreach (var book in Model)
+                        @foreach (var item in Model)
                         {
                             <tr>
-                                <td style="color:#666;">#@book.Id</td>
+                                <td style="color:#666;">#@item.Id</td>
+
                                 <td>
-                                    @if (!string.IsNullOrEmpty(book.Image))
-                                    {
-                                        <img src="@book.Image" alt="@book.Name" class="book-thumb" />
-                                    }
-                                    else
-                                    {
-                                        <div class="no-image" title="Görsel Yok">
-                                            <i class="bi bi-journal-text"></i>
-                                        </div>
-                                    }
-                                </td>
-                                <td>
-                                    <div style="font-weight:bold; color:#fff; font-size:1rem;">@book.Name</div>
-                                    <div style="color:#888; font-size:0.85rem;">
-                                        <i class="bi bi-pen"></i> @(book.Author ?? "Bilinmiyor")
+                                    <div class="user-badge">
+                                        <i class="bi bi-person-circle"></i>
+                                        <span>@(item.User?.UserName ?? "Sistem")</span>
                                     </div>
                                 </td>
+
                                 <td>
-                                    <span class="category-tag">
-                                        @(book.Category?.CategoryName ?? "Genel")
-                                    </span>
+                                    <span class="category-name-style">@item.CategoryName</span>
                                 </td>
 
                                 <td style="text-align:right;">
-                                    <a asp-action="Edit" asp-route-id="@book.Id" class="action-btn btn-edit" title="Düzenle">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn btn-edit" title="Düzenle">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-route-id="@book.Id" class="action-btn btn-delete" title="Sil">
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-btn btn-delete" title="Sil">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>
@@ -301,9 +279,9 @@
                     else
                     {
                         <tr>
-                            <td colspan="7" class="text-center p-4 text-muted">
-                                <i class="bi bi-journal-x" style="font-size: 2rem; display:block; margin-bottom:10px;"></i>
-                                Aradığınız kriterlere uygun kitap bulunamadı.
+                            <td colspan="4" class="text-center p-4 text-muted">
+                                <i class="bi bi-tags" style="font-size: 2rem; display:block; margin-bottom:10px;"></i>
+                                Henüz hiç kategori eklenmemiş veya arama sonucu bulunamadı.
                             </td>
                         </tr>
                     }
@@ -314,12 +292,15 @@
 </div>
 
 <script>
-    document.getElementById('searchBookInput')?.addEventListener('keyup', function() {
+    // JS Hızlı Arama (Kategori Adı ve Kullanıcı Adı üzerinden)
+    document.getElementById('categorySearchInput').addEventListener('keyup', function() {
         var value = this.value.toLowerCase();
-        var rows = document.querySelectorAll('#booksTable tbody tr');
+        var rows = document.querySelectorAll('#categoriesTable tbody tr');
 
         rows.forEach(function(row) {
             var text = row.textContent.toLowerCase();
+            if(row.textContent.includes("Henüz hiç kategori")) return;
+
             row.style.display = text.indexOf(value) > -1 ? '' : 'none';
         });
     });
