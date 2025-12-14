@@ -16,8 +16,8 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
         }
         public IActionResult Search(string q)
         {
-            var users = _context.Users.Where(u=>u.UserName.Contains(q) || u.Email.Contains(q)).ToList();
-            return View("List" , users);
+            var users = _context.Users.Where(u => u.UserName.Contains(q) || u.Email.Contains(q)).ToList();
+            return View("List", users);
         }
         public IActionResult Add()
         {
@@ -41,7 +41,7 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
             }
             if (ModelState.IsValid)
             {
-                if (!string.IsNullOrEmpty(model.PasswordHash))  
+                if (!string.IsNullOrEmpty(model.PasswordHash))
                 {
                     model.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.PasswordHash);
                 }
@@ -53,7 +53,7 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
         }
         public IActionResult List()
         {
-            var userList = _context.Users.Include(u => u.Books).Include(c=>c.Categories).ToList();
+            var userList = _context.Users.Include(u => u.Books).Include(c => c.Categories).ToList();
 
 
             return View(userList);
@@ -69,7 +69,7 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
             {
                 return NotFound();
             }
-            var roles = new List<string> { "User","SuperAdmin" };
+            var roles = new List<string> { "User", "SuperAdmin" };
             ViewBag.Roles = new SelectList(roles, user.Role); ;
             return View(user);
         }
@@ -92,6 +92,41 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("List");
+        }
+   
+        public async Task<IActionResult> DeleteConfirm(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken] 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var existingUser = await _context.Users.FindAsync(id);
+
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(existingUser);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(List));
         }
     }
 }

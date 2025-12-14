@@ -1,0 +1,213 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "Kullanıcı Silme Onayı";
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_SuperAdminLayout.cshtml";
+
+    // Controller'dan gelen kategori listesini alıyoruz
+    var connectedCategories = ViewBag.UserCategories as List<Category>;
+    bool hasCategories = connectedCategories != null && connectedCategories.Any();
+}
+
+<style>
+    /* --- SİLME SAYFASI TASARIMI --- */
+    @@keyframes zoomIn {
+        from
+
+    {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 50px;
+        min-height: 70vh;
+        animation: zoomIn 0.4s ease-out;
+    }
+
+    .form-card {
+        background-color: #111;
+        width: 100%;
+        max-width: 600px; /* Liste olacağı için biraz genişlettik */
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        border: 1px solid #333;
+        border-top: 4px solid #ff4444;
+        text-align: center;
+    }
+
+    .warning-icon {
+        font-size: 3.5rem;
+        color: #ff4444;
+        margin-bottom: 15px;
+        text-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
+    }
+
+    .form-title {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .highlight-text {
+        color: #ffd700;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .email-text {
+        color: #aaa;
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+
+    /* Bağlı Veriler Listesi */
+    .linked-data-box {
+        background-color: rgba(255, 68, 68, 0.1); /* Hafif kırmızı zemin */
+        border: 1px solid #ff4444;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 20px 0;
+        text-align: left;
+    }
+
+    .linked-title {
+        color: #ff4444;
+        font-weight: bold;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .linked-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+
+        .linked-list li {
+            color: #ccc;
+            font-size: 0.9rem;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+            .linked-list li:last-child {
+                border-bottom: none;
+            }
+
+    /* Buton Grubu */
+    .btn-group-custom {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 25px;
+    }
+
+    .btn-delete-confirm {
+        background-color: #ff4444;
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        transition: all 0.3s;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-delete-confirm:hover {
+            background-color: #cc0000;
+            transform: translateY(-2px);
+        }
+
+    .btn-cancel {
+        background-color: transparent;
+        border: 1px solid #444;
+        color: #ccc;
+        padding: 12px 30px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+        .btn-cancel:hover {
+            border-color: #fff;
+            color: #fff;
+            background-color: #222;
+        }
+</style>
+
+<div class="form-container">
+    <div class="form-card">
+
+        <div class="warning-icon">
+            <i class="bi bi-person-x-fill"></i>
+        </div>
+
+        <h1 class="form-title">Kullanıcı Silme İşlemi</h1>
+
+        <div style="margin-bottom: 20px;">
+            <p style="color:#888;">Bu kullanıcıyı silmek istediğinize emin misiniz?</p>
+            <span class="highlight-text">"@Model.UserName"</span><br />
+            <span class="email-text">(@Model.Email)</span>
+        </div>
+
+        @if (hasCategories)
+        {
+            <div class="linked-data-box">
+                <div class="linked-title">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    DİKKAT: Aşağıdaki veriler de silinecektir!
+                </div>
+                <ul class="linked-list">
+                    @foreach (var cat in connectedCategories)
+                    {
+                        <li>
+                            <i class="bi bi-tag-fill" style="margin-right:5px; font-size:0.8rem;"></i>
+                            Kategori: <strong>@cat.CategoryName</strong>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        else
+        {
+            <p style="color:#2ecc71; font-size:0.9rem; margin-top:10px;">
+                <i class="bi bi-check-circle"></i> Bu kullanıcıya bağlı silinecek veri bulunamadı. Güvenle silebilirsiniz.
+            </p>
+        }
+
+        <form method="post" asp-action="Delete" asp-controller="Users">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="btn-group-custom">
+                <a asp-action="List" class="btn-cancel">Vazgeç</a>
+
+                <button type="submit" class="btn-delete-confirm">
+                    <i class="bi bi-trash-fill"></i>
+                    @(hasCategories ? "Evet, Hepsini Sil" : "Evet, Sil")
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

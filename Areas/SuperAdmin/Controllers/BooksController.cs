@@ -11,13 +11,13 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
         private readonly MyDbContext _context;
         public BooksController(MyDbContext context)
         {
-           _context = context;
+            _context = context;
         }
         public IActionResult List()
         {
             var books = _context.Books
                                 .Include(b => b.Category)
-                                .OrderByDescending(b => b.Id) 
+                                .OrderByDescending(b => b.Id)
                                 .ToList();
             return View(books);
         }
@@ -29,7 +29,7 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
                 return NotFound();
             }
 
-            ViewBag.CategoryList = new SelectList(_context.Categories.ToList(), "Id", "Name", book.CategoryId);
+            ViewBag.CategoryList = new SelectList(_context.Categories.ToList(), "Id", "CategoryName", book.CategoryId);
             return View(book);
         }
 
@@ -46,7 +46,7 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
                 {
                     categories = new List<Category>(); // Boş liste oluştur
                 }
-                ViewBag.CategoryList = new SelectList(categories, "Id", "Name", book.CategoryId);
+                ViewBag.CategoryList = new SelectList(categories, "Id", "CategoryName", book.CategoryId);
                 return View(book);
             }
 
@@ -79,6 +79,29 @@ namespace BookManagementApp.Areas.SuperAdmin.Controllers
                                 .OrderByDescending(b => b.Id)
                                 .ToList();
             return View("List", books);
+        }
+        public IActionResult DeleteConfirm(int id)
+        {
+            var book = _context.Books.FirstOrDefault(a => a.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Book book)
+        {
+            var existingBook = _context.Books.FirstOrDefault(b => b.Id == book.Id);
+            if (existingBook == null)
+            {
+                return NotFound();
+            }
+            _context.Books.Remove(existingBook);
+            _context.SaveChanges();
+            return RedirectToAction("List");
         }
     }
 }

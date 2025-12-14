@@ -314,7 +314,7 @@
                                     </a>
                                     @if(user.Role != "SuperAdmin" )
                                     {
-                                        <a asp-action="Delete" asp-route-id="@user.Id" class="action-btn btn-delete" title="Sil">
+                                        <a asp-action="DeleteConfirm" asp-route-id="@user.Id" class="action-btn btn-delete" title="Sil">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     }
