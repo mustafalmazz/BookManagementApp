@@ -304,6 +304,12 @@
                                 <a class="dropdown-item logout-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
                                     Kütüphaneyi Yönet
                                 </a>
+                                @if (Model.User.Role == "SuperAdmin")
+                                {
+                                    <a class="dropdown-item logout-item" asp-area="SuperAdmin" asp-controller="Dashboard" asp-action="Index">
+                                        Sistemi Yönet
+                                    </a>
+                                }
                             </li>
                             <li>
                                 <a class="dropdown-item logout-item text-danger" asp-area="" asp-controller="Account" asp-action="Logout">

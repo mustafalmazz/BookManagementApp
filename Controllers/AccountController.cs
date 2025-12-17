@@ -69,14 +69,31 @@ namespace BookManagementApp.Controllers
         {
             var user = _context.Users.FirstOrDefault(u => u.UserName == username);
 
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            bool isPasswordValid = false;
+
+            if (user != null)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(user.PasswordHash) && user.PasswordHash.StartsWith("$2"))
+                    {
+                        isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                }
+            }
+
+            if (isPasswordValid)
             {
                 await SignInUserAsync(user);
-                if (user.Role == "SuperAdmin")
-                {
-                    // Eğer SuperAdmin ise özel panele git
-                    return RedirectToAction("Index", "DashBoard", new { area = "SuperAdmin" });
-                }
+                //if (user.Role == "SuperAdmin")
+                //{
+                //    return RedirectToAction("Index", "DashBoard", new { area = "SuperAdmin" });
+                //}
+                return RedirectToAction("Index", "Home");
             }
 
             ViewBag.Error = "Geçersiz kullanıcı adı veya şifre.";
@@ -116,10 +133,12 @@ namespace BookManagementApp.Controllers
             if (user != null)
             {
                 await SignInUserAsync(user);
+
                 if (user.Role == "SuperAdmin")
                 {
                     return RedirectToAction("Index", "DashBoard", new { area = "SuperAdmin" });
                 }
+                return RedirectToAction("Index", "Home");
             }
 
             TempData["GoogleEmail"] = email;
@@ -168,11 +187,16 @@ namespace BookManagementApp.Controllers
                 return View();
             }
 
+           
+            string randomPassword = Guid.NewGuid().ToString();
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(randomPassword);
+
             var newUser = new User
             {
                 UserName = username,
                 Email = email,
-                PasswordHash = Guid.NewGuid().ToString()
+                PasswordHash = hashedPassword,
+                Role = "User" 
             };
 
             _context.Users.Add(newUser);
@@ -189,8 +213,6 @@ namespace BookManagementApp.Controllers
     {
         new Claim(ClaimTypes.Name, user.UserName ?? ""),
         new Claim(ClaimTypes.Email, user.Email ?? ""),
-        // ESKİ HALİ: new Claim(ClaimTypes.Role, "User") 
-        // YENİ HALİ: Veritabanındaki rolü al, boşsa "User" kabul et
         new Claim(ClaimTypes.Role, user.Role ?? "User")
     };
 
@@ -205,7 +227,6 @@ namespace BookManagementApp.Controllers
             HttpContext.Session.SetInt32("UserId", user.Id);
             HttpContext.Session.SetString("UserName", user.UserName ?? "");
         }
-        // --- ŞİFREMİ UNUTTUM BÖLÜMÜ ---
 
         [HttpGet]
         public IActionResult ForgotPassword()
