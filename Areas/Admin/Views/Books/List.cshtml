@@ -5,8 +5,8 @@
 
 <style>
     /* Sayfa _Layout.cshtml kullanmıyorsa veya
-          body stilini oradan almıyorsa bu gereklidir.
-        */
+               body stilini oradan almıyorsa bu gereklidir.
+            */
     body {
         background-color: #0a0c1e;
         color: #e0e0e0;
@@ -82,6 +82,7 @@
         border-collapse: separate;
         border-spacing: 0;
         overflow: hidden; /* Köşeleri düzgün göstermek için */
+        margin-bottom: 0; /* Responsive div içinde boşluk yapmasın */
     }
 
         /* Tablo Başlığı */
@@ -90,6 +91,7 @@
             border-bottom: 2px solid #1f2a52;
             background-color: #131a38;
             border-top: none;
+            white-space: nowrap; /* Başlıkların mobilde kırılmasını önler */
         }
 
         /* Tablo Hücreleri */
@@ -156,10 +158,46 @@
             box-shadow: 0 0 10px #00c3ff;
             color: #0a0c1e;
         }
+
+    /* --- MOBİL UYUMLULUK (RESPONSIVE CSS) --- */
+    @@media (max-width: 768px) {
+        /* Üst kısımdaki Add New ve Search kısmını alt alta al */
+        .top-action-bar
+
+    {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 15px;
+    }
+
+    /* Butonu tam genişlik yap */
+    .btn-outline-success {
+        width: 100%;
+    }
+
+    /* Arama formunu tam genişlik yap */
+    .search-form {
+        width: 100%;
+        margin-bottom: 0; /* Container margin'i yeterli */
+    }
+
+        /* Arama kutusundaki 300px sabit genişliği eziyoruz */
+        .search-form input[name="q"] {
+            width: 100% !important;
+        }
+
+    /* Tablo içindeki resimleri biraz küçült (isteğe bağlı, ama daha iyi görünür) */
+    .table img {
+        width: 60px !important;
+    }
+
+    }
 </style>
+
 <h1 class="text-center mb-3">Tüm Kitaplarım</h1>
 <hr />
-<div class="d-flex justify-content-between align-items-center mb-4">
+
+<div class="d-flex justify-content-between align-items-center mb-4 top-action-bar">
 
     <a asp-area="Admin" asp-action="Create" class="btn btn-outline-success">Add New</a>
 
@@ -176,37 +214,50 @@
     </form>
 </div>
 
-
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Author</th>
-            <th>Rating</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>TotalPage</th>
-
-            <th style="width:150px;">Operations</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
             <tr>
-                <td><img src="@item.Image" style="width:100px" /></td>
-                <td>@item.Name</td>
-                <td>@item.Author</td>
-                <td>@item.Rate</td>
-                <td>@item.Description</td>
-                <td>@item.Category?.CategoryName</td>
-                <td>@item.TotalPages</td>
-                <td>
-                    <a class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
-                </td>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Rating</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>TotalPage</th>
+                <th style="width:150px;">Operations</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.Image" style="width:100px" /></td>
+                    <td>@item.Name</td>
+                    <td>@item.Author</td>
+                    <td>@item.Rate</td>
+
+                    <td title="@item.Description">
+                        @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 50)
+                        {
+                            @($"{item.Description.Substring(0, 50)}...")
+                        }
+                        else
+                        {
+                            @item.Description
+                        }
+                    </td>
+
+                    <td>@item.Category?.CategoryName</td>
+                    <td>@item.TotalPages</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

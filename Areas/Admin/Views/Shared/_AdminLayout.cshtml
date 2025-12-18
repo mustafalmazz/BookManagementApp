@@ -17,6 +17,7 @@
             /* Ana arka plan koyu lacivert */
             background-color: #0a0c1e;
             color: #e0e0e0; /* Varsayılan metin rengi */
+            transition: all 0.3s;
         }
 
         .sidebar {
@@ -28,6 +29,8 @@
             /* İçerikten ayırmak için neon mavi sınır ve parıltı */
             border-right: 1px solid #00aaff;
             box-shadow: 3px 0 15px rgba(0, 170, 255, 0.2);
+            z-index: 1000; /* Mobilde üstte kalması için */
+            transition: all 0.3s ease;
         }
 
             /* Sidebar Başlığı (Admin Panel) */
@@ -94,13 +97,80 @@
             padding: 30px; /* İçeriğe biraz daha fazla boşluk */
             height: 100vh;
             overflow-y: auto; /* İçerik taşarsa kaydırma çubuğu */
+            width: 100%; /* Mobilde tam genişlik olması için */
+        }
+
+        /* --- RESPONSIVE CSS EKLEMELERİ --- */
+
+        /* Menü açma butonu (Sadece mobilde görünür) */
+        .menu-toggle-btn {
+            display: none;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 999;
+            background-color: #10152f;
+            border: 1px solid #00aaff;
+            color: #00aaff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
+        }
+
+        /* Mobil Ekranlar İçin (768px altı) */
+        @@media (max-width: 768px) {
+            .sidebar
+
+        {
+            position: fixed;
+            left: -240px; /* Varsayılan olarak ekran dışına it */
+            height: 100vh;
+            top: 0;
+        }
+
+        .sidebar.active {
+            left: 0; /* Class eklenince ekrana gelsin */
+        }
+
+        .content {
+            padding-top: 60px; /* Üstteki buton için boşluk */
+        }
+
+        .menu-toggle-btn {
+            display: block; /* Mobilde butonu göster */
+        }
+
+        /* Menü açıldığında arkaplanı karartmak için overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            backdrop-filter: blur(2px);
+        }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar d-flex flex-column p-3">
-        <h4 class="text-center mb-4"><img src="~/images/admin.png" /> Admin Panel</h4>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <button class="menu-toggle-btn" id="menuToggle">
+        <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+    </button>
+
+    <div class="sidebar d-flex flex-column p-3" id="sidebarMenu">
+        <h4 class="text-center mb-4"><img src="~/images/admin.png" style="max-width:30px;" /> Admin Panel</h4>
         <ul class="nav nav-pills flex-column mb-auto">
 
             <li class="nav-item">
@@ -144,6 +214,21 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#menuToggle').click(function () {
+                $('#sidebarMenu').toggleClass('active');
+                $('#sidebarOverlay').toggleClass('active');
+            });
+
+            // Karartıya basınca menüyü kapat
+            $('#sidebarOverlay').click(function () {
+                $('#sidebarMenu').removeClass('active');
+                $('#sidebarOverlay').removeClass('active');
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
     @section Scripts {

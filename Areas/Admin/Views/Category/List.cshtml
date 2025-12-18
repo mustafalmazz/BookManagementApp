@@ -6,8 +6,8 @@
 
 <style>
     /* Sayfa _Layout.cshtml kullanmıyorsa veya
-          body stilini oradan almıyorsa bu gereklidir.
-        */
+               body stilini oradan almıyorsa bu gereklidir.
+            */
     body {
         background-color: #0a0c1e;
         color: #e0e0e0;
@@ -89,6 +89,7 @@
         border-collapse: separate;
         border-spacing: 0;
         overflow: hidden;
+        margin-bottom: 0; /* Responsive div içinde boşluk yapmasın */
     }
 
         /* Tablo Başlığı */
@@ -98,6 +99,7 @@
             background-color: #131a38;
             border-top: none;
             vertical-align: middle;
+            white-space: nowrap; /* Başlıkların mobilde kırılmasını önler */
         }
 
         /* Tablo Hücreleri */
@@ -159,12 +161,42 @@
             box-shadow: 0 0 10px #00c3ff;
             color: #0a0c1e;
         }
+
+    /* --- MOBİL UYUMLULUK (RESPONSIVE CSS) --- */
+    @@media (max-width: 768px) {
+        /* Üst kısımdaki Add New ve Search kısmını alt alta al */
+        .top-action-bar
+
+    {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 15px;
+    }
+
+    /* Butonu tam genişlik yap */
+    .btn-outline-success {
+        width: 100%;
+    }
+
+    /* Arama formunu tam genişlik yap */
+    .search-form {
+        width: 100%;
+        margin-bottom: 0; /* Container margin'i yeterli */
+    }
+
+        /* Arama kutusundaki 300px sabit genişliği eziyoruz */
+        .search-form input[name="q"] {
+            width: 100% !important;
+        }
+
+    }
 </style>
 
 
 <h1 class="text-center mb-3">Tüm Kategorilerim</h1>
 <hr />
-<div class="d-flex justify-content-between align-items-center mb-4">
+
+<div class="d-flex justify-content-between align-items-center mb-4 top-action-bar">
 
     <a asp-area="Admin" asp-action="Create" class="btn btn-outline-success">Add New</a>
 
@@ -173,58 +205,59 @@
                name="q"
                class="form-control me-2"
                placeholder="Kitap veya Yazar Adı..."
-               style="width: 300px;" />
-
-        <button type="submit" class="btn btn-search">
+               style="width: 300px;" /> <button type="submit" class="btn btn-search">
             <i class="fas fa-search"></i> Ara
         </button>
     </form>
 </div>
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>Category Id</th>
-            <th>Category Name</th>
-            <th>Books</th>
-            <th style="width:200px;">Operations</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.CategoryName</td>
-                <td>
-                    @if (item.Books != null && item.Books.Any())
-                    {
-                        var booksToShow = item.Books.Take(3).ToList();
-                        for (int i = 0; i < booksToShow.Count; i++)
-                        {
-                            @booksToShow[i].Name
 
-                            @if (i < booksToShow.Count - 1)
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Kategori</th>
+                <th>Books</th>
+                <th style="width:200px;">Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CategoryName</td>
+                    <td>
+                        @if (item.Books != null && item.Books.Any())
+                        {
+                            var booksToShow = item.Books.Take(3).ToList();
+                            for (int i = 0; i < booksToShow.Count; i++)
                             {
-                                <text>, </text>
+                                @booksToShow[i].Name
+
+                                @if (i < booksToShow.Count - 1)
+                                {
+                                    <text>, </text>
+                                }
+                            }
+
+                            @if (item.Books.Count() > 3)
+                            {
+                                <text>...</text>
                             }
                         }
-
-                        @if (item.Books.Count() > 3)
+                        else
                         {
-                            <text>...</text>
+                            <span class="text-danger">Bu Kategoriye Henüz Kitap Eklenmemiş!</span>
                         }
-                    }
-                    else
-                    {
-                        <span class="text-danger">Bu Kategoriye Henüz Kitap Eklenmemiş!</span>
-                    }
-                </td>
+                    </td>
 
-                <td>
-                    <a class="btn btn-danger btn-sm" asp-area="admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    <a class="btn btn-success btn-sm" asp-area="admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-danger btn-sm" asp-area="admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a class="btn btn-success btn-sm" asp-area="admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

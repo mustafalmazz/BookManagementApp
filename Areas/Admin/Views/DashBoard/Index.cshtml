@@ -6,14 +6,13 @@
     var totalBooks = Model.Books?.Count ?? 0;
     var totalCategories = Model.Categories?.Count ?? 0;
 
-    // --- YENİ EKLENEN: TOPLAM TUTAR HESAPLAMASI ---
-    // Kitapların fiyatlarını topluyoruz. Stock ile çarpmak isterseniz: .Sum(b => b.Price * b.Stock) yapabilirsiniz.
+   
     var totalPrice = Model.Books?.Sum(b => b.Price) ?? 0;
 }
 
 <style>
     body {
-        background-color: #0a0c1e; /* Koyu lacivert */
+        background-color: #0a0c1e; 
         margin: 0;
         padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -49,6 +48,7 @@
 
     .stats-grid {
         display: grid;
+        /* Masaüstünde geniş, mobilde uyumlu */
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 30px;
     }
@@ -107,14 +107,12 @@
             text-shadow: 0 0 8px #00c3ff;
         }
 
-        /* Kategori ikonu için neon yeşil tema (kontrast için) */
         .card-icon.categories-icon {
             background-color: rgba(0, 255, 100, 0.1); /* Yarı saydam yeşil */
             color: #00ff6a; /* Neon yeşil */
             text-shadow: 0 0 8px #00ff6a;
         }
 
-        /* --- YENİ EKLENEN: PARA İKONU STİLİ (NEON GOLD/SARI) --- */
         .card-icon.money-icon {
             background-color: rgba(255, 215, 0, 0.1); /* Yarı saydam sarı */
             color: #ffd700; /* Neon Gold */
@@ -123,25 +121,24 @@
 
     .card-content {
         flex-grow: 1;
+        min-width: 0;
     }
 
     .stat-number-wrapper {
         text-align: left;
         margin-bottom: 5px;
-        display: flex; /* Para birimi simgesi için yan yana */
+        display: flex;
         align-items: baseline;
     }
 
     .stat-number {
         font-size: 2.5rem;
         font-weight: 700;
-        /* Metin rengi parlak beyaza değiştirildi */
         color: #ffffff;
         line-height: 1.1;
     }
 
     .stat-description-title {
-        /* Metin rengi koyu temaya uyarlandı */
         color: #e0e0e0;
         font-size: 1rem;
         font-weight: 600;
@@ -149,7 +146,6 @@
     }
 
     .stat-description-text {
-        /* Metin rengi koyu temaya uyarlandı */
         color: #90a0c0;
         font-size: 0.9rem;
         line-height: 1.5;
@@ -157,7 +153,6 @@
         margin-top: 8px;
     }
 
-    /* Animasyonlar (Değişiklik yok) */
     @@keyframes fadeInDown {
         from {
             opacity: 0;
@@ -182,9 +177,7 @@
         }
     }
 
-    /* --- "Son Kitaplar" Stilleri Koyu Temaya Uyarlandı --- */
     .recent-books-card {
-        /* Stat-card ile aynı stil */
         background: #10152f;
         border-radius: 8px;
         padding: 25px;
@@ -197,16 +190,13 @@
     .recent-books-title {
         font-size: 1.5rem;
         font-weight: 600;
-        /* Başlık rengi beyaza değiştirildi */
         color: #ffffff;
         margin-top: 0;
         margin-bottom: 20px;
-        /* Ayırıcı çizgi rengi koyulaştırıldı */
         border-bottom: 1px solid #1f2a52;
         padding-bottom: 15px;
     }
 
-        /* HTML içindeki inline stili (color: #555) ezmek için */
         .recent-books-title .fas {
             color: #00c3ff !important;
         }
@@ -226,24 +216,20 @@
         .recent-books-table td {
             text-align: left;
             padding: 12px 15px;
-            /* Tablo ayırıcı çizgisi koyulaştırıldı */
             border-bottom: 1px solid #1f2a52;
             white-space: nowrap;
         }
 
         .recent-books-table th {
-            /* Başlık metni rengi uyarlandı */
             color: #a0b0d0;
             font-weight: 600;
         }
 
         .recent-books-table td {
-            /* Veri metni rengi uyarlandı */
             color: #e0e0e0;
         }
 
         .recent-books-table tr:nth-child(even) {
-            /* Çift satır arkaplanı koyulaştırıldı */
             background-color: #131a38;
         }
 
@@ -252,53 +238,84 @@
         }
 
         .recent-books-table tr:hover {
-            /* Hover rengi temaya uyarlandı */
             background-color: #1a2452;
         }
 
     .no-books-message {
-        /* Mesaj rengi uyarlandı */
         color: #7080a0;
         font-style: italic;
         padding: 20px;
         text-align: center;
     }
 
-    /* Responsive (Değişiklik yok) */
     @@media (max-width: 768px) {
-        .page-title {
-            font-size: 2rem;
-        }
-
-        .stats-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        .stat-number {
-            font-size: 2.2rem;
-        }
-
         .dashboard-container {
             padding: 20px;
         }
 
+        .page-title {
+            font-size: 1.8rem; 
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px; /* Kart arası boşluk azaltıldı */
+        }
+
         .stat-card {
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
+            padding: 15px; /* Kart içi boşluk azaltıldı */
         }
 
         .card-icon {
-            margin-bottom: 10px;
+            width: 50px;
+            height: 50px;
+            font-size: 1.4rem;
+        }
+
+        .stat-number {
+            font-size: 1.8rem; /* Sayı boyutu küçültüldü */
+        }
+
+        .stat-description-title {
+            font-size: 0.9rem;
+        }
+
+        .stat-description-text {
+            font-size: 0.8rem;
         }
 
         .recent-books-card {
             padding: 15px;
+            margin-top: 30px;
         }
 
         .recent-books-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        .recent-books-table th:first-child,
+        .recent-books-table td:first-child {
+            display: none;
+        }
+        .recent-books-table {
+            min-width: 100%;
+        }
+
+            .recent-books-table th,
+            .recent-books-table td {
+                padding: 8px 10px; /* Tablo hücresi dolgusu azaltıldı */
+                font-size: 0.85rem; /* Tablo fontu küçültüldü */
+                white-space: normal; /* Mobilde uzun isimlerin alt satıra geçmesine izin ver */
+            }
+    }
+
+    @@media (max-width: 400px) {
+        .stats-grid {
+            grid-template-columns: 1fr; /* Tek sütuna düş */
         }
     }
 </style>
@@ -312,7 +329,7 @@
     <div class="stats-grid">
         <div class="stat-card">
             <div class="card-icon books-icon">
-                <img src="~/images/book (3).png" />
+                <img src="~/images/book (3).png" style="max-width: 60%;" />
             </div>
             <div class="card-content">
                 <div class="stat-description-title">Toplam Kitap</div>
@@ -327,7 +344,7 @@
 
         <div class="stat-card">
             <div class="card-icon categories-icon">
-                <img src="~/images/category.png" />
+                <img src="~/images/category.png" style="max-width: 60%;" />
             </div>
             <div class="card-content">
                 <div class="stat-description-title">Toplam Kategori</div>
@@ -342,12 +359,12 @@
 
         <div class="stat-card">
             <div class="card-icon money-icon">
-                <img src="~/images/return-on-investment.png" />
+                <img src="~/images/return-on-investment.png" style="max-width: 60%;" />
             </div>
             <div class="card-content">
                 <div class="stat-description-title">Kitap Maliyeti</div>
                 <div class="stat-number-wrapper">
-                    <span style="color: #fff; font-size: 2rem; margin-right:5px;">₺</span>
+                    <span style="color: #fff; font-size: 1.8rem; margin-right:5px;">₺</span>
                     <div class="stat-number" id="totalPriceCount" data-count="@totalPrice">0</div>
                 </div>
                 <p class="stat-description-text">
@@ -421,21 +438,19 @@
             }, 16);
         }
 
-        // Sayıları animasyonlu olarak göster
         setTimeout(() => {
             const bookCountElement = document.getElementById('bookCount');
             const categoryCountElement = document.getElementById('categoryCount');
-            const totalPriceElement = document.getElementById('totalPriceCount'); // Yeni element
+            const totalPriceElement = document.getElementById('totalPriceCount'); 
 
             const bookCount = parseInt(bookCountElement.getAttribute('data-count')) || 0;
             const categoryCount = parseInt(categoryCountElement.getAttribute('data-count')) || 0;
-            // Para birimi ondalıklı olabilir, ancak mevcut animasyon mantığı tamsayı (floor) kullanıyor.
-            // Görüntü bütünlüğü için Math.floor mantığını koruyoruz.
+            
             const totalPrice = parseFloat(totalPriceElement.getAttribute('data-count')) || 0;
 
             animateCounter(bookCountElement, bookCount, 1500);
             animateCounter(categoryCountElement, categoryCount, 1500);
-            animateCounter(totalPriceElement, totalPrice, 1500); // Yeni animasyon
+            animateCounter(totalPriceElement, totalPrice, 1500); 
         }, 300);
     });
 </script>
