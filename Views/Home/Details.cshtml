@@ -390,19 +390,61 @@
         margin: 40px 0;
     }
 
+    /* --- RESPONSIVE DÜZENLEME BAŞLANGICI --- */
+
     @@media (max-width: 768px) {
-        .book-title
+        .details-container
 
     {
-        font-size: 2rem;
+        padding: 30px 0;
     }
 
-    .book-author {
-        font-size: 1.2rem;
+    .breadcrumb-wrapper {
+        padding: 10px 15px;
+        margin-bottom: 25px;
     }
+
+    .book-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    /* --- BURASI DEĞİŞTİRİLDİ: Yazar, Kategori, Tarih, Sayfa yan yana (2'li) --- */
+    /* Önceden col-6 olanların mobilde de %50 genişlikte kalmasını sağlıyoruz */
+    .row .book-author.col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        font-size: 0.95rem; /* Fontu mobil için hafif küçülttük */
+        margin-bottom: 15px;
+    }
+
+    /* --- Sadece Puan (col-7) ve Buton (col-5) için düzenleme --- */
+    /* Puan kısmını ve Butonu alt alta (veya sıkışmadan) gösterir */
+    .row .col-7,
+    .row .col-5 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .rating {
+        font-size: 1.1rem;
+        margin-bottom: 5px; /* Alt boşluk azaltıldı */
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+        .rating i {
+            font-size: 24px !important;
+        }
 
     .price-value {
         font-size: 2.2rem;
+    }
+
+    .price-section {
+        padding: 20px;
+        margin: 20px 0;
     }
 
     .info-grid {
@@ -417,6 +459,20 @@
     .btn-secondary-custom {
         width: 100%;
         justify-content: center;
+        font-size: 1rem;
+        padding: 14px 30px;
+    }
+
+    .btn-notes-primary {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+
+    .btn-secondary-mini {
+        font-size: 0.8rem;
+        padding: 6px 12px;
     }
 
     .image-section {
@@ -427,12 +483,109 @@
         padding: 30px 20px;
     }
 
+    .stock-badge {
+        top: 10px;
+        right: 10px;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .book-category-badge {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+
+    .description-section {
+        padding: 20px 15px;
+        margin: 20px 0;
+    }
+
+    .description-title {
+        font-size: 1.3rem;
+    }
+
+    .description-text {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .info-item {
+        padding: 15px;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+    }
+
+    .decorative-divider {
+        margin: 25px 0;
+    }
+
+    /* "Aynı Kategoriden Kitaplar" bölümü */
+    .container-custom .col-lg-3,
+    .container-custom .col-md-4,
+    .container-custom .col-sm-6 {
+        margin-bottom: 20px;
+    }
+
+    .book-card {
+        margin: 0 auto;
+        max-width: 300px;
+    }
+
+    }
+
+    /* Ekstra küçük ekranlar için */
+    @@media (max-width: 576px) {
+        .book-title
+
+    {
+        font-size: 1.6rem;
+    }
+
+    .rating {
+        font-size: 1rem;
+    }
+
+        .rating i {
+            font-size: 20px !important;
+        }
+
+    .price-value {
+        font-size: 1.8rem;
+    }
+
+    .description-title {
+        font-size: 1.2rem;
+    }
+
+    .description-text {
+        font-size: 0.95rem;
+    }
+
+    .btn-primary-custom,
+    .btn-secondary-custom {
+        font-size: 0.9rem;
+        padding: 12px 25px;
+    }
+
+    .info-section {
+        padding: 25px 15px;
+    }
+
+    .breadcrumb {
+        font-size: 0.9rem;
+    }
+
     }
 </style>
 
 <div class="details-container">
     <div class="container">
-        <!-- Breadcrumb -->
         <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -442,21 +595,16 @@
             </ol>
         </nav>
 
-        <!-- Main Content -->
         <div class="book-details-card">
             <div class="row g-0">
-                <!-- Image Section -->
                 <div class="col-lg-5 image-section">
                     <div class="book-image-wrapper">
                         <img src="@(string.IsNullOrEmpty(Model.Book.Image) ? "/images/ResimBulunamadi.png" : Model.Book.Image)"
                              class="book-image"
                              alt="@Model.Book.Name">
-
-
                     </div>
                 </div>
 
-                <!-- Info Section -->
                 <div class="col-lg-7 info-section">
                     <h1 class="book-title">@Model.Book.Name</h1>
                     @if (!string.IsNullOrEmpty(Model.Book.Description))
@@ -493,6 +641,7 @@
                     }
 
                     <div class="decorative-divider"></div>
+
                     <div class="row">
                         <div class="book-author col-6">
                             <i class="fa-solid fa-feather"></i>
@@ -511,6 +660,7 @@
                             <i class="fa-solid fa-scroll"></i>@Model.Book.TotalPages Sayfa
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-7">
                             <text class="rating">Puanım/ </text>
@@ -522,17 +672,17 @@
 
                                 @for (int i = 0; i < fullStars; i++)
                                 {
-                                    <i style="font-size:30px;" class="fa-solid fa-star text-warning"></i>
+                                    <i style="font-size:20px;" class="fa-solid fa-star text-warning"></i>
                                 }
 
                                 @if (hasHalfStar)
                                 {
-                                    <i style="font-size:30px;" class="fa-solid fa-star-half-stroke text-warning"></i>
+                                    <i style="font-size:20px;" class="fa-solid fa-star-half-stroke text-warning"></i>
                                 }
 
                                 @for (int i = 0; i < (5 - fullStars - (hasHalfStar ? 1 : 0)); i++)
                                 {
-                                    <i style="font-size:30px;" class="fa-regular fa-star text-warning"></i>
+                                    <i style="font-size:20px;" class="fa-regular fa-star text-warning"></i>
                                 }
                             }
                             else
@@ -541,7 +691,7 @@
                             }
                         </div>
                         <div class="col-5">
-                            <a href="/home/notes/@Model.Book?.Id" class="btn-notes-primary">Aldığım Notlar   <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="/home/notes/@Model.Book?.Id" class="btn-notes-primary">Aldığım Notlar    <i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -601,7 +751,7 @@
                 } else {
                     fullDesc.style.display = "none";
                     shortDesc.style.display = "block";
-                     toggleBtn.innerHTML = 'Devamını Oku <i class="fa-solid fa-arrow-right"></i>';
+                    toggleBtn.innerHTML = 'Devamını Oku <i class="fa-solid fa-arrow-right"></i>';
                 }
             });
         }

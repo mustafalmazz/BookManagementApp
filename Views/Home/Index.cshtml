@@ -17,7 +17,7 @@
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         color: #f5f0e8;
         padding: 30px 0 0px;
-        margin-bottom: 50px;
+        margin-bottom: 50px; /* Masaüstünde geniş boşluk */
         box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         position: relative;
         overflow: hidden;
@@ -330,44 +330,130 @@
             background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
         }
 
+    /* MOBİL GÖRÜNÜM İÇİN AÇILIR MENÜ STİLLERİ */
+    .mobile-filter-toggle {
+        display: none;
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: left;
+        box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
+        transition: all 0.3s ease;
+    }
+
+        .mobile-filter-toggle:hover {
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+        }
+
+        .mobile-filter-toggle i {
+            float: right;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-filter-toggle.active i {
+            transform: rotate(180deg);
+        }
+
     /* Responsive */
     @@media (max-width: 1024px) {
-        .filter-sidebar {
-            width: 240px;
-        }
+        .filter-sidebar
+
+    {
+        width: 240px;
+    }
+
     }
 
     @@media (max-width: 768px) {
-        .page-header h1 {
-            font-size: 2.5rem;
+        /* BAŞLIK FONTU */
+        .page-header h1
+
+    {
+        font-size: 1.60rem;
+    }
+
+    /* --- ÖNEMLİ: KAHVERENGİ KUTU İLE FİLTRE ARASINDAKİ BOŞLUĞU AZALTTIK --- */
+    .page-header {
+        margin-bottom: 15px !important; /* Normalde 50px idi, 15px'e düştü */
+        padding-bottom: 10px; /* İç boşluğu da biraz kıstık */
+    }
+
+    .container-custom {
+        flex-direction: column;
+    }
+
+    /* Mobil filtreleme açılır menü */
+    .mobile-filter-toggle {
+        display: block;
+    }
+
+    .filter-sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+    }
+
+        .filter-sidebar.show {
+            max-height: 1000px;
         }
 
-        .container-custom {
-            flex-direction: column;
-        }
+    /* Mobilde yan yana 2 kitap */
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+        margin-top:0;
+        gap: 12px;
+    }
 
-        .filter-sidebar {
-            width: 100%;
-            position: relative;
-            top: 0;
-        }
+    /* Mobilde kitap kartlarını küçült */
+    .book-card .card-img-top {
+        height: 200px;
+    }
 
-        .books-grid {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        }
-        /* Empty State Responsive */
-        .empty-card {
-            padding: 30px;
-        }
+    .book-card .card-body {
+        padding: 8px;
+    }
 
-        .empty-title {
-            font-size: 2rem;
-        }
+    .card-title {
+        font-size: 0.90rem;
+        min-height: 35px;
+        margin-bottom: 4px;
+    }
 
-        .add-book-btn-lg {
-            width: 100%;
-            justify-content: center;
-        }
+    .author-name {
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+    }
+
+    .details-btn {
+        padding: 8px 15px;
+        font-size: 0.60rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Empty State Responsive */
+    .empty-card {
+        padding: 30px;
+    }
+
+    .empty-title {
+        font-size: 2rem;
+    }
+
+    .add-book-btn-lg {
+        width: 100%;
+        justify-content: center;
+    }
+
     }
 </style>
 
@@ -416,7 +502,12 @@
 else
 {
     <div class="container-custom">
-        <aside class="filter-sidebar">
+        <button class="mobile-filter-toggle" onclick="toggleMobileFilters()">
+            <i class="fa-solid fa-filter"></i> Filtrele
+            <i class="fa-solid fa-chevron-down"></i>
+        </button>
+
+        <aside class="filter-sidebar" id="filterSidebar">
             <div class="filter-card">
                 <h3 class="filter-title">
                     <i class="fa-solid fa-filter"></i> Filtrele
@@ -474,7 +565,7 @@ else
                              alt="@book.Name">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-center">@book.Name</h5>
-                            <p class="author-name text-center">@book.Author</p>
+                            <p class="author-name text-center"><i class="fa-solid fa-feather"></i>@book.Author</p>
                             <div class="mt-auto text-center">
                                 <a href="/Home/Details/@book.Id" class="btn details-btn">
                                     Detayları Gör
@@ -492,6 +583,13 @@ else
     @if (hasBooks)
     {
         <script>
+            function toggleMobileFilters() {
+                const sidebar = document.getElementById('filterSidebar');
+                const toggle = document.querySelector('.mobile-filter-toggle');
+                sidebar.classList.toggle('show');
+                toggle.classList.toggle('active');
+            }
+
             function filterAndSortBooks() {
                 const pageCountFilter = document.querySelector('input[name="pageCount"]:checked').value;
                 const sortOrder = document.querySelector('input[name="sortOrder"]:checked').value;
