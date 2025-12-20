@@ -390,6 +390,116 @@
         margin: 40px 0;
     }
 
+    /* --- ANA SAYFADAN ALINAN KART STİLLERİ --- */
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        margin-top: 30px;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .book-card {
+        transition: all 0.4s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: visible;
+        background: #fff9f0;
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.15);
+        position: relative;
+    }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 15px;
+            background: radial-gradient(circle, rgba(255, 215, 130, 0.6) 0%, rgba(205, 164, 94, 0.4) 30%, rgba(139, 111, 71, 0.2) 60%, transparent 100%);
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 19px 19px rgba(107, 85, 65, 0.1);
+        }
+
+            .book-card:hover::before {
+                width: 110%;
+                height: 110%;
+                opacity: 1;
+            }
+
+        .book-card .card-img-top {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: all 0.4s ease;
+            border-bottom: 3px solid #8b6f47;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .book-card .card-body {
+            padding: 20px;
+            background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
+            border-radius: 0 0 15px 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+    .card-title {
+        color: #4a3f35;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .author-name {
+        color: #8b6f47;
+        font-size: 1rem;
+        font-style: italic;
+        margin-bottom: 15px;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .details-btn {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        border: none;
+        color: #f5f0e8;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        margin-top: auto;
+    }
+
+        .details-btn:hover {
+            transform: scale(1.01);
+            color: #f5f0e8;
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+        }
+
     /* --- RESPONSIVE DÜZENLEME BAŞLANGICI --- */
 
     @@media (max-width: 768px) {
@@ -476,7 +586,7 @@
     }
 
     .image-section {
-        padding: 30px 20px;
+        padding: 45px 30px;
     }
 
     .info-section {
@@ -525,16 +635,36 @@
         margin: 25px 0;
     }
 
-    /* "Aynı Kategoriden Kitaplar" bölümü */
-    .container-custom .col-lg-3,
-    .container-custom .col-md-4,
-    .container-custom .col-sm-6 {
-        margin-bottom: 20px;
+    /* Mobilde kitapları yan yana 2'li göster */
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
-    .book-card {
-        margin: 0 auto;
-        max-width: 300px;
+    /* Mobilde kitap kartlarını küçült */
+    .book-card .card-img-top {
+        height: 200px;
+    }
+
+    .book-card .card-body {
+        padding: 8px;
+    }
+
+    .card-title {
+        font-size: 0.90rem;
+        min-height: 35px;
+        margin-bottom: 4px;
+    }
+
+    .author-name {
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+    }
+
+    .details-btn {
+        padding: 8px 15px;
+        font-size: 0.60rem;
+        letter-spacing: 0.5px;
     }
 
     }
@@ -702,29 +832,24 @@
             <h2 class="text-center mb-2 my-4" style="color:#4a3f35;">Aynı Kategoriden Kitaplar</h2>
             <div class="decorative-divider"></div>
 
-            <div class="container-custom">
-                <div class="row g-4">
-                    @foreach (var book in Model.RelatedBooks)
-                    {
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="card book-card shadow-sm">
-                                <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
-                                     class="card-img-top"
-                                     alt="@book.Name">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title text-center">@book.Name</h5>
-                                    <p class="author-name text-center text-muted">@book.Author</p>
-
-                                    <div class="mt-auto text-center">
-                                        <a href="/Home/Details/@book.Id" class="btn-secondary-mini">
-                                            Detayları Gör <i class="fa-solid fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
+            <div class="books-grid">
+                @foreach (var book in Model.RelatedBooks)
+                {
+                    <div class="book-card" data-pages="@book.TotalPages">
+                        <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
+                             class="card-img-top"
+                             alt="@book.Name">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-center">@book.Name</h5>
+                            <p class="author-name text-center"><i class="fa-solid fa-feather"></i> @book.Author</p>
+                            <div class="mt-auto text-center">
+                                <a href="/Home/Details/@book.Id" class="btn details-btn">
+                                    Detayları Gör
+                                </a>
                             </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         }
         else

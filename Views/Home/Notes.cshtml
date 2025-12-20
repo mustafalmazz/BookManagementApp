@@ -499,67 +499,171 @@
     }
 
         @@media (max-width: 768px) {
-                .notes-card-header
-
-    {
+                .notes-card-header {
                     flex-direction: column; /* Mobil cihazlarda alt alta yığılmalı */
                     align-items: flex-start;
-                    padding: 20px;
-
+                    padding: 20px 15px;
     }
 
             .notes-container {
-                    padding: 0 15px;
-
+                    padding: 0 15px 40px 15px;
+                    margin: 10px auto;
     }
 
             .notes-title {
-                    font-size: 2rem;
-
+                    font-size: 1.8rem;
     }
+
+                .notes-title::after {
+                        width: 100px;
+                        height: 3px;
+                        margin: 15px auto 0;
+        }
 
             .book-icon-display {
-                    width: 90px;
-                    height: 90px;
-                    font-size: 3rem;
-
+                    width: 80px;
+                    height: 80px;
+                    font-size: 2.5rem;
+                    margin-bottom: 20px;
     }
 
-            .notes-content {
-                    padding: 30px 25px;
+            .notes-header {
+                    margin-bottom: 30px;
+    }
 
+            .notes-card {
+                    border-radius: 20px;
+                    border-width: 2px;
+                    box-shadow: 10px 10px 30px rgba(107, 85, 65, 0.25), -3px -3px 15px rgba(255, 255, 255, 0.7);
+    }
+
+                .notes-card::before {
+                        width: 8px;
+        }
+
+            .notes-card-title {
+                    font-size: 1.2rem;
+                    white-space: normal;
+                    margin-right: 0;
+                    margin-bottom: 10px;
+                    width: 100%;
+    }
+
+                .notes-card-title i {
+                        font-size: 1.4rem;
+        }
+
+            .notes-content {
+                    padding: 25px 20px;
+                    min-height: 250px;
     }
 
             .notes-text {
-                    font-size: 1.05rem;
+                    font-size: 1rem;
+                    line-height: 1.5;
+                    min-height: 300px;
+                    max-height: 500px;
+    }
 
+            .notebook-lines {
+                    left: 20px;
+                    right: 20px;
+                    background-image: repeating-linear-gradient( transparent, transparent 28px, rgba(139, 111, 71, 0.08) 28px, rgba(139, 111, 71, 0.08) 30px );
     }
 
             .action-buttons {
                     flex-direction: column;
-
+                    gap: 15px;
+                    margin-top: 30px;
+                    margin-bottom: 40px;
     }
 
             .notes-btn {
                     width: 100%;
                     justify-content: center;
-
+                    padding: 14px 30px;
+                    font-size: 1rem;
+                    letter-spacing: 0.5px;
     }
 
             .decoration-quote {
                     font-size: 5rem;
+    }
+
+                .decoration-quote.top-left {
+                        top: 15px;
+                        left: 30px;
+        }
+
+                .decoration-quote.bottom-right {
+                        bottom: 15px;
+                        right: 30px;
+        }
+
+            .formatting-toolbar {
+                width: 100%;
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: 2px solid #e8dcc8; /* Ayırıcı çizgiyi geri getir */
+                justify-content: center; /* Mobil görünümde ortala */
+                margin-left: 0;
+                gap: 6px;
+                flex-wrap: wrap;
+    }
+
+            .toolbar-btn {
+                    width: 36px;
+                    height: 36px;
+                    font-size: 0.9rem;
+    }
+
+            .toolbar-btn.color-btn span {
+                    width: 20px;
+                    height: 20px;
+    }
+
+            .color-separator {
+                    height: 36px;
+                    margin: 0 2px;
+    }
 
     }
 
-    .formatting-toolbar {
-        width: 100%;
-        margin-top: 15px;
-        padding-top: 15px;
-        border-top: 2px solid #e8dcc8; /* Ayırıcı çizgiyi geri getir */
-        justify-content: center; /* Mobil görünümde ortala */
-        margin-left: 0;
+        @@media (max-width: 576px) {
+                .notes-title {
+                    font-size: 1.5rem;
     }
 
+            .notes-card-header {
+                    padding: 15px 12px;
+    }
+
+            .notes-card-title {
+                    font-size: 1.1rem;
+    }
+
+            .notes-content {
+                    padding: 20px 15px;
+    }
+
+            .notes-text {
+                    font-size: 0.95rem;
+    }
+
+            .toolbar-btn {
+                    width: 34px;
+                    height: 34px;
+                    font-size: 0.85rem;
+    }
+
+            .notes-btn {
+                    padding: 12px 25px;
+                    font-size: 0.95rem;
+    }
+
+            .decoration-quote {
+                    font-size: 4rem;
+    }
 
     }
 </style>
@@ -657,7 +761,7 @@
 
         // Arka plan rengini manuel olarak 'transparent' yaparak krem rengi lekesini temizle
         document.execCommand('hiliteColor', false, 'transparent');
-        document.execCommand('backColor', false, 'transparent');   
+        document.execCommand('backColor', false, 'transparent');   
 
         // Metin rengini de varsayılana (koyu kahve) döndür
         document.execCommand('foreColor', false, '#4a3f35');

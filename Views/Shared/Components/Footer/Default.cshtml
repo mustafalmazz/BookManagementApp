@@ -298,8 +298,8 @@
         .book-footer
 
     {
-        padding: 40px 0 0 0;
-        margin-top: 50px;
+        padding: 30px 0 0 0;
+        margin-top: 40px;
     }
 
     .footer-brand-text {
@@ -313,31 +313,61 @@
     }
 
     .footer-section-title {
-        font-size: 1.2rem;
-        margin-bottom: 20px;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+
+    /* --- MOBİL İÇİN YAN YANA YERLEŞİM (Linkler & İletişim) --- */
+    /* Linkleri daha kompakt yap */
+    .footer-links li {
+        margin-bottom: 8px;
+    }
+
+    .footer-links a {
+        font-size: 0.9rem;
+    }
+
+    .contact-info li {
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+
+    .social-section {
+        margin-top: 20px;
+    }
+
+    .social-title {
+        font-size: 1rem;
+        text-align: center;
     }
 
     .social-icons {
         justify-content: center;
     }
 
-    .footer-links li:hover {
-        transform: translateX(5px);
+        .social-icons a {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+        }
+
+    .footer-divider {
+        margin: 20px 0;
     }
 
-    .decorative-book-icon {
-        font-size: 5rem;
+    .footer-quote {
+        padding: 15px;
+        font-size: 0.9rem;
     }
 
     }
 </style>
 
 <footer class="book-footer">
-  
-
     <div class="container footer-container">
         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-12 mb-4">
                 <div class="footer-brand">
                     <div class="footer-logo">
                         <img src="/images/library.png" style="width:50px;" />
@@ -346,8 +376,6 @@
                 </div>
                 <p class="footer-description">
                     Kitapların büyülü dünyasında kaybolmak isteyenler için dijital bir sığınak.
-                    Okuma tutkunlarını bir araya getiren, bilgiyi paylaşan ve edebiyat sevgisini
-                    yaşatan bir platform.
                 </p>
                 <div class="footer-quote">
                     <div class="footer-quote-text">
@@ -357,84 +385,49 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 col-6 mb-4">
                 <h5 class="footer-section-title">
                     <i class="fas fa-compass"></i>
-                    Hızlı Erişim
+                    Menü
                 </h5>
                 <ul class="footer-links">
-                    <li>
-                        <a href="/Home/Index">
-                            <i class="fas fa-chevron-right"></i>
-                            Ana Sayfa
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Books/List">
-                            <i class="fas fa-chevron-right"></i>
-                            Tüm Kitaplar
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Category/List">
-                            <i class="fas fa-chevron-right"></i>
-                            Kategoriler
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Home/About">
-                            <i class="fas fa-chevron-right"></i>
-                            Hakkımızda
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Home/Privacy">
-                            <i class="fas fa-chevron-right"></i>
-                            Gizlilik Politikası
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Home/Contact">
-                            <i class="fas fa-chevron-right"></i>
-                            İletişim
-                        </a>
-                    </li>
+                    <li><a href="/Home/Index">Ana Sayfa</a></li>
+                    <li><a href="/Books/List">Kitaplar</a></li>
+                    <li><a href="/Category/List">Kategoriler</a></li>
+                    <li><a href="/Home/About">Hakkımızda</a></li>
+                    <li><a href="/Home/Privacy">Gizlilik</a></li>
+                    <li><a href="/Home/Contact">İletişim</a></li>
                 </ul>
             </div>
 
-            <div class="col-lg-4 col-md-12 mb-4">
+            <div class="col-lg-4 col-md-6 col-6 mb-4">
                 <h5 class="footer-section-title">
                     <i class="fas fa-address-book"></i>
-                    Bize Ulaşın
+                    Ulaşın
                 </h5>
                 <ul class="contact-info">
                     <li>
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Kadıköy, İstanbul<br>Türkiye</span>
+                        <span>İstanbul</span>
                     </li>
                     <li>
                         <i class="fas fa-envelope"></i>
-                        <span>info@dijitalkutuphanem.com</span>
+                        <span>info@dk.com</span>
                     </li>
                     <li>
                         <i class="fas fa-phone"></i>
-                        <span>+90 (212) 555 00 00</span>
+                        <span>+90 212 555</span>
                     </li>
                 </ul>
+            </div>
 
-                <div class="social-section">
-                    <h6 class="social-title">Sosyal Medyada Bizi Takip Edin</h6>
+            <div class="col-12">
+                <div class="social-section text-center">
+                    <h6 class="social-title">Bizi Takip Edin</h6>
                     <div class="social-icons">
-                        <a href="#" title="Instagram" aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" title="LinkedIn" aria-label="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="#" title="GitHub" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                     
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>
@@ -446,8 +439,7 @@
     <div class="copyright-section">
         <div class="container">
             <p class="copyright-text">
-                © @DateTime.Now.Year DijitalKütüphanem
-                Tüm hakları saklıdır
+                © @DateTime.Now.Year DijitalKütüphanem | Tüm hakları saklıdır
             </p>
         </div>
     </div>

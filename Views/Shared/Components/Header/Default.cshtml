@@ -8,7 +8,8 @@
         border: none !important;
         box-shadow: 0 4px 20px rgba(107, 85, 65, 0.3);
         padding: 15px 0;
-        margin-bottom: 5px !important;
+        /* İsteğe bağlı: Header altı boşluğu sıfırlamak istersen 0px yap */
+        margin-bottom: 0px !important;
         position: relative;
     }
 
@@ -44,7 +45,7 @@
     .book-navbar .navbar-toggler {
         border: 2px solid #f5f0e8;
         background: rgba(245, 240, 232, 0.1);
-        padding: 8px 12px;
+        padding: 6px 10px; /* Mobilde biraz küçülttük */
         border-radius: 8px;
         transition: all 0.3s ease;
     }
@@ -56,6 +57,8 @@
 
     .book-navbar .navbar-toggler-icon {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23f5f0e8' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        width: 1.2em; /* İkonu biraz kibarlaştırdık */
+        height: 1.2em;
     }
 
     .book-navbar .nav-link {
@@ -98,6 +101,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
+    /* --- MASAÜSTÜ ARAMA FORMU (Mevcut) --- */
     .book-search-form {
         margin-left: auto;
         display: flex;
@@ -150,70 +154,32 @@
             border-color: #ffd782;
         }
 
-        .book-search-btn i {
-            font-size: 1.1rem;
-        }
-
-    @@media (max-width: 768px) {
-        .book-navbar .navbar-brand {
-            font-size: 1.3rem;
-        }
-
-        .brand-icon {
-            font-size: 1.5rem;
-        }
-
-        .book-search-form {
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        .book-search-input {
-            min-width: unset;
-            flex: 1;
-        }
-
-        .book-navbar .nav-link {
-            text-align: center;
-            margin: 5px 0;
-        }
-    }
-
     .navbar-nav {
         align-items: center;
-        justify-content: center; /* <--- YENİ EKLENEN: Elemanları tam ortaya çeker */
+        justify-content: center;
         width: 100%;
-    }
-
-    .nav-item-decorator {
-        color: rgba(245, 240, 232, 0.3);
-        margin: 0 10px;
-        font-size: 1.2rem;
     }
 
     .book-navbar .container-fluid {
         max-width: 1400px;
     }
+
     @@media (min-width: 992px) {
         .book-navbar .dropdown-menu
 
     {
-        /* Menüyü ebeveynin tam ortasına getir */
         left: 50% !important;
         right: auto !important;
         transform: translateX(-50%) !important;
-        /* Tasarım Güzelleştirmeleri */
-        margin-top: 15px !important; /* Butondan biraz aşağıda dursun */
+        margin-top: 15px !important;
         border-radius: 15px !important;
         border: none !important;
         box-shadow: 0 10px 30px rgba(107, 85, 65, 0.2);
-        text-align: center; /* İçindeki yazıları ortala */
-        min-width: 200px; /* Çok dar olmasın */
-        /* Ufak bir animasyon */
+        text-align: center;
+        min-width: 200px;
         animation: fadeInDropdown 0.3s ease;
     }
 
-    /* Yukarı doğru küçük ok işareti ekleyelim (Opsiyonel ama şık durur) */
     .book-navbar .dropdown-menu::before {
         content: '';
         position: absolute;
@@ -227,7 +193,6 @@
 
     }
 
-    /* Dropdown açılma animasyonu */
     @@keyframes fadeInDropdown {
         from
 
@@ -243,11 +208,66 @@
 
     }
 
-    /* Dropdown item'larının hover rengini de temaya uyduralım */
     .dropdown-item:active, .dropdown-item:hover {
         background-color: rgba(139, 111, 71, 0.1) !important;
         color: #8b6f47 !important;
         border-radius: 10px;
+    }
+
+    /* --- YENİ MOBİL ÖZEL CSSLER --- */
+    @@media (max-width: 768px) {
+        .book-navbar .nav-link
+
+    {
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    /* Mobilde Navbar'ı sıkışık yapmamak için padding ayarı */
+    .book-navbar {
+        padding: 10px 0;
+    }
+
+    /* Mobil Arama Formu Stilleri */
+    .mobile-search-form {
+        flex-grow: 1; /* Boşluğu doldur */
+        margin: 0 10px; /* Logo ve hamburger ile mesafe */
+        position: relative;
+    }
+
+    .mobile-search-input {
+        width: 100%;
+        border: 2px solid rgba(245, 240, 232, 0.3);
+        border-radius: 20px;
+        padding: 8px 35px 8px 15px; /* Sağ tarafta ikon için boşluk */
+        background: rgba(255, 255, 255, 0.15);
+        color: #f5f0e8;
+        font-size: 0.95rem;
+        outline: none;
+    }
+
+        .mobile-search-input::placeholder {
+            color: rgba(245, 240, 232, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .mobile-search-input:focus {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffd782;
+        }
+
+    /* Mobil Arama İkonu (Input'un içinde) */
+    .mobile-search-btn-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #f5f0e8;
+        padding: 0;
+    }
+
     }
 </style>
 
@@ -256,15 +276,24 @@
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                 <img src="/images/library.png" style="width:50px;" />
-                DijitalKütüphanem
+                <span class="d-none d-md-block">DijitalKütüphanem</span>
             </a>
+
+            <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="Search" method="get">
+                <input class="mobile-search-input" type="search" name="q" placeholder="Raflarında Ara..." aria-label="Search">
+                <button type="submit" class="mobile-search-btn-icon">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="navbar-collapse collapse" id="navbarContent">
                 <ul class="navbar-nav flex-grow-1">
-                   
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -288,11 +317,7 @@
                             }
                         </ul>
                     </li>
-                    @* <li class="nav-item"> *@
-                    @*     <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"> *@
-                    @*        Panelim *@
-                    @*     </a> *@
-                    @* </li> *@
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -316,7 +341,6 @@
                                     <i class="fa-solid fa-right-from-bracket text-danger"></i> Çıkış Yap
                                 </a>
                             </li>
-                           
                         </ul>
                     </li>
                     <li>
@@ -325,7 +349,8 @@
                         </a>
                     </li>
                 </ul>
-                <form class="book-search-form" asp-controller="Home" asp-action="Search" method="get">
+
+                <form class="book-search-form d-none d-lg-flex" asp-controller="Home" asp-action="Search" method="get">
                     <input class="form-control book-search-input" type="search" name="q"
                            placeholder="Kitap veya yazar ara..." aria-label="Search">
                     <button class="btn book-search-btn" type="submit">

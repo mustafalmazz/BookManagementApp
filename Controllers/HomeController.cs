@@ -40,13 +40,19 @@ namespace BookManagementApp.Controllers
         }
         public IActionResult Details(int? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             if (id == null)
                 return NotFound();
 
+
             var book = _context.Books
                         .Include(b => b.Category)
-                        .FirstOrDefault(b => b.Id == id);
-            var relatedBooks = _context.Books.Where(a => a.CategoryId == book.CategoryId && a.Name != book.Name).Take(4).ToList();
+                        .FirstOrDefault(b => b.Id == id && b.UserId == userId);
+            var relatedBooks = _context.Books.Where(a => a.CategoryId == book.CategoryId && a.Name != book.Name && a.UserId == userId).Take(8).ToList();
             if (book == null)
                 return NotFound();
             var viewModel = new BookDetailsViewModel
