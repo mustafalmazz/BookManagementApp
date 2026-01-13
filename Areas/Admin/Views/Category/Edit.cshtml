@@ -6,8 +6,8 @@
 
 <style>
     /* Sayfa _Layout.cshtml kullanmıyorsa veya
-          body stilini oradan almıyorsa bu gereklidir.
-        */
+              body stilini oradan almıyorsa bu gereklidir.
+            */
     body {
         background-color: #0a0c1e;
         color: #e0e0e0;
@@ -119,20 +119,20 @@
 <h1 class="text-center">Kategorileri Düzenle</h1>
 <hr />
 <div class="row">
-    <div class="col-6">
+    <div class="col-12 col-md-6 mb-4">
 
         <form method="post" action="Edit">
             <input type="hidden" asp-for="Category.Id" /> <div class="mb-2">
-                <label asp-for="Category.CategoryName">Category Name</label>
+                <label asp-for="Category.CategoryName">Kategori Adı</label>
                 <input class="form-control" asp-for="Category.CategoryName" />
             </div>
             <button class="btn btn-primary mt-3">
-                Save
+                Kaydet
             </button>
         </form>
     </div>
 
-    <div class="col-6">
+    <div class="col-12 col-md-6">
         <ul class="list-group">
             <li class="list-group-item active" aria-current="true">Books in category</li>
 

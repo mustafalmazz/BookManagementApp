@@ -128,7 +128,7 @@
         margin: 0 auto;
         padding: 0 20px;
         display: flex;
-        gap: 30px;
+        gap: 10px;
     }
 
     .filter-sidebar {
@@ -341,7 +341,7 @@
         font-weight: 600;
         font-size: 1.1rem;
         cursor: pointer;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
         width: 100%;
         text-align: left;
         box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
@@ -381,8 +381,8 @@
 
     /* --- ÖNEMLİ: KAHVERENGİ KUTU İLE FİLTRE ARASINDAKİ BOŞLUĞU AZALTTIK --- */
     .page-header {
-        margin-bottom: 15px !important; /* Normalde 50px idi, 15px'e düştü */
-        padding-bottom: 10px; /* İç boşluğu da biraz kıstık */
+        margin-bottom: 15px !important;
+        padding-bottom: 10px;
     }
 
     .container-custom {
@@ -407,10 +407,40 @@
             max-height: 1000px;
         }
 
+    /* ---- YENİ DÜZENLEMELER: Mobil Filtre İçini Sıkılaştırma ---- */
+    .filter-card {
+        padding: 15px;
+    }
+
+    .filter-title {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+    }
+
+    .filter-section {
+        margin-bottom: 15px;
+    }
+
+    .filter-option {
+        padding: 8px;
+        margin-bottom: 5px;
+    }
+
+    .filter-label {
+        margin-bottom: 8px;
+    }
+
+    .clear-filters-btn {
+        margin-top: 10px;
+        padding: 10px;
+    }
+    /* ------------------------------------------------------------- */
+
     /* Mobilde yan yana 2 kitap */
     .books-grid {
         grid-template-columns: repeat(2, 1fr);
-        margin-top:0;
+        margin-top: 0;
         gap: 12px;
     }
 
@@ -440,19 +470,40 @@
         letter-spacing: 0.5px;
     }
 
-    /* Empty State Responsive */
+    /* --- YENİ EKLENEN: EMPTY STATE MOBİL AYARLARI --- */
+    /* Mobilde boşlukları ve fontları küçülterek daha uygun hale getirdik */
+    .empty-state-wrapper {
+        padding: 30px 15px; /* Dış boşluk azaltıldı */
+    }
+
     .empty-card {
-        padding: 30px;
+        padding: 25px 20px; /* Kart içi boşluk sıkılaştırıldı */
+        border-radius: 30px;
+        border-width: 3px;
+    }
+
+    .empty-icon {
+        font-size: 4rem; /* İkon boyutu küçültüldü (6rem -> 4rem) */
+        margin-bottom: 20px;
     }
 
     .empty-title {
-        font-size: 2rem;
+        font-size: 1.5rem; /* Başlık küçültüldü (2.5rem -> 1.5rem) */
+        margin-bottom: 15px;
+    }
+
+    .empty-text {
+        font-size: 1rem; /* Yazı boyutu ideal mobil standardına çekildi */
+        margin-bottom: 30px;
     }
 
     .add-book-btn-lg {
         width: 100%;
         justify-content: center;
+        padding: 15px 20px; /* Buton içi boşluk azaltıldı */
+        font-size: 1.1rem;
     }
+    /* ------------------------------------------------ */
 
     }
 </style>

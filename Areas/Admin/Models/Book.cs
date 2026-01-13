@@ -9,6 +9,7 @@ namespace BookManagementApp.Models
 
         [Required(ErrorMessage = "Kitap adı zorunludur.")]
         [StringLength(100)]
+        [Display(Name = "Kitap Adı")]
         public string Name { get; set; } = string.Empty;
         [Display(Name = "Resim")]
         public string? Image {  get; set; }
@@ -19,21 +20,26 @@ namespace BookManagementApp.Models
 
         [Required(ErrorMessage = "Yazar adı zorunludur.")]
         [StringLength(100)]
+        [Display(Name = "Yazar Adı")]
         public string Author { get; set; } = string.Empty;
 
         [StringLength(600)]
+        [Display(Name = "Açıklama")]
         public string? Description { get; set; }
         [Display(Name = "Kitap Notlarım")]
         public string? Notes { get; set; }
 
 
         [Range(0, 9999.99, ErrorMessage = "Fiyat 0 ile 9999 arasında olmalı.")]
+        [Display(Name = "Fiyat")]
         public decimal Price { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Stok sayısı negatif olamaz.")]
+        [Display(Name = "Adet")]
         public int Stock { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Tarih")]
         public DateTime CreateDate { get; set; } = DateTime.Now;
         [Display(Name = "Kategori")]
         public int CategoryId { get; set; }
