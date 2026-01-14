@@ -19,6 +19,7 @@
             background-color: #050505;
             color: #e0e0e0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden; /* Mobilde taşmayı önler */
         }
 
         /* --- SIDEBAR (YAN MENÜ) --- */
@@ -33,6 +34,8 @@
             box-shadow: 3px 0 20px rgba(255, 215, 0, 0.15); /* Altın parıltısı */
             display: flex;
             flex-direction: column;
+            transition: all 0.3s ease; /* Mobilde açılma animasyonu için */
+            z-index: 1000;
         }
 
             /* Sidebar Başlığı */
@@ -116,6 +119,7 @@
             height: 100vh;
             overflow-y: auto;
             background-image: radial-gradient(circle at top right, #1a1500 0%, #050505 40%); /* Sağ üstte hafif altın ışık süzmesi */
+            width: 100%; /* Mobil uyum için eklendi */
         }
 
         /* Kartlar için özel stil (İleride kullanırsanız diye) */
@@ -124,11 +128,54 @@
             border: 1px solid #333;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
+
+        /* --- MOBİL UYUMLULUK (RESPONSIVE) --- */
+        .mobile-toggle-btn {
+            display: none; /* Masaüstünde gizle */
+            background: transparent;
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar
+
+        {
+            position: fixed;
+            height: 100%;
+            left: -260px; /* Ekran dışına it */
+            top: 0;
+        }
+
+        .sidebar.active {
+            left: 0; /* Geri getir */
+        }
+
+        .content {
+            padding: 20px; /* Mobilde paddingi azalt */
+        }
+
+        .mobile-toggle-btn {
+            display: inline-block; /* Mobilde göster */
+        }
+
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar p-3">
+    <div class="sidebar p-3" id="sidebarMenu">
+        <div class="d-md-none text-end mb-2">
+            <button class="btn btn-sm btn-outline-secondary text-white border-0" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
         <h4>
             <i class="bi bi-shield-lock-fill"></i> SUPER ADMIN
         </h4>
@@ -178,6 +225,10 @@
         </div>
     </div>
     <div class="content">
+        <button class="mobile-toggle-btn" id="sidebarToggle">
+            <i class="bi bi-list"></i> Menü
+        </button>
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -185,6 +236,28 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Menüyü Aç
+            $('#sidebarToggle').click(function () {
+                $('#sidebarMenu').addClass('active');
+            });
+
+            // Menüyü Kapat (X butonu ile)
+            $('#closeSidebar').click(function () {
+                $('#sidebarMenu').removeClass('active');
+            });
+
+            // İçeriğe tıklanınca menüyü kapat (Opsiyonel kullanıcı deneyimi için)
+            $('.content').click(function(e) {
+                // Eğer tıklanan yer buton değilse kapat
+                if(!$(e.target).closest('#sidebarToggle').length && window.innerWidth <= 768) {
+                     $('#sidebarMenu').removeClass('active');
+                }
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

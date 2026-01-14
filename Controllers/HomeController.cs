@@ -27,16 +27,82 @@ namespace BookManagementApp.Controllers
             }
 
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string q, string sortOrder, string pageCount, int page = 1)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
+            if (userId == null) return RedirectToAction("Login", "Account");
+
+            int pageSize = 4; // Sayfa başına kaç kitap gösterilecek?
+
+            // 1. Temel Sorgu (Henüz veri çekilmedi)
+            var books = _context.Books.Where(u => u.UserId == userId).AsQueryable();
+
+            // 2. Arama (Search)
+            if (!string.IsNullOrEmpty(q))
             {
-                return RedirectToAction("Login", "Account");
+                q = q.ToLower();
+                books = books.Where(b => b.Name.ToLower().Contains(q) || b.Author.ToLower().Contains(q));
             }
 
-            var model = _context.Books.Where(u => u.UserId == userId).OrderByDescending(x => x.CreateDate).ToList();
-            return View(model);
+            // 3. Sayfa Sayısı Filtresi (Page Count)
+            if (!string.IsNullOrEmpty(pageCount))
+            {
+                switch (pageCount)
+                {
+                    case "0-200":
+                        books = books.Where(b => b.TotalPages >= 0 && b.TotalPages <= 200);
+                        break;
+                    case "201-400":
+                        books = books.Where(b => b.TotalPages >= 201 && b.TotalPages <= 400);
+                        break;
+                    case "401-600":
+                        books = books.Where(b => b.TotalPages >= 401 && b.TotalPages <= 600);
+                        break;
+                    case "601+":
+                        books = books.Where(b => b.TotalPages >= 601);
+                        break;
+                }
+            }
+
+            // 4. Sıralama (Sort)
+            switch (sortOrder)
+            {
+                case "asc": // İsme göre A-Z
+                    books = books.OrderBy(b => b.Name);
+                    break;
+                case "desc": // İsme göre Z-A
+                    books = books.OrderByDescending(b => b.Name);
+                    break;
+                default: // Varsayılan: En yeni eklenen en üstte
+                    books = books.OrderByDescending(x => x.CreateDate);
+                    break;
+            }
+
+            // --- SAYFALAMA MANTIĞI (PAGINATION) ---
+
+            // Filtrelenmiş toplam kayıt sayısını bul (Sayfa sayısı hesabı için şart)
+            int totalRecords = await books.CountAsync();
+
+            // Toplam kaç sayfa olacağını hesapla (Örn: 20 kayıt / 12 = 2 sayfa)
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            // Veriyi çek (Skip ve Take ile sadece 12 tanesini al)
+            var pagedData = await books
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // View'a gerekli verileri gönder
+            ViewData["CurrentSearch"] = q;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentPageCount"] = pageCount;
+
+            // Yeni eklenen sayfalama verileri
+            ViewData["CurrentPage"] = page;
+            ViewData["TotalPages"] = totalPages;
+            ViewData["TotalRecords"] = totalRecords;
+
+            return View(pagedData);
         }
         public IActionResult Details(int? id)
         {
@@ -62,29 +128,29 @@ namespace BookManagementApp.Controllers
             };
             return View(viewModel);
         }
-        public IActionResult Search(string q)
-        {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            if (string.IsNullOrWhiteSpace(q))
-            {
-                return RedirectToAction("Index");
-            }
+        //public IActionResult Search(string q)
+        //{
+        //    var userId = HttpContext.Session.GetInt32("UserId");
+        //    if (userId == null)
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
+        //    if (string.IsNullOrWhiteSpace(q))
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
 
-            var books = _context.Books
-                .Where(a => a.UserId == userId && (a.Name.Contains(q) || a.Author.Contains(q)))
-                .ToList();
+        //    var books = _context.Books
+        //        .Where(a => a.UserId == userId && (a.Name.Contains(q) || a.Author.Contains(q)))
+        //        .ToList();
 
-            return View("Index", books);
-        }
-        public IActionResult List()
-        {
-            var model = _context.Books.ToList();
-            return View(model);
-        }
+        //    return View("Index", books);
+        //}
+        //public IActionResult List()
+        //{
+        //    var model = _context.Books.ToList();
+        //    return View(model);
+        //}
         public IActionResult CategoryList()
         {
             var books = _context.Categories.Include(a => a.Books).ToList();

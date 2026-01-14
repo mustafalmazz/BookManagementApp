@@ -136,6 +136,163 @@
             background-color: rgba(255,255,255,0.05);
         }
 
+    /* --- MOBİL GÖRÜNÜM OPTİMİZASYONU --- */
+    @@media (max-width: 768px) {
+        .delete-card
+
+    {
+        padding: 18px 14px;
+        margin: 12px;
+        border-radius: 8px;
+    }
+
+    .warning-icon {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .warning-title {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+
+    .warning-text {
+        font-size: 0.82rem;
+        margin-bottom: 12px;
+        line-height: 1.4;
+    }
+
+    hr {
+        margin: 10px 0 12px 0;
+    }
+
+    /* Kitap görseli daha büyük ve ortalı */
+    .book-image-container {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .book-image {
+        max-height: 200px;
+    }
+
+    /* Kitap bilgileri ortalanmış ve daha okunaklı */
+    .book-info {
+        text-align: center;
+        margin-bottom: 0 !important;
+    }
+
+        .book-info h3 {
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .book-info p {
+            font-size: 0.92rem;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .book-info strong {
+            font-size: 0.92rem;
+        }
+
+    /* Tüm br'leri gizle */
+    br {
+        display: none;
+    }
+
+    /* Butonlar */
+    .btn-danger,
+    .btn-secondary {
+        padding: 11px;
+        font-size: 0.92rem;
+    }
+
+    /* Buton container boşluğunu azalt */
+    .row.g-3 {
+        margin-top: 12px !important;
+        row-gap: 8px !important;
+    }
+
+    .row.align-items-start {
+        row-gap: 0 !important;
+    }
+
+    .col-md-4.mb-4 {
+        margin-bottom: 12px !important;
+    }
+
+    .col-md-8 {
+        padding-top: 0 !important;
+    }
+
+    /* Görsel yok placeholder */
+    .book-image-container .p-4 {
+        padding: 1.2rem !important;
+        font-size: 0.88rem;
+    }
+
+    .book-image-container .fa-2x {
+        font-size: 1.8rem !important;
+    }
+
+    }
+
+    /* Çok küçük ekranlar için (mobil yatay/küçük telefonlar) */
+    @@media (max-width: 576px) {
+        .delete-card
+
+    {
+        padding: 16px 12px;
+        margin: 10px;
+    }
+
+    .warning-icon {
+        font-size: 1.6rem;
+        margin-bottom: 6px;
+    }
+
+    .warning-title {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+    }
+
+    .warning-text {
+        font-size: 0.78rem;
+        margin-bottom: 10px;
+    }
+
+    .book-image {
+        max-height: 180px;
+    }
+
+    .book-info h3 {
+        font-size: 1.05rem;
+        margin-bottom: 8px;
+    }
+
+    .book-info p {
+        font-size: 0.88rem;
+        margin-bottom: 4px;
+        padding-bottom: 4px;
+    }
+
+    .btn-danger,
+    .btn-secondary {
+        padding: 10px;
+        font-size: 0.88rem;
+    }
+
+    .row.g-3 {
+        margin-top: 10px !important;
+    }
+
+    }
 </style>
 
 <div class="delete-card">
@@ -167,7 +324,7 @@
             <div class="book-info mb-4">
                 <h3>@Model.Name</h3>
                 <p><strong>Yazar:</strong> @Model.Author</p>
-                <p><strong>Kategori:</strong> @Model.Category?.CategoryName</p> 
+                <p><strong>Kategori:</strong> @Model.Category?.CategoryName</p>
             </div>
             <br />
             <br />

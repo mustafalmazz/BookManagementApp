@@ -116,6 +116,12 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
+    /* Tablo Responsive Wrapper */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .custom-table {
         width: 100%;
         border-collapse: collapse;
@@ -208,6 +214,42 @@
             color: white;
             box-shadow: 0 0 10px #dc3545;
         }
+
+    /* --- MOBİL UYUMLULUK (MEDIA QUERY) --- */
+    @@media (max-width: 768px) {
+        .page-container {
+            padding: 10px;
+        }
+
+        .header-wrapper {
+            flex-direction: column;
+            align-items: stretch; /* Elemanları genişlet */
+            text-align: center;
+            gap: 15px;
+        }
+
+            .header-wrapper > div {
+                width: 100%;
+            }
+
+        .btn-gold {
+            width: 100%; /* Butonu mobilde tam genişlik yap */
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 1.6rem;
+        }
+
+        .search-card {
+            padding: 15px;
+        }
+        /* Tablo hücrelerinin mobilde satır kırmasını engelle */
+        .custom-table th, .custom-table td {
+            white-space: nowrap;
+            padding: 12px;
+        }
+    }
 </style>
 
 <div class="page-container">
@@ -293,7 +335,7 @@
 
 <script>
     // JS Hızlı Arama (Kategori Adı ve Kullanıcı Adı üzerinden)
-    document.getElementById('categorySearchInput').addEventListener('keyup', function() {
+    document.getElementById('categorySearchInput')?.addEventListener('keyup', function() {
         var value = this.value.toLowerCase();
         var rows = document.querySelectorAll('#categoriesTable tbody tr');
 

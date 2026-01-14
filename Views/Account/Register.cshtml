@@ -6,11 +6,11 @@
 }
 
 <style>
-
+    /* --- VALIDATION CSS --- */
     .text-danger {
         color: #dc3545;
-        font-size: 0.85rem;
-        margin-top: 5px;
+        font-size: 0.8rem; /* Hata mesajını biraz küçülttük */
+        margin-top: 3px;
         font-weight: 600;
         display: block;
         padding-left: 10px;
@@ -26,77 +26,34 @@
         .field-validation-error::before {
             font-family: 'Font Awesome 5 Free';
             font-weight: 900;
+            content: "\f06a"; /* Ünlem ikonu */
         }
 
-   @@keyframes fadeIn {
-        from
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
 
-    {
-        opacity: 0;
-        transform: translateY(-5px);
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    }
-    .divider {
-        display: flex;
-        align-items: center;
-        text-align: center;
-        margin: 20px 0;
-        color: #8b6f47;
-        font-style: italic;
-        font-size: 0.9rem;
-    }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid rgba(139, 111, 71, 0.3);
-        }
-
-        .divider::before {
-            margin-right: .5em;
-        }
-
-        .divider::after {
-            margin-left: .5em;
-        }
-
-    .btn-google {
-        background: #fff;
-        color: #4a3f35;
-        border: 2px solid #e8dcc8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        text-decoration: none; /* Link olduğu için altı çizili olmasın */
-        transition: all 0.3s ease;
-    }
-
-        .btn-google:hover {
-            background: #f5ede0;
-            border-color: #8b6f47;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.15);
-        }
-
-        .btn-google i {
-            color: #DB4437; /* Google kırmızısı */
-        }
+    /* --- GENEL AYARLAR --- */
     body {
         background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
         min-height: 100vh;
         font-family: 'Georgia', serif;
         position: relative;
-        overflow: hidden;
         margin: 0;
         padding: 0;
+        /* --- MERKEZLEME GÜNCELLEMESİ (Flexbox) --- */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px; /* Mobilde kenarlara yapışmaması için */
     }
 
         body::before {
@@ -111,15 +68,13 @@
             z-index: 0;
         }
 
+    /* --- WRAPPER (Kapsayıcı) --- */
     .register-wrapper {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
+        position: relative; /* Fixed yerine Relative */
         width: 100%;
-        max-width: 550px;
-        padding: 20px;
+        max-width: 500px; /* Masaüstü genişliği */
+        z-index: 1;
+        margin: auto;
         animation: fadeInScale 0.8s ease;
     }
 
@@ -142,9 +97,10 @@
             background: linear-gradient(90deg, #8b6f47 0%, #6b5541 50%, #a0785a 100%);
         }
 
+    /* --- HEADER --- */
     .register-header {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
-        padding: 30px 40px;
+        padding: 40px 40px;
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -157,7 +113,6 @@
             left: 50%;
             transform: translate(-50%, -50%);
             opacity: 0.1;
-            /* bookFloat animasyonu kaldırıldı */
         }
 
         .register-header::after {
@@ -172,8 +127,8 @@
         }
 
     .register-icon {
-        width: 100px;
-        height: 100px;
+        width: 100px; /* Masaüstü boyutu korundu */
+        height: 100px; /* Masaüstü boyutu korundu */
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
         border-radius: 25px;
@@ -187,7 +142,6 @@
         border: 3px solid rgba(255, 255, 255, 0.3);
         position: relative;
         z-index: 1;
-        /* iconPulse animasyonu kaldırıldı */
     }
 
     .register-title {
@@ -210,12 +164,13 @@
         z-index: 1;
     }
 
+    /* --- FORM --- */
     .register-form {
-        padding: 50px 40px;
+        padding: 40px;
     }
 
     .form-group {
-        margin-bottom: 28px;
+        margin-bottom: 25px;
         position: relative;
     }
 
@@ -269,9 +224,10 @@
         color: #8b6f47;
         font-size: 1.2rem;
         pointer-events: none;
-        z-index: 5; /* DÜZELTME: Input tıklandığında ikonun üstte kalması için eklendi */
+        z-index: 5;
     }
 
+    /* --- BUTONLAR --- */
     .btn {
         width: 100%;
         padding: 18px 30px;
@@ -287,23 +243,10 @@
         position: relative;
         overflow: hidden;
         margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-           
-        }
-
-        .btn:hover::before {
-            width: 400px;
-            height: 400px;
-        }
 
         .btn span {
             position: relative;
@@ -325,8 +268,48 @@
             box-shadow: 0 10px 30px rgba(107, 85, 65, 0.5);
         }
 
-        .btn-primary:active {
-            transform: translateY(-1px);
+    /* Divider & Google */
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 20px 0;
+        color: #8b6f47;
+        font-style: italic;
+        font-size: 0.9rem;
+    }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(139, 111, 71, 0.3);
+        }
+
+        .divider::before {
+            margin-right: .5em;
+        }
+
+        .divider::after {
+            margin-left: .5em;
+        }
+
+    .btn-google {
+        background: #fff;
+        color: #4a3f35;
+        border: 2px solid #e8dcc8;
+        text-decoration: none;
+        padding: 15px; /* Mobilde küçülecek */
+    }
+
+        .btn-google:hover {
+            background: #f5ede0;
+            border-color: #8b6f47;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.15);
+        }
+
+        .btn-google i {
+            color: #DB4437;
         }
 
     .decorative-element {
@@ -334,7 +317,6 @@
         font-size: 4rem;
         opacity: 0.05;
         pointer-events: none;
-        /* floatRandom animasyonu kaldırıldı */
     }
 
         .decorative-element.top-left {
@@ -342,89 +324,88 @@
             left: 20px;
         }
 
-        .decorative-element.bottom-right {
-            bottom: 20px;
-            right: 20px;
-            /* animation-delay kaldırıldı */
-        }
-
-        .decorative-element.middle-left {
-            top: 50%;
-            left: 10px;
-            /* animation-delay ve font-size ayarı kaldırıldı */
-        }
-
-    /* Animations */
     @@keyframes fadeInScale {
         from {
             opacity: 0;
-            /* Login sayfasındaki gibi merkezi başlangıç */
-            transform: translate(-50%, -50%) scale(0.9);
+            transform: scale(0.9);
         }
 
         to {
             opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+            transform: scale(1);
         }
     }
 
-    /* Tüm sürekli animasyonlar kaldırılmıştır (bookFloat, iconPulse, floatRandom keyframe'leri silinmiştir) */
-
-    /* Responsive */
+    /* --- MOBİL İÇİN KÜÇÜLTME (COMPACT) MODU --- */
     @@media (max-width: 768px) {
+        body {
+            padding: 10px;
+        }
+
         .register-wrapper {
-            padding: 15px;
-            max-width: 95%;
+            max-width: 100%;
         }
-
+        /* Paddingler azaltıldı (Daha sıkı görünüm) */
         .register-header {
-            padding: 40px 30px;
-        }
-
-        .register-title {
-            font-size: 2rem;
+            padding: 25px 20px;
         }
 
         .register-form {
-            padding: 40px 30px;
+            padding: 25px 20px;
         }
-    }
-
-    @@media (max-height: 700px) {
-        .register-wrapper {
-            position: absolute;
-            top: 20px;
-            transform: translateX(-50%);
-            margin-bottom: 40px;
+        /* Yazı boyutları küçültüldü */
+        .register-title {
+            font-size: 1.6rem;
         }
 
-        .register-header {
-            padding: 35px 30px;
+        .register-subtitle {
+            font-size: 0.9rem;
         }
-
+        /* İkon boşluğu azaltıldı ama BOYUTU AYNI KALDI (İstek üzerine) */
         .register-icon {
-            width: 80px;
-            height: 80px;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            /* width ve height değiştirilmedi: 100px */
         }
-
-        .register-title {
-            font-size: 2rem;
-        }
-
-        .register-form {
-            padding: 35px 30px;
-        }
-
+        /* Form elemanları sıkılaştırıldı */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            padding: 12px 15px 12px 45px; /* Yükseklik azaltıldı */
+            font-size: 0.95rem;
+        }
+
+        .input-icon {
+            font-size: 1rem;
+        }
+        /* Butonlar küçültüldü */
+        .btn {
+            padding: 12px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .btn-google {
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+        /* Linkler */
+        .divider {
+            margin: 15px 0;
         }
     }
 </style>
 
 <div class="register-wrapper">
     <div class="register-container">
+        <div class="decorative-element top-left">📖</div>
+
         <div class="register-header">
             <div class="register-icon">
                 <i class="fas fa-user-plus"></i>
@@ -435,7 +416,7 @@
 
         <div class="register-form">
             <form method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 20px; text-align: center; font-size: 1rem;"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 15px; text-align: center;"></div>
 
                 <div class="form-group">
                     <label asp-for="UserName" class="form-label">
@@ -511,7 +492,7 @@
                         Google ile Kaydol
                     </span>
                 </a>
-                <div style="text-align: center; margin-top: 20px;">
+                <div style="text-align: center; margin-top: 15px;">
                     <p style="color: #6b5541; font-size: 0.9rem;">
                         Zaten bir hesabınız var mı?
                         <a asp-action="Login" style="color: #8b6f47; font-weight: bold; text-decoration: none;">Giriş Yap</a>
@@ -539,11 +520,9 @@
             });
         });
 
-        // Form validasyon görsel feedback
         const form = document.querySelector('form');
         form.addEventListener('submit', function(e) {
             const submitBtn = this.querySelector('.btn-primary');
-            submitBtn.innerHTML = '<span><i class="fas fa-spinner fa-spin"></i> Kayıt yapılıyor...</span>';
         });
     });
 </script>

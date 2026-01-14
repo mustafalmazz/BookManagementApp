@@ -1,0 +1,360 @@
+﻿@using BookManagementApp.Areas.Admin.Models
+@model List<Contact>
+
+@{
+    ViewData["Title"] = "Gelen Kutusu";
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_SuperAdminLayout.cshtml";
+}
+
+<style>
+    /* --- SAYFAYA ÖZEL CSS --- */
+
+    /* Animasyon */
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        animation: slideUp 0.6s ease-out;
+    }
+
+    /* Başlık Alanı */
+    .header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 20px;
+    }
+
+    .page-title {
+        color: #ffd700;
+        font-weight: 700;
+        font-size: 2rem;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        margin: 0;
+    }
+
+    .page-subtitle {
+        color: #888;
+        font-size: 0.95rem;
+        margin-top: 5px;
+    }
+
+    /* Tablo Kartı */
+    .message-card {
+        background: #111;
+        border: 1px solid #333;
+        border-top: 3px solid #ffd700; /* Üstte gold çizgi */
+        border-radius: 12px;
+        padding: 5px; /* Tablo kenarları için */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Tablo Stilleri */
+    .custom-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        color: #ccc;
+    }
+
+        .custom-table thead {
+            background-color: #1a1a1a;
+        }
+
+        .custom-table th {
+            text-align: left;
+            padding: 18px;
+            color: #ffd700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #333;
+            white-space: nowrap;
+        }
+
+        .custom-table td {
+            padding: 18px;
+            border-bottom: 1px solid #222;
+            vertical-align: middle;
+            font-size: 0.95rem;
+        }
+
+        .custom-table tr:hover td {
+            background-color: rgba(255, 215, 0, 0.03); /* Hoverda hafif gold */
+            color: #fff;
+        }
+
+    /* Avatar / Gönderen Stili */
+    .sender-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .sender-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #222;
+        color: #ffd700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border: 1px solid #444;
+        flex-shrink: 0;
+    }
+
+    .sender-details div {
+        line-height: 1.2;
+    }
+
+    .sender-name {
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .sender-email {
+        font-size: 0.8rem;
+        color: #777;
+    }
+
+    /* Butonlar */
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        border: 1px solid transparent;
+        color: #fff;
+        margin-left: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-view {
+        background: rgba(255, 215, 0, 0.1);
+        color: #ffd700;
+        border-color: rgba(255, 215, 0, 0.3);
+    }
+
+        .btn-view:hover {
+            background: #ffd700;
+            color: #000;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+    .btn-delete {
+        background: rgba(220, 53, 69, 0.1);
+        color: #ff6b6b;
+        border-color: rgba(220, 53, 69, 0.3);
+    }
+
+        .btn-delete:hover {
+            background: #dc3545;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
+        }
+
+    /* Modal (Pop-up) Tasarımı - Dark Mode */
+    .modal-content {
+        background-color: #111;
+        border: 1px solid #333;
+        color: #e0e0e0;
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.1);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #333;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #333;
+    }
+
+    .modal-title {
+        color: #ffd700;
+        font-weight: bold;
+    }
+
+    .btn-close-white {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    /* Mobil Uyumluluk */
+    @@media (max-width: 768px) {
+        .header-wrapper {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .custom-table th, .custom-table td {
+            padding: 12px;
+        }
+        /* Tabloyu mobilde kaydırılabilir yap */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+</style>
+
+<div class="page-container">
+
+    <div class="header-wrapper">
+        <div>
+            <h1 class="page-title"><i class="bi bi-envelope-paper-fill"></i> Gelen Kutusu</h1>
+            <p class="page-subtitle">Kullanıcılardan gelen @(Model?.Count ?? 0) adet mesajı yönetin.</p>
+        </div>
+    </div>
+
+    <div class="message-card">
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">#ID</th>
+                        <th>Gönderen</th>
+                        <th>Konu</th>
+                        <th>Tarih</th>
+                        <th style="text-align:right;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var msg in Model.OrderByDescending(x => x.CreatedDate))
+                        {
+                            var senderName = msg.User != null ? msg.User.UserName : msg.GuestName;
+                            var senderEmail = msg.User != null ? msg.User.Email : msg.GuestEmail;
+                            var displayInitials = !string.IsNullOrEmpty(senderName) ? senderName.Substring(0, 1).ToUpper() : "?";
+
+                            <tr>
+                                <td style="color:#666;">#@msg.Id</td>
+
+                                <td>
+                                    <div class="sender-info">
+                                        <div class="sender-avatar">@displayInitials</div>
+                                        <div class="sender-details">
+                                            <div class="sender-name">@senderName</div>
+                                            <div class="sender-email">@senderEmail</div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span style="font-weight:600; color:#eee;">@msg.Subject</span>
+                                    <div style="font-size:0.8rem; color:#888; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        @msg.Message
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div style="font-size:0.9rem; color:#ffd700;">
+                                        <i class="bi bi-calendar3"></i> @msg.CreatedDate.ToString("dd.MM.yyyy")
+                                    </div>
+                                    <div style="font-size:0.8rem; color:#666;">
+                                        @msg.CreatedDate.ToString("HH:mm")
+                                    </div>
+                                </td>
+
+                                <td style="text-align:right;">
+                                    <button type="button" class="btn-action btn-view"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#messageModal"
+                                            onclick="openMessage('@msg.Subject', '@System.Web.HttpUtility.JavaScriptStringEncode(msg.Message)', '@senderName', '@senderEmail', '@msg.CreatedDate')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+
+                                    <a asp-action="Delete" asp-route-id="@msg.Id"
+                                       class="btn-action btn-delete"
+                                       onclick="return confirm('Bu mesajı silmek istediğinize emin misiniz?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center p-5 text-muted">
+                                <i class="bi bi-inbox" style="font-size: 3rem; display:block; margin-bottom:15px; color:#333;"></i>
+                                Gelen kutunuz boş. Henüz hiç mesaj yok.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalSubject">Mesaj Konusu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary">
+                    <div class="sender-info">
+                        <div class="sender-avatar" id="modalAvatar">?</div>
+                        <div class="sender-details">
+                            <div class="sender-name" id="modalSenderName" style="color:#ffd700;"></div>
+                            <div class="sender-email" id="modalSenderEmail"></div>
+                        </div>
+                    </div>
+                    <div class="text-muted small" id="modalDate"></div>
+                </div>
+
+                <div class="message-content" style="font-size: 1.1rem; line-height: 1.6; color:#ddd; white-space: pre-wrap;" id="modalMessage">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary text-white" data-bs-dismiss="modal">Kapat</button>
+                <a href="#" id="modalReplyBtn" class="btn btn-sm" style="background-color:#ffd700; color:#000; font-weight:bold;">
+                    <i class="bi bi-reply-fill"></i> Yanıtla (Email)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openMessage(subject, message, name, email, date) {
+            document.getElementById('modalSubject').textContent = subject;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalSenderName').textContent = name;
+            document.getElementById('modalSenderEmail').textContent = email;
+            document.getElementById('modalDate').textContent = date;
+
+            var initial = name ? name.charAt(0).toUpperCase() : '?';
+            document.getElementById('modalAvatar').textContent = initial;
+
+            var mailtoLink = "mailto:" + email + "?subject=RE: " + subject;
+            document.getElementById('modalReplyBtn').setAttribute('href', mailtoLink);
+        }
+    </script>
+}

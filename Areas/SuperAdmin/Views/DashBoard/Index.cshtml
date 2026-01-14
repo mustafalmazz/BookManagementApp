@@ -60,7 +60,8 @@
     /* --- İSTATİSTİK KARTLARI (GRID) --- */
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        /* Mobilde sıkışmayı önlemek için min-width değerini düşürdük */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 30px;
     }
 
@@ -235,6 +236,7 @@
             padding: 15px;
             border-bottom: 1px solid #222;
             transition: background 0.2s;
+            white-space: nowrap; /* Mobilde satırlar kırılmasın */
         }
 
         .gold-table tr:last-child td {
@@ -255,18 +257,58 @@
         border: 1px solid rgba(255, 215, 0, 0.3);
     }
 
+    /* --- MOBİL UYUMLULUK AYARLARI --- */
     @@media (max-width: 768px) {
+        .dashboard-container {
+            padding: 15px;
+        }
+        /* Başlıklar küçülür */
+        .page-title {
+            font-size: 1.8rem;
+        }
+        /* Grid tek sütuna düşer */
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        /* Kart içeriği dikey olur ve ortalanır */
         .stat-card {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+            .stat-card .card-icon {
+                margin-bottom: 10px;
+            }
+
+        .stat-number-wrapper {
+            justify-content: center;
         }
 
         .stat-number {
             font-size: 2.5rem;
         }
+        /* Tablo bölümü düzenlemeleri */
+        .recent-section {
+            padding: 15px;
+            margin-top: 30px;
+        }
 
-        .page-title {
-            font-size: 2rem;
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+            .section-header button {
+                width: 100%; /* Buton tam genişlik */
+            }
+        /* Tabloya kaydırma özelliği */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
     }
 </style>
@@ -275,7 +317,6 @@
 
     <div class="page-title-section">
         <h1 class="page-title">YÖNETİM MERKEZİ</h1>
-        <p class="page-subtitle">Sistem İstatistikleri ve Global Veriler</p>
     </div>
 
     <div class="stats-grid">
@@ -288,7 +329,6 @@
                 <div class="stat-number-wrapper">
                     <div class="stat-number" id="totalPriceCount" data-count="@totalUser">0</div>
                 </div>
-                <div class="stat-description-text">Sisteme Kayıtlı toplam kullanıcı sayısı</div>
             </div>
         </div>
 
@@ -301,7 +341,6 @@
                 <div class="stat-number-wrapper">
                     <div class="stat-number" id="bookCount" data-count="@totalBooks">0</div>
                 </div>
-                <div class="stat-description-text">Tüm sistemdeki aktif kitap envanteri</div>
             </div>
         </div>
 
@@ -314,11 +353,10 @@
                 <div class="stat-number-wrapper">
                     <div class="stat-number" id="categoryCount" data-count="@totalCategories">0</div>
                 </div>
-                <div class="stat-description-text">Listelenen farklı tür sayısı</div>
             </div>
         </div>
 
-        
+
     </div>
 
     <div class="recent-section">
@@ -403,7 +441,7 @@
 
             animateCounter(bookCountEl, v1, 1500);
             animateCounter(catCountEl, v2, 1500);
-            animateCounter(priceEl, v3, 1800); // Para biraz daha yavaş artsın, havalı durur
+            animateCounter(priceEl, v3, 1800); 
         }, 300);
     });
 </script>

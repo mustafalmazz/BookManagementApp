@@ -350,9 +350,16 @@
                     </li>
                 </ul>
 
-                <form class="book-search-form d-none d-lg-flex" asp-controller="Home" asp-action="Search" method="get">
+                <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="Index" method="get">
+                    <input class="mobile-search-input" type="search" name="q" placeholder="Raflarında Ara..." aria-label="Search" value="@ViewData["CurrentSearch"]">
+                    <button type="submit" class="mobile-search-btn-icon">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+
+                <form class="book-search-form d-none d-lg-flex" asp-controller="Home" asp-action="Index" method="get">
                     <input class="form-control book-search-input" type="search" name="q"
-                           placeholder="Kitap veya yazar ara..." aria-label="Search">
+                           placeholder="Kitap veya yazar ara..." aria-label="Search" value="@ViewData["CurrentSearch"]">
                     <button class="btn book-search-btn" type="submit">
                         <i class="bi bi-search"></i>
                         Ara

@@ -64,8 +64,8 @@
     }
 
     .btn-sm {
-        padding: 8px 15px !important; 
-        font-size: 0.9rem; 
+        padding: 8px 15px !important;
+        font-size: 0.9rem;
     }
 
     .btn-gold:hover {
@@ -179,7 +179,9 @@
         border-radius: 10px;
         font-size: 1.0rem;
         border: 2px solid #ffd700;
+        white-space: nowrap; /* Mobilde kategori taşmasın */
     }
+
     .action-btn {
         width: 35px;
         height: 35px;
@@ -217,6 +219,45 @@
             color: white;
             box-shadow: 0 0 10px #dc3545;
         }
+
+    /* --- MOBİL UYUMLULUK AYARLARI --- */
+    @@media (max-width: 768px) {
+        .page-container {
+            padding: 10px; /* Mobilde kenar boşluğunu azalt */
+        }
+
+        .header-wrapper {
+            flex-direction: column; /* Başlık ve butonu alt alta al */
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+            .header-wrapper > div:last-child {
+                width: 100%; /* Buton kapsayıcısını genişlet */
+            }
+
+        .btn-gold {
+            width: 100%; /* Butonu mobilde tam genişlik yap */
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 1.5rem; /* Başlığı mobilde biraz küçült */
+        }
+
+        .search-card {
+            padding: 15px;
+        }
+        /* Tabloyu mobilde kaydırılabilir yap ama stilleri bozma */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .custom-table {
+            min-width: 600px; /* Tablonun mobilde çok sıkışmasını engelle */
+        }
+    }
 </style>
 
 <div class="page-container">
@@ -238,7 +279,7 @@
             <form method="get" asp-action="Search" asp-controller="Books" style="display: flex; gap: 10px;">
                 <input type="text" name="q" class="input-dark" placeholder="Kitap adı, Yazar veya Kategori ara..." value="@Context.Request.Query["q"]">
                 <button type="submit" class="btn-gold btn-sm">
-                    <i class="bi bi-search"></i> 
+                    <i class="bi bi-search"></i>
                 </button>
             </form>
         </div>

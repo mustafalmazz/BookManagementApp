@@ -11,6 +11,7 @@
         padding: 8px 15px !important;
         font-size: 0.9rem;
     }
+
     .btn-gold {
         background-color: #ffd700;
         color: #000;
@@ -24,6 +25,7 @@
         display: inline-block;
         cursor: pointer;
     }
+
     @@keyframes slideIn {
         from {
             opacity: 0;
@@ -127,6 +129,12 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
+    /* Tablo Responsive Wrapper (Kaydırma için) */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .custom-table {
         width: 100%;
         border-collapse: collapse;
@@ -172,6 +180,7 @@
         border: 1px solid #555;
         text-transform: uppercase;
         font-size: 1.1rem;
+        flex-shrink: 0; /* Mobilde büzülmesin */
     }
 
     /* Rozetler */
@@ -181,6 +190,7 @@
         font-size: 0.75rem;
         font-weight: 600;
         border: 1px solid;
+        white-space: nowrap; /* Mobilde alt satıra geçmesin */
     }
 
     .badge-admin {
@@ -233,6 +243,42 @@
             color: white;
             box-shadow: 0 0 10px #dc3545;
         }
+
+    /* --- MOBİL UYUMLULUK (MEDIA QUERY) --- */
+    @@media (max-width: 768px) {
+        .page-container {
+            padding: 10px;
+        }
+
+        .header-wrapper {
+            flex-direction: column;
+            align-items: stretch; /* İçerikleri tam genişliğe yay */
+            text-align: center;
+            gap: 15px;
+        }
+
+            .header-wrapper > div {
+                width: 100%;
+            }
+
+        .btn-gold {
+            width: 100%; /* Buton mobilde tam genişlik */
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 1.6rem;
+        }
+
+        .search-card {
+            padding: 15px;
+        }
+        /* Tablo hücrelerinin mobilde satır kırmasını engelle */
+        .custom-table th, .custom-table td {
+            white-space: nowrap;
+            padding: 12px;
+        }
+    }
 </style>
 
 <div class="page-container">
@@ -252,7 +298,7 @@
     <div class="search-card">
         <div style="flex-grow: 1;">
             <form method="get" asp-action="Search" asp-controller="Users" style="display: flex; gap: 10px;">
-                <input type="text" name="q" class="input-dark" placeholder="Tabloda ara (Kullanıcı Adı, Email)...">
+                <input type="text" id="searchInput" name="q" class="input-dark" placeholder="Tabloda ara (Kullanıcı Adı, Email)...">
                 <button class="btn-gold">  <i class="bi bi-search"></i></button>
             </form>
         </div>
@@ -275,11 +321,11 @@
                     {
                         @foreach (var user in Model)
                         {
-                           
+
                             var userName = !string.IsNullOrEmpty(user.UserName) ? user.UserName : "Bilinmiyor";
                             var initials = userName.Substring(0, 1).ToUpper();
 
-                      
+
                             var role = user.Role ?? "User";
 
                             var badgeClass = (role == "SuperAdmin") ? "badge-admin" : "badge-user";
@@ -312,13 +358,13 @@
                                     <a asp-action="Edit" asp-route-id="@user.Id" class="action-btn btn-edit" title="Düzenle">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    @if(user.Role != "SuperAdmin" )
+                                    @if (user.Role != "SuperAdmin")
                                     {
                                         <a asp-action="DeleteConfirm" asp-route-id="@user.Id" class="action-btn btn-delete" title="Sil">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     }
-                                    
+
                                 </td>
                             </tr>
                         }
@@ -340,7 +386,7 @@
 
 <script>
     // JS Arama Filtresi
-    document.getElementById('searchInput').addEventListener('keyup', function() {
+    document.getElementById('searchInput')?.addEventListener('keyup', function() {
         var value = this.value.toLowerCase();
         var rows = document.querySelectorAll('#usersTable tbody tr');
 

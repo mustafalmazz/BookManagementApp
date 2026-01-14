@@ -12,9 +12,12 @@
         min-height: 100vh;
         font-family: 'Georgia', serif;
         position: relative;
-        overflow: hidden;
         margin: 0;
         padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
     }
 
         body::before {
@@ -30,15 +33,12 @@
         }
 
     .login-wrapper {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
+        position: relative;
         width: 100%;
-        max-width: 500px;
-        padding: 20px;
+        max-width: 480px;
+        z-index: 1;
         animation: fadeInScale 0.8s ease;
+        margin: auto;
     }
 
     .login-container {
@@ -89,8 +89,8 @@
         }
 
     .login-icon {
-        width: 100px;
-        height: 100px;
+        width: 90px;
+        height: 90px;
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
         border-radius: 25px;
@@ -131,7 +131,7 @@
     }
 
     .form-group {
-        margin-bottom: 25px; /* Biraz küçülttük ki link sığsın */
+        margin-bottom: 25px;
         position: relative;
     }
 
@@ -362,47 +362,81 @@
         }
 
     @@keyframes fadeInScale {
-        from
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
 
-    {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.9);
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    }
-
+    /* --- MOBİL İÇİN KÜÇÜLTME AYARLARI --- */
     @@media (max-width: 768px) {
-        .login-wrapper
+        body {
+            padding: 10px;
+        }
 
-    {
-        padding: 15px;
-    }
+        .login-wrapper {
+            max-width: 100%;
+        }
+        /* Paddingleri azalttık (Daha sıkı) */
+        .login-header {
+            padding: 25px 20px;
+        }
 
-    .login-header {
-        padding: 40px 30px;
-    }
+        .login-form {
+            padding: 25px 20px;
+        }
+        /* Yazı boyutlarını küçülttük */
+        .login-title {
+            font-size: 1.5rem;
+        }
 
-    .login-title {
-        font-size: 2rem;
-    }
+        .login-subtitle {
+            font-size: 0.85rem;
+        }
 
-    .login-form {
-        padding: 40px 30px;
-    }
+        .login-icon {
+            margin-bottom: 15px; /* Resmi etkilemeden çerçeve marjını kıstık */
+        }
+        /* Form elemanlarını sıkılaştırdık */
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-    .button-group {
-        flex-direction: column;
-    }
+        .form-label {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
 
-    .btn {
-        width: 100%;
-    }
+        .form-control {
+            padding: 12px 15px 12px 45px; /* Yüksekliği azalttık */
+            font-size: 0.95rem;
+        }
 
+        .input-icon {
+            font-size: 1rem;
+        }
+        /* Butonları küçülttük */
+        .button-group {
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px; /* Buton yüksekliğini düşürdük */
+            font-size: 0.95rem;
+        }
+
+        .btn-google {
+            padding: 12px;
+            font-size: 0.95rem;
+        }
     }
 </style>
 
@@ -412,7 +446,7 @@
 
         <div class="login-header">
             <div class="login-icon">
-                <i class="fas fa-book-reader"></i>
+                <img src="/images/library.png" style="width:60px;" />
             </div>
             <h1 class="login-title">Giriş Yap</h1>
             <p class="login-subtitle">Dijital kütüphanenize hoş geldiniz</p>
@@ -500,7 +534,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Input animasyonları
         const inputs = document.querySelectorAll('.form-control');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
@@ -513,7 +546,6 @@
             });
         });
 
-        // Hata veya Başarı mesajına otomatik kaydırma
         const alertMessage = document.querySelector('.error-message, .success-message');
         if (alertMessage) {
             alertMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
