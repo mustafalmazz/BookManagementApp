@@ -224,8 +224,21 @@ namespace BookManagementApp.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken] 
         public IActionResult SendMeMessage(Contact contact)
         {
+            var lastMessageTime = HttpContext.Session.GetString("LastMessageTime");
+
+            if (!string.IsNullOrEmpty(lastMessageTime))
+            {
+                var timeDiff = DateTime.Now - DateTime.Parse(lastMessageTime);
+                if (timeDiff.TotalSeconds < 60)
+                {
+                    TempData["ErrorMessage"] = "Çok hızlı işlem yapıyorsunuz. Lütfen yeni mesaj için bir süre bekleyin.";
+                    return View(contact); 
+                }
+            }
+
             if (contact == null)
             {
                 return BadRequest();
@@ -240,13 +253,22 @@ namespace BookManagementApp.Controllers
             if (userId != null)
             {
                 contact.UserId = userId;
+
+                var user = _context.Users.FirstOrDefault(c => c.Id == userId);
+                if (user != null)
+                {
+                    contact.GuestName = user.UserName;
+                    contact.GuestEmail = user.Email;
+                }
             }
-            var user = _context.Users.FirstOrDefault(c=>c.Id == userId);
+
             contact.CreatedDate = DateTime.Now;
-            contact.GuestName = user?.UserName;
-            contact.GuestEmail = user?.Email;
+
             _context.Contacts.Add(contact);
             _context.SaveChanges();
+
+            HttpContext.Session.SetString("LastMessageTime", DateTime.Now.ToString());
+
             TempData["SuccessMessage"] = "Mesajınız başarıyla gönderildi!";
             return RedirectToAction("SendMeMessage");
         }

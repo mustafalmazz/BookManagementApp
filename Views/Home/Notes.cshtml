@@ -204,19 +204,15 @@
             text-underline-offset: 4px;
         }
 
-        /* DÜZELTME BURADA YAPILDI: Kalınlaştırma yapan stil kaldırıldı ve sadece arka plan ayarlandı */
         div.notes-text span[style*="background-color"] {
             padding: 1px 3px;
             line-height: 1.8;
             border-radius: 3px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.08);
             display: inline;
-            font-weight: normal; /* Kalınlığı sıfırla */
-            font-family: 'Georgia', serif; /* Fontun değişmesini engelle */
+            font-weight: normal;
+            font-family: 'Georgia', serif;
         }
-
-    /* BURASI SİLİNDİ: Eskiden "color" geçen her style'ı kalın yapıyordu, bu da highlight'ı bozuyordu. */
-    /* div.notes-text span[style*="color"] { font-weight: 600; } */
 
     .formatting-toolbar {
         display: flex;
@@ -602,21 +598,26 @@
                 </h3>
 
                 <div class="formatting-toolbar">
-                    <button type="button" class="toolbar-btn" onclick="formatDoc('bold')" title="Kalın"><i class="fas fa-bold"></i></button>
-                    <button type="button" class="toolbar-btn" onclick="formatDoc('italic')" title="Eğik"><i class="fas fa-italic"></i></button>
-                    <button type="button" class="toolbar-btn" onclick="formatDoc('underline')" title="Altı Çizili"><i class="fas fa-underline"></i></button>
+                    <button type="button" class="toolbar-btn" onmousedown="event.preventDefault();" onclick="formatDoc('bold')" title="Kalın"><i class="fas fa-bold"></i></button>
+                    <button type="button" class="toolbar-btn" onmousedown="event.preventDefault();" onclick="formatDoc('italic')" title="Eğik"><i class="fas fa-italic"></i></button>
+                    <button type="button" class="toolbar-btn" onmousedown="event.preventDefault();" onclick="formatDoc('underline')" title="Altı Çizili"><i class="fas fa-underline"></i></button>
 
                     <div class="color-separator"></div>
 
-                    <button type="button" class="toolbar-btn color-btn" onclick="setColor('#FFEB3B')" title="Sarı"><span style="background: #FFEB3B;"></span></button>
-                    <button type="button" class="toolbar-btn color-btn" onclick="setColor('#8BC34A')" title="Yeşil"><span style="background: #8BC34A;"></span></button>
-                    <button type="button" class="toolbar-btn color-btn" onclick="setColor('#42A5F5')" title="Mavi"><span style="background: #42A5F5;"></span></button>
-                    <button type="button" class="toolbar-btn color-btn" onclick="setColor('#FF9800')" title="Turuncu"><span style="background: #FF9800;"></span></button>
-                    <button type="button" class="toolbar-btn color-btn" onclick="setColor('#E91E63')" title="Pembe"><span style="background: #E91E63;"></span></button>
+                    <button type="button" class="toolbar-btn color-btn" onmousedown="event.preventDefault();" onclick="setColor('transparent')" title="Renksiz (Normal Yazı)"><span style="background: transparent; border: 2px dashed #8b6f47;"></span></button>
+                    <button type="button" class="toolbar-btn color-btn" onmousedown="event.preventDefault();" onclick="setColor('#FFEB3B')" title="Sarı"><span style="background: #FFEB3B;"></span></button>
+                    <button type="button" class="toolbar-btn color-btn" onmousedown="event.preventDefault();" onclick="setColor('#8BC34A')" title="Yeşil"><span style="background: #8BC34A;"></span></button>
+                    <button type="button" class="toolbar-btn color-btn" onmousedown="event.preventDefault();" onclick="setColor('#42A5F5')" title="Mavi"><span style="background: #42A5F5;"></span></button>
+                    <button type="button" class="toolbar-btn color-btn" onmousedown="event.preventDefault();" onclick="setColor('#FF9800')" title="Turuncu"><span style="background: #FF9800;"></span></button>
+                    <button type="button" class="toolbar-btn color-btn" onmousedown="event.preventDefault();" onclick="setColor('#E91E63')" title="Pembe"><span style="background: #E91E63;"></span></button>
+
+                    <button type="button" class="toolbar-btn" onmousedown="event.preventDefault();" onclick="resetActiveStyle()" title="Normal Yazı (Rengi Kaldır)">
+                        <i class="fas fa-ban" style="font-size: 0.9rem; color: #666;"></i>
+                    </button>
 
                     <div class="color-separator"></div>
 
-                    <button type="button" class="toolbar-btn" onclick="cleanFormat()" title="Formatı Temizle"><i class="fas fa-eraser"></i></button>
+                    <button type="button" class="toolbar-btn" onmousedown="event.preventDefault();" onclick="cleanFormat()" title="Tüm Formatı Temizle"><i class="fas fa-eraser"></i></button>
                 </div>
             </div>
 
@@ -644,41 +645,55 @@
 </div>
 
 <script>
-    // 1. Temel Formatlama (Kalın, İtalik vb.)
+    // 1. Temel Formatlama
     function formatDoc(cmd, value = null) {
         document.execCommand(cmd, false, value);
-        focusEditor();
+        // focusEditor() çağrısına gerek kalmadı çünkü onmousedown focus kaybını önlüyor
     }
 
-    // 2. Renklendirme Mantığı (Sadece Arka Plan)
+    // 2. Renklendirme (GÜNCELLENDİ: Toggle Özelliği Eklendi)
+    let activeColor = null; // Aktif rengi takip etmek için
+
     function setColor(color) {
-        // CSS stillerini kullan
         document.execCommand('styleWithCSS', false, true);
 
-        // hiliteColor sadece arka plan rengini değiştirir, yazının kendisiyle oynamaz.
-        document.execCommand('hiliteColor', false, color);
-
-        focusEditor();
+        // Eğer aynı renge tekrar tıklanırsa, rengi kapat ve normal stile dön
+        if (activeColor === color) {
+            document.execCommand('hiliteColor', false, 'transparent');
+            document.execCommand('styleWithCSS', false, false);
+            activeColor = null; // Aktif rengi sıfırla
+        } else {
+            // Yeni bir renk uygula
+            document.execCommand('hiliteColor', false, color);
+            activeColor = color; // Aktif rengi kaydet
+        }
     }
 
-    // 3. Temizleme Mantığı
-    function cleanFormat() {
-        document.execCommand('styleWithCSS', false, false);
-        document.execCommand('removeFormat', false, null);
+    // 3. YENİ EKLENEN: Sadece Rengi ve Stili Sıfırla (Normal Yazıya Dön)
+    function resetActiveStyle() {
+        document.execCommand('styleWithCSS', false, true);
 
-        // Arka plan rengini temizle
+        // Arka plan rengini kaldır
         document.execCommand('hiliteColor', false, 'transparent');
-        document.execCommand('backColor', false, 'transparent');
 
-        // Metin rengini varsayılana döndür
+        // Yazı rengini siyaha/koyu griye döndür (Normal yazı rengin neyse)
         document.execCommand('foreColor', false, '#4a3f35');
 
-        focusEditor();
+        // CSS modunu kapat ki temiz HTML üretsin
+        document.execCommand('styleWithCSS', false, false);
+
+        // Aktif rengi sıfırla
+        activeColor = null;
     }
 
-    function focusEditor() {
-        const editor = document.getElementById('notesEditor');
-        editor.focus();
+    // 4. Tüm Formatı Temizle (Silgi Butonu)
+    function cleanFormat() {
+        document.execCommand('styleWithCSS', false, false);
+        document.execCommand('removeFormat', false, null); // Kalın, italik hepsini siler
+        document.execCommand('hiliteColor', false, 'transparent'); // Arka planı siler
+
+        // Aktif rengi sıfırla
+        activeColor = null;
     }
 
     document.addEventListener("DOMContentLoaded", function() {

@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing; 
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace BookManagementApp.Areas.Admin.Controllers
 {
@@ -112,7 +115,7 @@ namespace BookManagementApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Book model, IFormFile ImageFile)
+        public async Task<IActionResult> Edit(Book model, IFormFile ImageFile) // async Task yaptık
         {
             // 1. Yetki Kontrolü
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -121,45 +124,88 @@ namespace BookManagementApp.Areas.Admin.Controllers
                 return RedirectToAction("Login", "Account", new { area = "" });
             }
 
-            // 2. ModelState Temizliği (Hatalı uyarıları engellemek için)
-            // UserId formdan gelmiyor, session'dan alıyoruz. Hata vermesin diye siliyoruz.
+            // 2. Validasyon Temizliği
             ModelState.Remove("UserId");
-
-            // Edit işleminde resim seçmek zorunlu değildir (eskisi kalabilir). 
-            // Bu yüzden resim için hata vermesini engelliyoruz.
             ModelState.Remove("Image");
             ModelState.Remove("ImageFile");
 
-            // 3. VALIDATION KONTROLÜ
+            // 3. Validation Kontrolü
             if (!ModelState.IsValid)
             {
-                // Eğer validation hatası varsa (örn: Puan 6 girilmişse),
-                // Dropdown'ın (Kategorilerin) tekrar dolması gerekir, yoksa hata alırız.
-                // Burayı kendi kategori çekme kodunuza göre düzenleyin:
-                // ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
-
-                return View(model); // Hataları göstermek için sayfayı geri yükle
+                // Hata varsa kategorileri tekrar doldur
+                ViewBag.Categories = new SelectList(_context.Categories.Where(c => c.UserId == userId), "Id", "CategoryName");
+                return View(model);
             }
 
             // 4. Veritabanından Kitabı Bulma
-            var book = _context.Books.FirstOrDefault(b => b.Id == model.Id && b.UserId == userId);
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == model.Id && b.UserId == userId);
             if (book == null)
             {
                 return NotFound();
             }
 
-            // 5. Resim Güncelleme İşlemi (Varsa)
+            // 5. RESİM GÜNCELLEME İŞLEMİ (ImageSharp ile Optimize Edildi)
             if (ImageFile != null && ImageFile.Length > 0)
             {
-                var fileName = Path.GetFileName(ImageFile.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // A. Uzantı Kontrolü
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
                 {
-                    ImageFile.CopyTo(stream);
+                    ModelState.AddModelError("Image", "Sadece resim dosyaları yüklenebilir.");
+                    ViewBag.Categories = new SelectList(_context.Categories.Where(c => c.UserId == userId), "Id", "CategoryName");
+                    return View(model);
                 }
-                book.Image = "/images/" + fileName; // Sadece yeni resim yüklenirse güncelle
+
+                try
+                {
+                    // B. Eski Resmi Silme (Sunucuda çöp dosya birikmesin diye)
+                    if (!string.IsNullOrEmpty(book.Image))
+                    {
+                        var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", book.Image.TrimStart('/'));
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+
+                    // C. Yeni Resim İçin Benzersiz İsim
+                    var uniqueFileName = Guid.NewGuid().ToString() + extension;
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                    var filePath = Path.Combine(uploadPath, uniqueFileName);
+
+                    if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+
+                    // D. Resize ve Sıkıştırma İşlemi
+                    using (var image = await Image.LoadAsync(ImageFile.OpenReadStream()))
+                    {
+                        // Genişlik 800px'den büyükse küçült
+                        if (image.Width > 800)
+                        {
+                            image.Mutate(x => x.Resize(800, 0));
+                        }
+
+                        var encoder = new JpegEncoder
+                        {
+                            Quality = 75 // %75 Kalite ile kaydet
+                        };
+
+                        await image.SaveAsync(filePath, encoder);
+                    }
+
+                    // Veritabanı yolunu güncelle
+                    book.Image = "/images/" + uniqueFileName;
+                }
+                catch (Exception)
+                {
+                    // Hata olursa (Loglanabilir)
+                    ModelState.AddModelError("Image", "Resim yüklenirken hata oluştu.");
+                    ViewBag.Categories = new SelectList(_context.Categories.Where(c => c.UserId == userId), "Id", "CategoryName");
+                    return View(model);
+                }
             }
-            // Resim yüklenmediyse 'book.Image'a dokunmuyoruz, eski resim kalıyor.
+            // Resim yüklenmediyse 'book.Image' değişmez, eski resim kalır.
 
             // 6. Diğer Bilgilerin Güncellenmesi
             book.Author = model.Author;
@@ -172,7 +218,7 @@ namespace BookManagementApp.Areas.Admin.Controllers
             book.Rate = model.Rate;
             book.Notes = model.Notes;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("List");
         }
 
@@ -195,33 +241,81 @@ namespace BookManagementApp.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(Book model, IFormFile ImageFile)
+        public async Task<IActionResult> Create(Book model, IFormFile ImageFile)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
                 return RedirectToAction("Login", "Account", new { area = "" });
             }
+
+            // --- VALIDATION TEMİZLİĞİ (Çok Önemli) ---
+            // 1. UserId session'dan geliyor, formdan değil.
             ModelState.Remove("UserId");
+            // 2. Resim yolu kodla oluşturulacak.
+            ModelState.Remove("Image");
+            // 3. Dosya nesnesi validasyona dahil değil.
+            ModelState.Remove("ImageFile");
+
+            // 4. Navigation Property'ler (User ve Category nesneleri) formdan gelmez.
+            // Sadece Id'leri gelir. Bu yüzden nesnelerin kendisini validasyondan çıkarıyoruz.
+            ModelState.Remove("User");
+            ModelState.Remove("Category");
+
             if (!ModelState.IsValid)
             {
+                // Hata varsa kategorileri TEKRAR doldurmak zorundayız.
+                // Yoksa sayfa yenilendiğinde dropdown boş gelir ve hata devam eder.
+                ViewBag.Categories = new SelectList(_context.Categories.Where(c => c.UserId == userId), "Id", "CategoryName");
                 return View(model);
             }
 
+            // --- RESİM YÜKLEME İŞLEMLERİ ---
             if (ImageFile != null && ImageFile.Length > 0)
             {
-                var fileName = Path.GetFileName(ImageFile.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
                 {
-                    ImageFile.CopyTo(stream);
+                    ModelState.AddModelError("Image", "Sadece .jpg, .jpeg veya .png yükleyebilirsiniz.");
+                    ViewBag.Categories = new SelectList(_context.Categories.Where(c => c.UserId == userId), "Id", "CategoryName");
+                    return View(model);
                 }
-                model.Image = "/images/" + fileName;
+
+                try
+                {
+                    var uniqueFileName = Guid.NewGuid().ToString() + extension;
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                    var filePath = Path.Combine(uploadPath, uniqueFileName);
+
+                    if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+
+                    using (var image = await Image.LoadAsync(ImageFile.OpenReadStream()))
+                    {
+                        if (image.Width > 800)
+                        {
+                            image.Mutate(x => x.Resize(800, 0));
+                        }
+                        var encoder = new JpegEncoder { Quality = 75 };
+                        await image.SaveAsync(filePath, encoder);
+                    }
+
+                    model.Image = "/images/" + uniqueFileName;
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("Image", "Resim yüklenirken bir hata oluştu.");
+                    ViewBag.Categories = new SelectList(_context.Categories.Where(c => c.UserId == userId), "Id", "CategoryName");
+                    return View(model);
+                }
             }
 
             model.UserId = userId.Value;
+            model.CreateDate = DateTime.Now; // Tarihi de garantiye alalım
+
             _context.Books.Add(model);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("List");
         }

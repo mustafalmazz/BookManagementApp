@@ -120,8 +120,7 @@
 <hr />
 
 <form method="post" asp-action="Create" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
     <div class="mb-2">
         <label class="form-label" asp-for="Name">Kitap Adı</label>
         <input class="form-control" asp-for="Name" />
