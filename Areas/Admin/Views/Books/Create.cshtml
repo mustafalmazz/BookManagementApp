@@ -5,65 +5,88 @@
 }
 
 <style>
-    /* Sayfa _Layout.cshtml kullanmıyorsa veya
-          body stilini oradan almıyorsa bu gereklidir.
-        */
     body {
         background-color: #0a0c1e;
         color: #e0e0e0;
     }
 
-    /* Başlık: Neon Mavi Parıltı */
     h1 {
         color: #ffffff;
         text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
     }
 
-    /* Ayırıcı Çizgi */
     hr {
         border-color: #1f2a52;
         opacity: 0.5;
     }
 
-    /* --- Form Stilleri --- */
+    /* --- YENİ EKLENEN ARAMA KUTUSU STİLLERİ --- */
+    .search-card {
+        background: #10152f; /* Form ile aynı arka plan */
+        border: 1px solid #ff0055; /* Farklı olması için Neon Pembe sınır */
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto 20px auto; /* Formun üstünde boşluk bırak */
+    }
 
-    /* Formun kendisini bir kart gibi göster (Önceki tasarımlarla uyum için) */
+    .btn-search {
+        background-color: #ff0055;
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 0 6px 6px 0; /* Input ile birleşik görünüm */
+        transition: all 0.3s ease;
+    }
+
+        .btn-search:hover {
+            background-color: #d60047;
+            box-shadow: 0 0 10px #ff0055;
+            color: white;
+        }
+
+    .search-input {
+        border-radius: 6px 0 0 6px !important; /* Butonla birleşik görünüm */
+        border: 1px solid #ff0055 !important;
+    }
+
+        .search-input:focus {
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.4) !important;
+        }
+
+    /* --- MEVCUT FORM STİLLERİ --- */
     form {
         background: #10152f;
         border: 1px solid #00aaff;
         border-radius: 8px;
         box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
         padding: 30px;
-        max-width: 800px; /* Formun çok genişlemesini engelle */
-        margin: 0 auto; /* Ortala */
+        max-width: 800px;
+        margin: 0 auto;
     }
 
-    /* Form Etiketleri */
     .form-label {
         color: #a0b0d0;
         font-weight: 500;
     }
 
-    /* Input ve Select Kutuları */
-    .form-control,
-    .form-select {
-        background-color: #131a38; /* Koyu mavi input alanı */
+    .form-control, .form-select {
+        background-color: #131a38;
         color: #e0e0e0;
-        border: 1px solid #1f2a52; /* Koyu sınır */
+        border: 1px solid #1f2a52;
         border-radius: 6px;
     }
 
-        /* Input/Select Odaklanma (Focus) Efekti */
-        .form-control:focus,
-        .form-select:focus {
+        .form-control:focus, .form-select:focus {
             background-color: #131a38;
             color: #e0e0e0;
-            border-color: #00d9ff; /* Neon mavi sınır */
-            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5); /* Neon parıltı */
+            border-color: #00d9ff;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
             outline: 0;
         }
 
-    /* Select (Dropdown) okunu temaya uyarla */
     .form-select {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a0b0d0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
         background-position: right 0.75rem center;
@@ -71,7 +94,6 @@
         background-size: 16px 12px;
     }
 
-    /* Dosya Yükleme (File Input) Butonunu temaya uyarla */
     .form-control[type="file"] {
         color: #a0b0d0;
     }
@@ -79,7 +101,7 @@
     .form-control::file-selector-button {
         background-color: #00c3ff;
         border: none;
-        color: #0a0c1e; /* Koyu metin */
+        color: #0a0c1e;
         padding: 8px 12px;
         border-radius: 4px;
         transition: all 0.3s ease;
@@ -91,17 +113,13 @@
         box-shadow: 0 0 8px #00c3ff;
     }
 
-
-    /* --- Buton Stilleri --- */
-
-    /* "Add" Butonu (Neon Mavi) */
     .btn-primary {
         background-color: #00c3ff;
         border-color: #00c3ff;
-        color: #0a0c1e; /* Kontrast için koyu metin */
+        color: #0a0c1e;
         transition: all 0.3s ease;
         font-weight: 600;
-        width: 100%; /* Butonu tam genişlik yap */
+        width: 100%;
         padding: 10px;
         font-size: 1.1rem;
     }
@@ -111,48 +129,58 @@
             border-color: #00a9db;
             box-shadow: 0 0 12px #00c3ff;
         }
-
 </style>
 
-
 <h1 class="text-center">Yeni Kitap Ekle</h1>
-
 <hr />
+
+<div class="search-card">
+    <label class="form-label" style="color: #ff0055;">🔍 Google Kitaplardan Hızlı Ekle</label>
+    <div class="input-group">
+        <input type="text" id="googleSearchInput" class="form-control search-input" placeholder="Kitap Adı veya ISBN Giriniz..." />
+        <button class="btn btn-search" type="button" onclick="searchGoogleBook()">BUL VE DOLDUR</button>
+    </div>
+    <div id="searchStatus" class="mt-2" style="font-size: 0.9rem;"></div>
+</div>
 
 <form method="post" asp-action="Create" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <input type="hidden" asp-for="Image" id="HiddenImageUrl" />
+
     <div class="mb-2">
         <label class="form-label" asp-for="Name">Kitap Adı</label>
-        <input class="form-control" asp-for="Name" />
+        <input class="form-control" asp-for="Name" id="BookName" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label class="form-label" asp-for="Author">Yazar</label>
-        <input class="form-control" asp-for="Author" />
+        <input class="form-control" asp-for="Author" id="BookAuthor" />
         <span asp-validation-for="Author" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label class="form-label" asp-for="Description">Kitap Özeti</label>
-        <textarea class="form-control" asp-for="Description"></textarea> <span asp-validation-for="Description" class="text-danger"></span>
+        <textarea class="form-control" asp-for="Description" id="BookDescription" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label class="form-label" asp-for="Notes">Kitap Notlarım</label>
-        <input class="form-control" asp-for="Notes" />
+        <input class="form-control" asp-for="Notes" placeholder="Kitap detayından da eklenebilir"/>
         <span asp-validation-for="Notes" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label class="form-label" asp-for="Price">Kitap Fiyatı</label>
-        <input class="form-control" asp-for="Price" type="number" step="0.01" />
+        <input class="form-control" asp-for="Price" type="number" step="0.01" placeholder="İsteğe bağlı" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <label class="form-label" asp-for="TotalPages">Toplam Sayfa</label>
-        <input class="form-control" asp-for="TotalPages" type="number" />
+        <input class="form-control" asp-for="TotalPages" type="number" id="BookPageCount" />
         <span asp-validation-for="TotalPages" class="text-danger"></span>
     </div>
 
@@ -164,7 +192,13 @@
 
     <div class="mb-2">
         <label class="form-label" asp-for="Image">Resim</label>
-        <input class="form-control" type="file" name="ImageFile" />
+
+        <div id="imagePreviewContainer" style="display:none; margin-bottom:10px; padding:10px; border:1px dashed #00c3ff; border-radius:6px;">
+            <img id="googleImagePreview" src="" style="max-height: 150px; border-radius: 4px;" />
+            <span class="text-info ms-2" style="font-size:0.9rem;">✓ Google kapağı seçildi. (Değiştirmek için dosya yükleyebilirsiniz)</span>
+        </div>
+
+        <input class="form-control" type="file" name="ImageFile" id="imageFileInput" />
         <span asp-validation-for="Image" class="text-danger"></span>
     </div>
 
@@ -178,3 +212,53 @@
 
     <button type="submit" class="btn btn-primary mt-3">Ekle</button>
 </form>
+
+
+<script>
+    function searchGoogleBook() {
+        var query = document.getElementById("googleSearchInput").value;
+        var statusLabel = document.getElementById("searchStatus");
+
+        if (!query) {
+            statusLabel.innerHTML = "<span class='text-danger'>Lütfen kitap adı veya ISBN girin.</span>";
+            return;
+        }
+
+        statusLabel.innerHTML = "<span class='text-warning'>Google'da aranıyor...</span>";
+
+        fetch('/Admin/Books/GetBookFromGoogle?query=' + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("BookName").value = data.title;
+                    document.getElementById("BookAuthor").value = data.authors;
+                    document.getElementById("BookDescription").value = data.description;
+                    document.getElementById("BookPageCount").value = data.pageCount;
+
+                    if (data.imageUrl) {
+                        document.getElementById("HiddenImageUrl").value = data.imageUrl;
+
+                        document.getElementById("googleImagePreview").src = data.imageUrl;
+                        document.getElementById("imagePreviewContainer").style.display = "block";
+                    } else {
+                         document.getElementById("imagePreviewContainer").style.display = "none";
+                    }
+
+                    statusLabel.innerHTML = "<span class='text-success'>✓ Kitap bilgileri başarıyla dolduruldu!</span>";
+                } else {
+                    statusLabel.innerHTML = "<span class='text-danger'>X Kitap bulunamadı. Lütfen ISBN veya tam ad deneyin.</span>";
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                statusLabel.innerHTML = "<span class='text-danger'>Bir hata oluştu. İnternet bağlantınızı kontrol edin.</span>";
+            });
+    }
+
+    document.getElementById("imageFileInput").addEventListener('change', function() {
+        if(this.files.length > 0){
+             document.getElementById("imagePreviewContainer").style.display = "none";
+             document.getElementById("HiddenImageUrl").value = "";
+        }
+    });
+</script>

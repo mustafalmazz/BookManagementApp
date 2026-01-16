@@ -5,8 +5,8 @@
 
 <style>
     /* Sayfa _Layout.cshtml kullanmıyorsa veya
-               body stilini oradan almıyorsa bu gereklidir.
-            */
+                  body stilini oradan almıyorsa bu gereklidir.
+               */
     body {
         background-color: #0a0c1e;
         color: #e0e0e0;
@@ -192,6 +192,34 @@
     }
 
     }
+
+    /* --- YENİ EKLENEN: Sayfalama (Pagination) Stilleri --- */
+    .pagination .page-link {
+        background-color: #10152f;
+        border-color: #1f2a52;
+        color: #00c3ff; /* Neon Mavi */
+        transition: all 0.3s ease;
+    }
+
+        .pagination .page-link:hover {
+            background-color: #1a2452;
+            color: #00d9ff;
+            box-shadow: 0 0 8px #00c3ff;
+        }
+
+    .pagination .page-item.active .page-link {
+        background-color: #00c3ff;
+        border-color: #00c3ff;
+        color: #0a0c1e; /* Koyu metin */
+        font-weight: bold;
+        box-shadow: 0 0 10px #00c3ff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        background-color: #0a0c1e;
+        color: #4a5a7a;
+        border-color: #1f2a52;
+    }
 </style>
 
 <h1 class="text-center mb-3">Tüm Kitaplarım</h1>
@@ -201,9 +229,10 @@
 
     <a asp-area="Admin" asp-action="Create" class="btn btn-outline-success">Kitap Ekle</a>
 
-    <form asp-action="Search" method="get" class="d-flex search-form p-0 m-0">
+    <form asp-action="List" method="get" class="d-flex search-form p-0 m-0">
         <input type="text"
                name="q"
+               value="@ViewBag.SearchQuery"
                class="form-control me-2"
                placeholder="Kitap veya Yazar Adı..."
                style="width: 300px;" />
@@ -253,7 +282,7 @@
                     <td>
                         <div class="d-flex gap-1">
                             <a class="btn btn-danger btn-sm" asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Sil</a>
-                            <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Düzenle</a>
+                            <a class="btn btn-primary btn-sm" asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id">Düzenle</a>
                         </div>
                     </td>
                 </tr>
@@ -261,3 +290,22 @@
         </tbody>
     </table>
 </div>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <div class="d-flex justify-content-center mt-4 mb-5">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="List"
+                           asp-route-page="@i"
+                           asp-route-q="@ViewBag.SearchQuery">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+}

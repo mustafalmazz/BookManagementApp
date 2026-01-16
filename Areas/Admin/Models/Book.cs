@@ -19,11 +19,11 @@ namespace BookManagementApp.Models
         public decimal? Rate { get; set; }
 
         [Required(ErrorMessage = "Yazar adı zorunludur.")]
-        [StringLength(100)]
+        [StringLength(200)]
         [Display(Name = "Yazar Adı")]
         public string Author { get; set; } = string.Empty;
 
-        [StringLength(600)]
+        [StringLength(1600)]
         [Display(Name = "Açıklama")]
         public string? Description { get; set; }
         [Display(Name = "Kitap Notlarım")]
@@ -32,7 +32,7 @@ namespace BookManagementApp.Models
 
         [Range(0, 9999.99, ErrorMessage = "Fiyat 0 ile 9999 arasında olmalı.")]
         [Display(Name = "Fiyat")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Stok sayısı negatif olamaz.")]
         [Display(Name = "Adet")]
