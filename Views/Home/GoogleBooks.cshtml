@@ -1,0 +1,469 @@
+﻿@model IEnumerable<Book>
+
+@{
+    ViewData["Title"] = "Google Kitap Arama";
+    var currentSearch = ViewData["CurrentSearch"] as string;
+
+    var currentPage = ViewData["CurrentPage"] != null ? (int)ViewData["CurrentPage"] : 1;
+    var totalPages = ViewData["TotalPages"] != null ? (int)ViewData["TotalPages"] : 1;
+
+    bool hasResults = Model != null && Model.Any();
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+    }
+
+    /* HEADER STİLİ */
+    .page-header {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        padding: 30px 0 0px;
+        margin-bottom: 50px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,106.7C1248,96,1344,96,1392,96L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+    /* CONTAINER VE SIDEBAR */
+    .container-custom {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .search-sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+
+    .search-card {
+        background: #fff9f0;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.15);
+        border: 1px solid #e8dcc8;
+    }
+
+    .search-title {
+        color: #4a3f35;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #8b6f47;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e8dcc8;
+        border-radius: 10px;
+        background: #fff;
+        color: #4a3f35;
+        font-family: 'Georgia', serif;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+
+        .search-input:focus {
+            border-color: #8b6f47;
+            outline: none;
+            box-shadow: 0 0 10px rgba(139, 111, 71, 0.2);
+        }
+
+    .search-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
+        }
+
+    /* KİTAP KARTLARI STİLLERİ - DÜZELTİLMİŞ YAPI */
+    .books-container {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .book-card {
+        transition: all 0.4s ease;
+        border: none;
+        border-radius: 15px;
+        background: #fff9f0;
+        height: 100%; /* Kartın grid hücresini doldurmasını sağlar */
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.15);
+        position: relative;
+        overflow: hidden;
+        display: flex; /* FLEXBOX YAPISI EKLENDİ */
+        flex-direction: column; /* İçerikler alt alta */
+    }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 19px 30px rgba(107, 85, 65, 0.2);
+        }
+
+        .book-card .card-img-top {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-bottom: 3px solid #8b6f47;
+            flex-shrink: 0; /* Resmin sıkışmasını engelle */
+        }
+
+        .book-card .card-body {
+            padding: 20px;
+            background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
+            display: flex;
+            flex-direction: column;
+            flex: 1; /* Kalan tüm boşluğu doldur */
+            justify-content: space-between; /* Başlık/Yazar üstte, Buton en altta */
+        }
+
+    .card-title {
+        color: #4a3f35;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+        text-align: center;
+        /* Başlık uzunsa 2 satırda kes */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .author-name {
+        color: #8b6f47;
+        font-size: 0.95rem;
+        font-style: italic;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* YEŞİL HIZLI EKLE BUTONU */
+    .add-btn {
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); /* Masaüstü Yeşil */
+        border: none;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(86, 171, 47, 0.3);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
+        .add-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 15px rgba(86, 171, 47, 0.5);
+            background: linear-gradient(135deg, #448a25 0%, #56ab2f 100%);
+        }
+
+    /* PAGINATION STİLLERİ (Index ile Aynı) */
+    .custom-pagination .page-link {
+        color: #8b6f47;
+        border: 1px solid #e8dcc8;
+        background-color: #fff;
+        margin: 0 3px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 40px;
+        text-align: center;
+    }
+
+        .custom-pagination .page-link:hover {
+            background-color: #f5f0e8;
+            color: #6b5541;
+            border-color: #d4c5b0;
+            transform: translateY(-2px);
+        }
+
+    .custom-pagination .page-item.active .page-link {
+        background-color: #8b6f47;
+        border-color: #8b6f47;
+        color: #fff;
+        box-shadow: 0 4px 8px rgba(139, 111, 71, 0.4);
+    }
+
+    .custom-pagination .page-item.disabled .page-link {
+        color: #ccc;
+        background-color: #f9f9f9;
+        pointer-events: none;
+    }
+
+    /* RESPONSIVE AYARLAR */
+    @@media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 15px !important;
+        }
+
+        .container-custom {
+            flex-direction: column;
+        }
+        /* ARAMA ÇUBUĞUNU MOBİLDE GÖSTER (Sidebar'ı gizlemeden) */
+        .search-sidebar {
+            width: 100%;
+            position: relative;
+            top: 0;
+            margin-bottom: 20px;
+        }
+        /* GRID YAPISI */
+        .books-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .book-card .card-img-top {
+            height: 200px;
+        }
+
+        .book-card .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        /* YAZAR ADINI GİZLEME SORUNUNU ÇÖZMEK İÇİN */
+        .author-name {
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            display: block !important; /* Görünürlüğü zorla */
+        }
+        /* MOBİL BUTON RENGİ (KAHVERENGİ) */
+        .add-btn {
+            background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+            padding: 8px;
+            font-size: 0.75rem;
+            box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
+        }
+    }
+</style>
+
+<div class="page-header">
+    <div class="container text-center">
+        <h1>
+            Google Kitap Keşfi
+            <br />
+            <small style="font-size:1.1rem; font-weight:400; color:#f5f0e8; letter-spacing: 1px;">
+                @if (!string.IsNullOrEmpty(currentSearch))
+                {
+                    <span>"@currentSearch" için sonuçlar (@ViewData["TotalRecords"])</span>
+                }
+                else
+                {
+                    <span>Dünya kütüphanesinde arama yapın</span>
+                }
+            </small>
+        </h1>
+    </div>
+</div>
+
+<div class="container-custom">
+
+    <aside class="search-sidebar">
+        <div class="search-card">
+            <h3 class="search-title">
+                <i class="fa-brands fa-google"></i> Kitap Ara
+            </h3>
+            <form method="get" asp-action="GoogleBooks">
+                <label style="color:#6b5541; font-weight:600; margin-bottom:5px; display:block;">Kitap veya Yazar Adı</label>
+                <input type="text" name="q" class="search-input" value="@currentSearch" placeholder="Örn: Sefiller..." required />
+
+                <button type="submit" class="search-btn">
+                    <i class="fa-solid fa-search"></i> Bul
+                </button>
+
+                @if (!string.IsNullOrEmpty(currentSearch))
+                {
+                    <a href="/Home/GoogleBooks" class="btn btn-link text-center w-100 mt-3" style="color:#8b6f47; text-decoration:none;">
+                        <i class="fa-solid fa-times"></i> Aramayı Temizle
+                    </a>
+                }
+            </form>
+        </div>
+
+        <div class="search-card mt-3 d-none d-md-block" style="background: #f0f7ff; border-color: #cce4ff;">
+            <p style="color: #4a3f35; font-size: 0.9rem; margin:0;">
+                <i class="fa-solid fa-circle-info text-primary"></i>
+                Beğendiğiniz kitabın üzerindeki butona basarak kütüphanenize anında ekleyebilirsiniz.
+            </p>
+        </div>
+    </aside>
+
+    <main class="books-container">
+        @if (hasResults)
+        {
+            <div class="books-grid">
+                @foreach (var book in Model)
+                {
+                    <div class="book-card">
+                        <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
+                             class="card-img-top"
+                             alt="@book.Name">
+
+                        <div class="card-body">
+                            <h5 class="card-title" title="@book.Name">
+                                @if (!string.IsNullOrEmpty(book.Name) && book.Name.Length > 20)
+                                {
+                                    @book.Name.Substring(0, 20)
+
+                                    <span>...</span>
+                                }
+                                else
+                                {
+                                    @book.Name
+                                }
+                            </h5>
+
+                            <p class="author-name" title="@book.Author">
+                                <i class="fa-solid fa-feather"></i>
+                                @if (!string.IsNullOrEmpty(book.Author) && book.Author.Length > 20)
+                                {
+                                    @book.Author.Substring(0, 20)
+
+                                    <span>...</span>
+                                }
+                                else
+                                {
+                                    @book.Author
+                                }
+                            </p>
+
+                            <form asp-area="Admin" asp-controller="Books" asp-action="QuickCreate" method="post" style="margin-top:auto;">
+                                <input type="hidden" name="Name" value="@book.Name" />
+                                <input type="hidden" name="Author" value="@book.Author" />
+                                <input type="hidden" name="Image" value="@book.Image" />
+                                <input type="hidden" name="Description" value="@book.Description" />
+                                <input type="hidden" name="TotalPages" value="@book.TotalPages" />
+                                <input type="hidden" name="Price" value="0" />
+
+                                <button type="submit" class="add-btn">
+                                    <i class="fa-solid fa-circle-plus"></i> <span class="d-none d-md-inline ms-1">Kütüphaneme</span> Ekle
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (totalPages > 1)
+            {
+                var routeData = new Dictionary<string, string> { { "q", currentSearch } };
+                int range = 2;
+                int startPage = Math.Max(1, currentPage - range);
+                int endPage = Math.Min(totalPages, currentPage + range);
+
+                if (currentPage <= range) { endPage = Math.Min(totalPages, 5); }
+                if (currentPage >= totalPages - range) { startPage = Math.Max(1, totalPages - 4); }
+
+                <nav aria-label="Page navigation" class="mt-5 mb-4">
+                    <ul class="pagination justify-content-center custom-pagination flex-wrap">
+                        <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="@(currentPage - 1)"><i class="fa-solid fa-chevron-left"></i></a>
+                        </li>
+                        @if (startPage > 1)
+                        {
+                            <li class="page-item"><a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="1">1</a></li> @if (startPage > 2)
+                            {
+                                <li class="page-item disabled"><span class="page-link border-0 bg-transparent">...</span></li>
+                            }                  }
+                        @for (int i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(i == currentPage ? "active" : "")"><a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="@i">@i</a></li>
+                        }
+                        @if (endPage < totalPages)
+                        { @if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled"><span class="page-link border-0 bg-transparent">...</span></li>
+                            }
+                            <li class="page-item"><a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="@totalPages">@totalPages</a></li>
+                        }
+                        <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                            <a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="@(currentPage + 1)"><i class="fa-solid fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="fa-solid fa-book-atlas empty-icon" style="font-size: 4rem; opacity: 0.5; margin-bottom: 20px;"></i>
+                @if (string.IsNullOrEmpty(currentSearch))
+                {
+                    <h3 style="color:#8b6f47">Keşfetmeye Başlayın</h3>
+                    <p style="color:#6b5541">Milyonlarca kitap arasında arama yapmak için soldaki kutuyu kullanın.</p>
+                }
+                else
+                {
+                    <h3 style="color:#8b6f47">Sonuç Bulunamadı</h3>
+                    <p style="color:#6b5541">"@currentSearch" için Google'da kayıtlı bir kitap bulamadık.</p>
+                }
+            </div>
+        }
+    </main>
+</div>

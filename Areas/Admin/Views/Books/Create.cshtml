@@ -23,7 +23,7 @@
     /* --- YENİ EKLENEN ARAMA KUTUSU STİLLERİ --- */
     .search-card {
         background: #10152f; /* Form ile aynı arka plan */
-        border: 1px solid #ff0055; /* Farklı olması için Neon Pembe sınır */
+        border: 1px solid aquamarine; /* Farklı olması için Neon Pembe sınır */
         border-radius: 8px;
         box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
         padding: 20px;
@@ -32,8 +32,8 @@
     }
 
     .btn-search {
-        background-color: #ff0055;
-        color: white;
+        background-color: aquamarine;
+        color: black;
         border: none;
         font-weight: 600;
         padding: 8px 20px;
@@ -42,14 +42,14 @@
     }
 
         .btn-search:hover {
-            background-color: #d60047;
-            box-shadow: 0 0 10px #ff0055;
+            background-color: aquamarine;
+            box-shadow: 0 0 10px aquamarine;
             color: white;
         }
 
     .search-input {
         border-radius: 6px 0 0 6px !important; /* Butonla birleşik görünüm */
-        border: 1px solid #ff0055 !important;
+        border: 1px solid aquamarine !important;
     }
 
         .search-input:focus {
@@ -135,10 +135,10 @@
 <hr />
 
 <div class="search-card">
-    <label class="form-label" style="color: #ff0055;">🔍 Google Kitaplardan Hızlı Ekle</label>
+    <label class="form-label" style="color: aquamarine;">🔍 Google Kitaplardan Hızlı Ekle</label>
     <div class="input-group">
         <input type="text" id="googleSearchInput" class="form-control search-input" placeholder="Kitap Adı veya ISBN Giriniz..." />
-        <button class="btn btn-search" type="button" onclick="searchGoogleBook()">BUL VE DOLDUR</button>
+        <button class="btn btn-search" type="button" onclick="searchGoogleBook()">Ara</button>
     </div>
     <div id="searchStatus" class="mt-2" style="font-size: 0.9rem;"></div>
 </div>

@@ -3,6 +3,8 @@ using BookManagementApp.Areas.Admin.Models;
 using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq; 
+using System.Net.Http;    
 
 namespace BookManagementApp.Controllers
 {
@@ -27,6 +29,83 @@ namespace BookManagementApp.Controllers
             }
 
         }
+        public async Task<IActionResult> GoogleBooks(string q, int page = 1)
+        {
+            int pageSize = 12; // Google'dan her seferinde 12 kitap çekelim (Grid yapısına uygun)
+
+            // Eğer arama boşsa boş sayfa döndür
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                ViewData["CurrentSearch"] = "";
+                ViewData["TotalPages"] = 0;
+                ViewData["CurrentPage"] = 1;
+                ViewData["TotalRecords"] = 0;
+                return View(new List<Book>());
+            }
+
+            var bookList = new List<Book>();
+            int totalItems = 0;
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    int startIndex = (page - 1) * pageSize;
+
+                    var url = $"https://www.googleapis.com/books/v1/volumes?q={q}&startIndex={startIndex}&maxResults={pageSize}";
+
+                    var response = await client.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        var data = JObject.Parse(jsonString);
+
+                        // Toplam sonuç sayısını al (Sayfalama hesaplamak için)
+                        totalItems = data["totalItems"]?.Value<int>() ?? 0;
+
+                        // Gelen Kitapları Listeye Çevir
+                        var items = data["items"];
+                        if (items != null)
+                        {
+                            foreach (var item in items)
+                            {
+                                var volume = item["volumeInfo"];
+
+                                var newBook = new Book
+                                {
+                                    // Google'dan gelen verileri bizim Book modeline eşliyoruz
+                                    Name = volume["title"]?.ToString() ?? "İsimsiz Eser",
+                                    Author = volume["authors"] != null ? string.Join(", ", volume["authors"]) : "Bilinmeyen Yazar",
+                                    Description = volume["description"]?.ToString(),
+                                    TotalPages = volume["pageCount"]?.Value<int>() ?? 0,
+                                    // Resim linkini HTTPS yapıyoruz
+                                    Image = volume["imageLinks"]?["thumbnail"]?.ToString().Replace("http://", "https://")
+                                };
+                                bookList.Add(newBook);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            ViewData["CurrentSearch"] = q;
+            ViewData["CurrentPage"] = page;
+            ViewData["TotalPages"] = totalPages;
+            ViewData["TotalRecords"] = totalItems;
+
+            ViewData["CurrentSort"] = "";
+            ViewData["CurrentPageCount"] = "";
+
+            return View(bookList);
+        }
+       
         public async Task<IActionResult> Index(string q, string sortOrder, string pageCount, int page = 1)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
