@@ -344,18 +344,23 @@
                         </ul>
                     </li>
                     <li>
+                        <a class="nav-link" style="white-space: nowrap;" asp-area="" asp-action="GoogleBooks" asp-controller="Home" role="button">
+                             Hızlı Kitap
+                        </a>
+                    </li>
+                    <li>
                         <a class="nav-link" asp-area="" asp-action="SendMeMessage" asp-controller="Home" role="button">
                             <i class="bi bi-phone"></i> İletişim
                         </a>
                     </li>
                 </ul>
 
-                <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="Index" method="get">
-                    <input class="mobile-search-input" type="search" name="q" placeholder="Raflarında Ara..." aria-label="Search" value="@ViewData["CurrentSearch"]">
-                    <button type="submit" class="mobile-search-btn-icon">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
+                @* <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="Index" method="get"> *@
+                @*     <input class="mobile-search-input" type="search" name="q" placeholder="Raflarında Ara..." aria-label="Search" value="@ViewData["CurrentSearch"]"> *@
+                @*     <button type="submit" class="mobile-search-btn-icon"> *@
+                @*         <i class="bi bi-search"></i> *@
+                @*     </button> *@
+                @* </form> *@
 
                 <form class="book-search-form d-none d-lg-flex" asp-controller="Home" asp-action="Index" method="get">
                     <input class="form-control book-search-input" type="search" name="q"

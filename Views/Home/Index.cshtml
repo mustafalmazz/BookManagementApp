@@ -506,7 +506,9 @@
                 var totalRecords = (int)(ViewData["TotalRecords"] ?? 0);
                 <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8;">
                     Toplam @totalRecords kitabınız bulunuyor
+                    
                 </small>
+               
             }
             else if (!isDatabaseEmpty)
             {
@@ -547,6 +549,7 @@
 }
 else
 {
+    
     <form method="get" asp-action="Index">
         <div class="container-custom">
 

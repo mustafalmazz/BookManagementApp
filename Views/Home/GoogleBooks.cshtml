@@ -11,6 +11,22 @@
 }
 
 <style>
+    .success-message {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        border: 2px solid #28a745;
+        color: #155724;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+    }
+
+        .success-message i {
+            font-size: 1.5rem;
+        }
     body {
         background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
         font-family: 'Georgia', serif;
@@ -122,7 +138,7 @@
             box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
         }
 
-    /* KİTAP KARTLARI STİLLERİ - DÜZELTİLMİŞ YAPI */
+    /* KİTAP KARTLARI STİLLERİ */
     .books-container {
         flex: 1;
         min-width: 0;
@@ -139,12 +155,12 @@
         border: none;
         border-radius: 15px;
         background: #fff9f0;
-        height: 100%; /* Kartın grid hücresini doldurmasını sağlar */
+        height: 100%;
         box-shadow: 0 4px 15px rgba(107, 85, 65, 0.15);
         position: relative;
         overflow: hidden;
-        display: flex; /* FLEXBOX YAPISI EKLENDİ */
-        flex-direction: column; /* İçerikler alt alta */
+        display: flex;
+        flex-direction: column;
     }
 
         .book-card:hover {
@@ -157,7 +173,7 @@
             height: 350px;
             object-fit: cover;
             border-bottom: 3px solid #8b6f47;
-            flex-shrink: 0; /* Resmin sıkışmasını engelle */
+            flex-shrink: 0;
         }
 
         .book-card .card-body {
@@ -165,8 +181,8 @@
             background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
             display: flex;
             flex-direction: column;
-            flex: 1; /* Kalan tüm boşluğu doldur */
-            justify-content: space-between; /* Başlık/Yazar üstte, Buton en altta */
+            flex: 1;
+            justify-content: space-between;
         }
 
     .card-title {
@@ -175,7 +191,6 @@
         font-weight: 600;
         margin-bottom: 5px;
         text-align: center;
-        /* Başlık uzunsa 2 satırda kes */
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -190,9 +205,10 @@
         text-align: center;
     }
 
-    /* YEŞİL HIZLI EKLE BUTONU */
+    /* --- BUTON RENGİ GÜNCELLEMESİ (KAHVERENGİ) --- */
     .add-btn {
-        background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); /* Masaüstü Yeşil */
+        /* Eski Yeşil Kaldırıldı, Kahverengi Eklendi */
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         border: none;
         color: #fff;
         padding: 12px 20px;
@@ -201,7 +217,7 @@
         transition: all 0.3s ease;
         text-transform: uppercase;
         font-size: 0.9rem;
-        box-shadow: 0 4px 12px rgba(86, 171, 47, 0.3);
+        box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3); /* Gölge rengi de kahveye uyumlu */
         width: 100%;
         display: flex;
         align-items: center;
@@ -212,11 +228,50 @@
 
         .add-btn:hover {
             transform: scale(1.02);
-            box-shadow: 0 6px 15px rgba(86, 171, 47, 0.5);
-            background: linear-gradient(135deg, #448a25 0%, #56ab2f 100%);
+            /* Hover rengi açık kahve */
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+            box-shadow: 0 6px 15px rgba(107, 85, 65, 0.5);
         }
 
-    /* PAGINATION STİLLERİ (Index ile Aynı) */
+    /* --- YENİ BOŞ DURUM (EMPTY STATE) TASARIMI --- */
+    .empty-state {
+        text-align: center;
+        padding: 60px 40px;
+        color: #8b6f47;
+        background: rgba(255, 255, 255, 0.6); /* Hafif transparan arka plan */
+        border: 2px dashed #e8dcc8; /* Kesikli şık kenarlık */
+        border-radius: 20px;
+        margin: 0 auto; /* Sayfanın ortasına hizala */
+        max-width: 600px;
+        box-shadow: 0 10px 30px rgba(139, 111, 71, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .empty-state h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #8b6f47;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            color: #6b5541;
+            max-width: 80%;
+            line-height: 1.6;
+        }
+
+    .empty-icon {
+        font-size: 5rem;
+        color: #d4c5b0;
+        margin-bottom: 25px;
+        opacity: 1; /* Opacity kaldırıldı, renk verildi */
+    }
+
+    /* PAGINATION STİLLERİ */
     .custom-pagination .page-link {
         color: #8b6f47;
         border: 1px solid #e8dcc8;
@@ -262,14 +317,14 @@
         .container-custom {
             flex-direction: column;
         }
-        /* ARAMA ÇUBUĞUNU MOBİLDE GÖSTER (Sidebar'ı gizlemeden) */
+
         .search-sidebar {
             width: 100%;
             position: relative;
             top: 0;
             margin-bottom: 20px;
         }
-        /* GRID YAPISI */
+
         .books-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
@@ -287,19 +342,19 @@
             font-size: 1rem;
             margin-bottom: 4px;
         }
-        /* YAZAR ADINI GİZLEME SORUNUNU ÇÖZMEK İÇİN */
+
         .author-name {
             font-size: 0.8rem;
             margin-bottom: 8px;
-            display: block !important; /* Görünürlüğü zorla */
+            display: block !important;
         }
-        /* MOBİL BUTON RENGİ (KAHVERENGİ) */
+
         .add-btn {
-            background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
             padding: 8px;
             font-size: 0.75rem;
-            box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
         }
+
+       
     }
 </style>
 
@@ -345,13 +400,17 @@
                 }
             </form>
         </div>
-
-        <div class="search-card mt-3 d-none d-md-block" style="background: #f0f7ff; border-color: #cce4ff;">
-            <p style="color: #4a3f35; font-size: 0.9rem; margin:0;">
-                <i class="fa-solid fa-circle-info text-primary"></i>
-                Beğendiğiniz kitabın üzerindeki butona basarak kütüphanenize anında ekleyebilirsiniz.
-            </p>
+        <div>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i>
+                    <span>@TempData["SuccessMessage"]</span>
+                </div>
+            }
         </div>
+
+       
     </aside>
 
     <main class="books-container">
@@ -452,16 +511,16 @@
         else
         {
             <div class="empty-state">
-                <i class="fa-solid fa-book-atlas empty-icon" style="font-size: 4rem; opacity: 0.5; margin-bottom: 20px;"></i>
+                <i class="fa-solid fa-book-atlas empty-icon"></i>
                 @if (string.IsNullOrEmpty(currentSearch))
                 {
                     <h3 style="color:#8b6f47">Keşfetmeye Başlayın</h3>
-                    <p style="color:#6b5541">Milyonlarca kitap arasında arama yapmak için soldaki kutuyu kullanın.</p>
+                    <p>Milyonlarca kitap arasında arama yapmak için soldaki kutuyu kullanın.</p>
                 }
                 else
                 {
                     <h3 style="color:#8b6f47">Sonuç Bulunamadı</h3>
-                    <p style="color:#6b5541">"@currentSearch" için Google'da kayıtlı bir kitap bulamadık.</p>
+                    <p>"@currentSearch" için Google'da kayıtlı bir kitap bulamadık.</p>
                 }
             </div>
         }
