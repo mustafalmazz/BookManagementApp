@@ -342,7 +342,7 @@
         display: none;
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         color: #f5f0e8;
-        padding: 15px 20px;
+        padding: 3px 10px;
         border: none;
         border-radius: 12px;
         font-weight: 600;
@@ -381,7 +381,7 @@
 
         .page-header {
             margin-bottom: 15px !important;
-            padding-bottom: 10px;
+            padding-bottom: 2px;
         }
 
         .container-custom {
@@ -428,8 +428,8 @@
         }
 
         .clear-filters-btn {
-            margin-top: 10px;
-            padding: 10px;
+            margin-top: 3px;
+            padding: 3px;
         }
 
         .books-grid {
@@ -499,7 +499,7 @@
 <div class="page-header">
     <div class="container text-center">
         <h1>
-            Kitap Koleksiyonum
+            Dijital Kütüphanem
             <br />
             @if (hasBooks)
             {
@@ -565,42 +565,56 @@ else
                     </h3>
 
                     <div class="filter-section">
-                        <label class="filter-label">Sayfa Sayısı</label>
-                        <div class="filter-option">
-                            <input type="radio" id="all" name="pageCount" value="" @(string.IsNullOrEmpty(currentPageCount) ? "checked" : "") onchange="this.form.submit()">
-                            <label for="all">Tümü</label>
+                        <label class="filter-label">Sayfa Sayısı Aralığı</label>
+                        <div class="d-flex gap-2 align-items-center mb-2">
+                            <input type="number" name="minPage" class="form-control form-control-sm"
+                                   placeholder="Min" value="@ViewData["MinPage"]" style="border:1px solid #e8dcc8; background:#fff;">
+                            <span style="color:#8b6f47;">-</span>
+                            <input type="number" name="maxPage" class="form-control form-control-sm"
+                                   placeholder="Max" value="@ViewData["MaxPage"]" style="border:1px solid #e8dcc8; background:#fff;">
                         </div>
-                        <div class="filter-option">
-                            <input type="radio" id="short" name="pageCount" value="0-200" @(currentPageCount == "0-200" ? "checked" : "") onchange="this.form.submit()">
-                            <label for="short">0 - 200 sayfa</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="radio" id="medium" name="pageCount" value="201-400" @(currentPageCount == "201-400" ? "checked" : "") onchange="this.form.submit()">
-                            <label for="medium">201 - 400 sayfa</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="radio" id="long" name="pageCount" value="401-600" @(currentPageCount == "401-600" ? "checked" : "") onchange="this.form.submit()">
-                            <label for="long">401 - 600 sayfa</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="radio" id="verylong" name="pageCount" value="601+" @(currentPageCount == "601+" ? "checked" : "") onchange="this.form.submit()">
-                            <label for="verylong">601+ sayfa</label>
-                        </div>
+                        <button type="submit" class="btn btn-sm w-100"
+                                style="background: #e8dcc8; color: #6b5541; font-weight:600; border:none;">
+                            Uygula
+                        </button>
                     </div>
 
                     <div class="filter-section">
                         <label class="filter-label">Sıralama</label>
+
                         <div class="filter-option">
-                            <input type="radio" id="date" name="sortOrder" value="" @(string.IsNullOrEmpty(currentSort) ? "checked" : "") onchange="this.form.submit()">
-                            <label for="date">En Yeni</label>
+                            <input type="radio" id="date_desc" name="sortOrder" value="date_desc"
+                            @(string.IsNullOrEmpty(currentSort) || currentSort == "date_desc" ? "checked" : "")
+                                   onchange="this.form.submit()">
+                            <label for="date_desc">En Yeni (Varsayılan)</label>
                         </div>
+
                         <div class="filter-option">
-                            <input type="radio" id="asc" name="sortOrder" value="asc" @(currentSort == "asc" ? "checked" : "") onchange="this.form.submit()">
-                            <label for="asc">Artan (A-Z)</label>
+                            <input type="radio" id="date_asc" name="sortOrder" value="date_asc"
+                            @(currentSort == "date_asc" ? "checked" : "")
+                                   onchange="this.form.submit()">
+                            <label for="date_asc">En Eski</label>
                         </div>
+
                         <div class="filter-option">
-                            <input type="radio" id="desc" name="sortOrder" value="desc" @(currentSort == "desc" ? "checked" : "") onchange="this.form.submit()">
-                            <label for="desc">Azalan (Z-A)</label>
+                            <input type="radio" id="rate_desc" name="sortOrder" value="rate_desc"
+                            @(currentSort == "rate_desc" ? "checked" : "")
+                                   onchange="this.form.submit()">
+                            <label for="rate_desc">Puana Göre (Yüksek)</label>
+                        </div>
+
+                        <div class="filter-option">
+                            <input type="radio" id="asc" name="sortOrder" value="asc"
+                            @(currentSort == "asc" ? "checked" : "")
+                                   onchange="this.form.submit()">
+                            <label for="asc">İsim (A-Z)</label>
+                        </div>
+
+                        <div class="filter-option">
+                            <input type="radio" id="desc" name="sortOrder" value="desc"
+                            @(currentSort == "desc" ? "checked" : "")
+                                   onchange="this.form.submit()">
+                            <label for="desc">İsim (Z-A)</label>
                         </div>
                     </div>
 
@@ -616,13 +630,22 @@ else
                     {
                         @foreach (var book in Model)
                         {
+                            var displayName = book.Name.Length > 25 ? book.Name.Substring(0, 22) + "..." : book.Name;
+                            var displayAuthor = book.Author.Length > 25 ? book.Author.Substring(0, 22) + "..." : book.Author;
+
                             <div class="book-card">
                                 <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
                                      class="card-img-top"
                                      alt="@book.Name">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title text-center">@book.Name</h5>
-                                    <p class="author-name text-center"><i class="fa-solid fa-feather"></i>@book.Author</p>
+                                    <h5 class="card-title text-center" title="@book.Name">
+                                        @displayName
+                                    </h5>
+
+                                    <p class="author-name text-center" title="@book.Author">
+                                        <i class="fa-solid fa-feather"></i> @displayAuthor
+                                    </p>
+
                                     <div class="mt-auto text-center">
                                         <a href="/Home/Details/@book.Id" class="btn details-btn">
                                             Detayları Gör

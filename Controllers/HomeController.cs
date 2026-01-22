@@ -105,15 +105,15 @@ namespace BookManagementApp.Controllers
 
             return View(bookList);
         }
-       
-        public async Task<IActionResult> Index(string q, string sortOrder, string pageCount, int page = 1)
+
+        public async Task<IActionResult> Index(string q, string sortOrder, int? minPage, int? maxPage, int page = 1)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
 
-            int pageSize = 6; // Sayfa başına kaç kitap gösterilecek?
+            int pageSize = 6; // Sayfa başına kitap sayısı
 
-            // 1. Temel Sorgu (Henüz veri çekilmedi)
+            // 1. Temel Sorgu
             var books = _context.Books.Where(u => u.UserId == userId).AsQueryable();
 
             // 2. Arama (Search)
@@ -123,60 +123,56 @@ namespace BookManagementApp.Controllers
                 books = books.Where(b => b.Name.ToLower().Contains(q) || b.Author.ToLower().Contains(q));
             }
 
-            // 3. Sayfa Sayısı Filtresi (Page Count)
-            if (!string.IsNullOrEmpty(pageCount))
+            // 3. Manuel Sayfa Sayısı Filtresi (Min - Max)
+            if (minPage != null)
             {
-                switch (pageCount)
-                {
-                    case "0-200":
-                        books = books.Where(b => b.TotalPages >= 0 && b.TotalPages <= 200);
-                        break;
-                    case "201-400":
-                        books = books.Where(b => b.TotalPages >= 201 && b.TotalPages <= 400);
-                        break;
-                    case "401-600":
-                        books = books.Where(b => b.TotalPages >= 401 && b.TotalPages <= 600);
-                        break;
-                    case "601+":
-                        books = books.Where(b => b.TotalPages >= 601);
-                        break;
-                }
+                books = books.Where(b => b.TotalPages >= minPage);
             }
 
-            // 4. Sıralama (Sort)
+            if (maxPage != null)
+            {
+                books = books.Where(b => b.TotalPages <= maxPage);
+            }
+
+            // 4. Sıralama (Sort) - Güncellendi
             switch (sortOrder)
             {
-                case "asc": // İsme göre A-Z
+                case "date_asc": // En Eski
+                    books = books.OrderBy(x => x.CreateDate);
+                    break;
+                case "rate_desc": // Puana Göre (Yüksekten Düşüğe)
+                    books = books.OrderByDescending(b => b.Rate);
+                    break;
+                case "asc": // İsim A-Z
                     books = books.OrderBy(b => b.Name);
                     break;
-                case "desc": // İsme göre Z-A
+                case "desc": // İsim Z-A
                     books = books.OrderByDescending(b => b.Name);
                     break;
-                default: // Varsayılan: En yeni eklenen en üstte
+                case "date_desc": // En Yeni
+                default: // Varsayılan
                     books = books.OrderByDescending(x => x.CreateDate);
                     break;
             }
 
             // --- SAYFALAMA MANTIĞI (PAGINATION) ---
 
-            // Filtrelenmiş toplam kayıt sayısını bul (Sayfa sayısı hesabı için şart)
             int totalRecords = await books.CountAsync();
-
-            // Toplam kaç sayfa olacağını hesapla (Örn: 20 kayıt / 12 = 2 sayfa)
             int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
 
-            // Veriyi çek (Skip ve Take ile sadece 12 tanesini al)
             var pagedData = await books
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            // View'a gerekli verileri gönder
+            // View'a verileri gönder (Inputların içi dolu kalsın diye)
             ViewData["CurrentSearch"] = q;
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["CurrentPageCount"] = pageCount;
 
-            // Yeni eklenen sayfalama verileri
+            // Min ve Max değerlerini geri gönderiyoruz
+            ViewData["MinPage"] = minPage;
+            ViewData["MaxPage"] = maxPage;
+
             ViewData["CurrentPage"] = page;
             ViewData["TotalPages"] = totalPages;
             ViewData["TotalRecords"] = totalRecords;

@@ -2,13 +2,24 @@
 @using BookManagementApp.Models
 @model CategoryUserViewModel
 
+@{
+    var routeData = ViewContext.RouteData.Values;
+    var currentController = routeData["controller"]?.ToString();
+    var currentAction = routeData["action"]?.ToString();
+
+    bool isGooglePage = currentController == "Home" && currentAction == "GoogleBooks";
+
+    string targetAction = isGooglePage ? "GoogleBooks" : "Index";
+
+    string placeholderText = isGooglePage ? "Google Kitaplarında Ara..." : "Kütüphanemde Ara...";
+}
+
 <style>
     .book-navbar {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%) !important;
         border: none !important;
         box-shadow: 0 4px 20px rgba(107, 85, 65, 0.3);
         padding: 15px 0;
-        /* İsteğe bağlı: Header altı boşluğu sıfırlamak istersen 0px yap */
         margin-bottom: 0px !important;
         position: relative;
     }
@@ -214,7 +225,6 @@
         border-radius: 10px;
     }
 
-    /* --- YENİ MOBİL ÖZEL CSSLER --- */
     @@media (max-width: 768px) {
         .book-navbar .nav-link
 
@@ -223,15 +233,13 @@
         margin: 5px 0;
     }
 
-    /* Mobilde Navbar'ı sıkışık yapmamak için padding ayarı */
     .book-navbar {
         padding: 10px 0;
     }
 
-    /* Mobil Arama Formu Stilleri */
     .mobile-search-form {
-        flex-grow: 1; /* Boşluğu doldur */
-        margin: 0 10px; /* Logo ve hamburger ile mesafe */
+        flex-grow: 1; 
+        margin: 0 10px; 
         position: relative;
     }
 
@@ -239,7 +247,7 @@
         width: 100%;
         border: 2px solid rgba(245, 240, 232, 0.3);
         border-radius: 20px;
-        padding: 8px 35px 8px 15px; /* Sağ tarafta ikon için boşluk */
+        padding: 8px 35px 8px 15px; 
         background: rgba(255, 255, 255, 0.15);
         color: #f5f0e8;
         font-size: 0.95rem;
@@ -279,8 +287,8 @@
                 <span class="d-none d-md-block">DijitalKütüphanem</span>
             </a>
 
-            <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="Search" method="get">
-                <input class="mobile-search-input" type="search" name="q" placeholder="Raflarında Ara..." aria-label="Search">
+            <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="@targetAction" method="get">
+                <input class="mobile-search-input" type="search" name="q" placeholder="@placeholderText" aria-label="Search" value="@ViewData["CurrentSearch"]">
                 <button type="submit" class="mobile-search-btn-icon">
                     <i class="bi bi-search"></i>
                 </button>
@@ -345,7 +353,7 @@
                     </li>
                     <li>
                         <a class="nav-link" style="white-space: nowrap;" asp-area="" asp-action="GoogleBooks" asp-controller="Home" role="button">
-                             Hızlı Kitap
+                            Hızlı Kitap
                         </a>
                     </li>
                     <li>
@@ -355,16 +363,9 @@
                     </li>
                 </ul>
 
-                @* <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="Index" method="get"> *@
-                @*     <input class="mobile-search-input" type="search" name="q" placeholder="Raflarında Ara..." aria-label="Search" value="@ViewData["CurrentSearch"]"> *@
-                @*     <button type="submit" class="mobile-search-btn-icon"> *@
-                @*         <i class="bi bi-search"></i> *@
-                @*     </button> *@
-                @* </form> *@
-
-                <form class="book-search-form d-none d-lg-flex" asp-controller="Home" asp-action="Index" method="get">
+                <form class="book-search-form d-none d-lg-flex" asp-controller="Home" asp-action="@targetAction" method="get">
                     <input class="form-control book-search-input" type="search" name="q"
-                           placeholder="Kitap veya yazar ara..." aria-label="Search" value="@ViewData["CurrentSearch"]">
+                           placeholder="@placeholderText" aria-label="Search" value="@ViewData["CurrentSearch"]">
                     <button class="btn book-search-btn" type="submit">
                         <i class="bi bi-search"></i>
                         Ara

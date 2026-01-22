@@ -379,41 +379,19 @@
 
 <div class="container-custom">
 
-    <aside class="search-sidebar">
-        <div class="search-card">
-            <h3 class="search-title">
-                <i class="fa-brands fa-google"></i> Kitap Ara
-            </h3>
-            <form method="get" asp-action="GoogleBooks">
-                <label style="color:#6b5541; font-weight:600; margin-bottom:5px; display:block;">Kitap veya Yazar Adı</label>
-                <input type="text" name="q" class="search-input" value="@currentSearch" placeholder="Örn: Sefiller..." required />
-
-                <button type="submit" class="search-btn">
-                    <i class="fa-solid fa-search"></i> Bul
-                </button>
-
-                @if (!string.IsNullOrEmpty(currentSearch))
-                {
-                    <a href="/Home/GoogleBooks" class="btn btn-link text-center w-100 mt-3" style="color:#8b6f47; text-decoration:none;">
-                        <i class="fa-solid fa-times"></i> Aramayı Temizle
-                    </a>
-                }
-            </form>
-        </div>
-        <div>
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="success-message">
-                    <i class="fas fa-check-circle"></i>
-                    <span>@TempData["SuccessMessage"]</span>
-                </div>
-            }
-        </div>
-
-       
-    </aside>
 
     <main class="books-container">
+        @{
+            var successMessage = TempData["SuccessMessage"] as string;
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="success-message">
+                <i class="fa-solid fa-check-circle"></i>
+                @successMessage
+            </div>
+        }
         @if (hasResults)
         {
             <div class="books-grid">
@@ -511,11 +489,11 @@
         else
         {
             <div class="empty-state">
-                <i class="fa-solid fa-book-atlas empty-icon"></i>
+                <img src="/images/search.png" />
                 @if (string.IsNullOrEmpty(currentSearch))
                 {
                     <h3 style="color:#8b6f47">Keşfetmeye Başlayın</h3>
-                    <p>Milyonlarca kitap arasında arama yapmak için soldaki kutuyu kullanın.</p>
+                    <p>Milyonlarca kitap arasında arama yapabilirsiniz!</p>
                 }
                 else
                 {
