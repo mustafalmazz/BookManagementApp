@@ -4,7 +4,8 @@ using BookManagementApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq; 
-using System.Net.Http;    
+using System.Net.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookManagementApp.Controllers
 {
@@ -14,6 +15,17 @@ namespace BookManagementApp.Controllers
         public HomeController(MyDbContext context)
         {
             _context = context;
+        }
+
+        [AllowAnonymous] 
+        public IActionResult Landing()
+        {
+            if (HttpContext.Session.GetInt32("UserId") != null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View();
         }
         private void LoadCategories()
         {

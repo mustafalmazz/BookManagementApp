@@ -1,0 +1,905 @@
+﻿@{
+    ViewData["Title"] = "Dijital Kütüphanene Hoşgeldin";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DijitalKütüphanem</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #0a0c1e;
+            --bg-card: #131a38;
+            --gold-primary: #8b6f47;
+            --gold-light: #c89666;
+            --cream-accent: #f5f0e8;
+            --text-muted: #a0b0d0;
+            --neon-gold-glow: 0 0 20px rgba(139, 111, 71, 0.4);
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader-icon {
+            font-size: 3rem;
+            color: var(--gold-primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        .loader-bar {
+            width: 150px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--gold-primary);
+            animation: loadProgress 1.5s ease-in-out forwards;
+        }
+        @@keyframes loadProgress {
+            0%
+
+        {
+            width: 0;
+        }
+
+        100% {
+            width: 100%;
+        }
+
+        }
+        @@keyframes pulse {
+            0%
+
+        {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        }
+
+        /* --- GENEL --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--cream-accent);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* Arka Plan Canvas (Toz Efekti İçin) */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--cream-accent);
+        }
+
+        /* --- Scroll Animasyon Sınıfları --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+            .reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        /* --- Tipografi --- */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, var(--cream-accent) 0%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 70px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 3px;
+                background: var(--gold-primary);
+                border-radius: 2px;
+            }
+
+        /* --- NAVBAR --- */
+        .landing-navbar {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+            .landing-navbar.scrolled {
+                background: rgba(10, 12, 30, 0.85);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(139, 111, 71, 0.1);
+                padding: 15px 0;
+            }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cream-accent) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-link-custom {
+            color: var(--cream-accent) !important;
+            font-weight: 500;
+            margin: 0 15px;
+            position: relative;
+            font-size: 0.95rem;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+            .nav-link-custom:hover {
+                opacity: 1;
+                color: var(--gold-light) !important;
+            }
+
+        /* --- BUTONLAR --- */
+        .btn-gold-outline {
+            color: var(--gold-primary);
+            border: 2px solid var(--gold-primary);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+            .btn-gold-outline:hover {
+                background: var(--gold-primary);
+                color: var(--cream-accent);
+                box-shadow: var(--neon-gold-glow);
+            }
+
+        .btn-gold-filled {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, #6b5541 100%);
+            color: var(--cream-accent);
+            border: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(139, 111, 71, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+            .btn-gold-filled::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0;
+                height: 100%;
+                background: linear-gradient(135deg, #a0785a 0%, var(--gold-primary) 100%);
+                transition: 0.3s;
+                z-index: -1;
+            }
+
+            .btn-gold-filled:hover::before {
+                width: 100%;
+            }
+
+            .btn-gold-filled:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 35px rgba(139, 111, 71, 0.4);
+                color: #fff;
+            }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            padding: 180px 0 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(139, 111, 71, 0.08), transparent 40%), radial-gradient(circle at 20% 80%, rgba(10, 12, 30, 0.95), transparent 50%);
+            z-index: -1;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .hero-lead {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 550px;
+        }
+
+        .typing-container {
+            color: var(--gold-primary);
+            border-right: 3px solid var(--gold-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            animation: blinkCursor 0.75s step-end infinite;
+        }
+        @@keyframes blinkCursor {
+            50%
+
+        {
+            border-color: transparent;
+        }
+
+        }
+
+        /* Mockup */
+        .hero-mockup-wrapper {
+            position: relative;
+            z-index: 1;
+            perspective: 1500px;
+        }
+
+        .hero-mockup {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: -30px 30px 80px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            transform: rotateY(-12deg) rotateX(5deg);
+            transition: transform 0.5s ease-out;
+        }
+
+            .hero-mockup:hover {
+                transform: rotateY(0) rotateX(0);
+            }
+
+        /* --- INFINITE MARQUEE (Kitap Rafı) --- */
+        .marquee-section {
+            padding: 50px 0;
+            background: rgba(255,255,255,0.01);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 60s linear infinite;
+        }
+
+        .marquee-item {
+            display: inline-block;
+            margin: 0 25px;
+            width: 140px;
+            height: 210px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+            transition: 0.3s;
+            filter: grayscale(30%) brightness(0.8);
+            object-fit: cover;
+        }
+
+            .marquee-item:hover {
+                transform: scale(1.1);
+                filter: grayscale(0%) brightness(1);
+                z-index: 2;
+                position: relative;
+                box-shadow: 0 10px 30px rgba(139, 111, 71, 0.4);
+            }
+        @@keyframes marquee {
+            0%
+
+        {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+
+        }
+
+        /* --- FEATURES SECTION (3D TILT) --- */
+        .features-section {
+            padding: 100px 0;
+        }
+
+        .tilt-card {
+            background: rgba(19, 26, 56, 0.6);
+            border: 1px solid rgba(139, 111, 71, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.1s; /* JS ile kontrol edilecek */
+        }
+
+        .feature-icon-box {
+            width: 60px;
+            height: 60px;
+            background: rgba(139, 111, 71, 0.15);
+            color: var(--gold-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            transform: translateZ(20px); /* Derinlik hissi */
+        }
+
+        .tilt-card h4 {
+            transform: translateZ(30px);
+            margin-bottom: 15px;
+        }
+
+        .tilt-card p {
+            transform: translateZ(20px);
+            color: var(--text-muted);
+        }
+
+        /* --- FAQ SECTION --- */
+        .faq-section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .accordion-custom {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        details {
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+            details[open] {
+                border-color: var(--gold-primary);
+                background: rgba(139, 111, 71, 0.05);
+            }
+
+        summary {
+            padding: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            summary::after {
+                content: '\f078';
+                font-family: "Font Awesome 6 Free";
+                font-weight: 900;
+                transition: 0.3s;
+                color: var(--gold-primary);
+            }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-content {
+            padding: 0 20px 20px 20px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* --- FOOTER --- */
+        .landing-footer {
+            background: #050610;
+            padding: 80px 0 30px;
+            border-top: 1px solid rgba(139, 111, 71, 0.1);
+            color: var(--text-muted);
+        }
+
+        .footer-brand {
+            font-family: 'Playfair Display';
+            font-size: 1.5rem;
+            color: var(--cream-accent);
+            margin-bottom: 20px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+            .footer-links a:hover {
+                color: var(--gold-primary);
+                padding-left: 5px;
+            }
+
+        /* RESPONSIVE */
+        @@media (max-width: 991px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-section {
+                text-align: center;
+                padding-top: 120px;
+            }
+
+            .hero-lead {
+                margin: 0 auto 40px auto;
+            }
+
+            .hero-mockup-wrapper {
+                margin-top: 60px;
+                padding: 0 20px;
+            }
+
+            .hero-mockup {
+                transform: none;
+            }
+
+            .navbar-collapse {
+                background: rgba(10, 12, 30, 0.98);
+                padding: 20px;
+                border-radius: 15px;
+                margin-top: 15px;
+                border: 1px solid rgba(139, 111, 71, 0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <i class="fa-solid fa-book-open loader-icon"></i>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <nav class="navbar navbar-expand-lg landing-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/images/library.png" alt="Logo" style="height: 40px; filter: drop-shadow(0 0 5px rgba(139, 111, 71, 0.5));">
+                DijitalKütüphanem
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="fa-solid fa-bars" style="color: var(--gold-primary); font-size: 1.5rem;"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#features">Özellikler</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#faq">S.S.S</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <a href="/Account/Login" class="btn btn-gold-outline me-2">Giriş Yap</a>
+                    </li>
+                    <li class="nav-item mt-2 mt-lg-0">
+                        <a href="/Account/Register" class="btn btn-gold-filled">Kayıt Ol</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-bg-overlay"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1>
+                        Kütüphaneniz Artık <br>
+                        <span class="typing-container" id="typingText"></span>
+                    </h1>
+                    <p class="hero-lead">
+                        Fiziksel sınırları kaldırın. Google Kitaplar entegrasyonu, bulut depolama ve akıllı not sistemi ile okuma deneyiminizi dijital çağa taşıyın.
+                    </p>
+                    <div class="d-flex gap-3 justify-content-lg-start justify-content-center">
+                        <a href="/Account/Register" class="btn btn-gold-filled">
+                            Ücretsiz Başla <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+                        <a href="#features" class="btn btn-gold-outline">
+                            <i class="fa-solid fa-play me-2"></i> Tanıtım
+                        </a>
+                    </div>
+
+                    <div class="mt-5 d-flex align-items-center gap-3 justify-content-lg-start justify-content-center reveal">
+                        <div class="d-flex">
+                            <img src="https://i.pravatar.cc/100?img=33" class="rounded-circle border border-2 border-dark" width="40" style="margin-right: -15px;">
+                            <img src="https://i.pravatar.cc/100?img=47" class="rounded-circle border border-2 border-dark" width="40" style="margin-right: -15px;">
+                            <img src="https://i.pravatar.cc/100?img=12" class="rounded-circle border border-2 border-dark" width="40">
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">
+                            <span class="text-white fw-bold">1.2k+</span> Kitap Sever Katıldı
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 hero-mockup-wrapper">
+                    <img src="https://placehold.co/800x600/131a38/e8dcc8?text=Uygulama+Aray%C3%BCz%C3%BC" alt="App Interface" class="img-fluid hero-mockup">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="marquee-section">
+        <div class="marquee-content">
+            <img src="https://upload.wikimedia.org/wikipedia/tr/a/a2/Tutunamayanlar-kapak.jpg" class="marquee-item" alt="Suç ve Ceza">
+            <img src="https://www.tinkitap.com/ogrenmeyi-ogrenmek-altay-cem-meric-kitapligi-altay-cem-meric-198-17-B.jpg" class="marquee-item" alt="Kürk Mantolu Madonna">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11447395/wi:800/wh:7ef1af605" class="marquee-item" alt="1984">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11863027/wi:800/wh:666af4a39" class="marquee-item" alt="Simyacı">
+            <img src="https://cdn.timas.com.tr/urun/sefiller-9786054985326.jpg" class="marquee-item" alt="Şeker Portakalı">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11668893/wi:220/wh:32f62ff63" class="marquee-item" alt="Tutunamayanlar">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:12126669/wi:220/wh:1fa38c12a" class="marquee-item" alt="Saatleri Ayarlama Enstitüsü">
+            <img src="https://www.tinkitap.com/bilim-yanilgisi-tum-kitaplar-rupert-sheldrake-230-66-O.jpg" class="marquee-item" alt="Suç ve Ceza">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:1207631/wi:220/wh:1a63c8d49" class="marquee-item" alt="Kürk Mantolu Madonna">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11484453/wi:220/wh:394670a5c" class="marquee-item" alt="1984">
+            <img src="https://www.tinkitap.com/selahaddin-kudus-kralliginin-dususu-tin-tarih-stanley-lane-poole-222-52-O.jpg" class="marquee-item" alt="Simyacı">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11462950/wi:220/wh:b162d5f38" class="marquee-item" alt="Şeker Portakalı">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11221036/wi:220/wh:d428ec94a" class="marquee-item" alt="Tutunamayanlar">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11614703/wi:220/wh:615a8fbbd" class="marquee-item" alt="Saatleri Ayarlama Enstitüsü">
+            <img src="https://upload.wikimedia.org/wikipedia/tr/a/a2/Tutunamayanlar-kapak.jpg" class="marquee-item" alt="Suç ve Ceza">
+            <img src="https://www.tinkitap.com/ogrenmeyi-ogrenmek-altay-cem-meric-kitapligi-altay-cem-meric-198-17-B.jpg" class="marquee-item" alt="Kürk Mantolu Madonna">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11447395/wi:800/wh:7ef1af605" class="marquee-item" alt="1984">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11863027/wi:800/wh:666af4a39" class="marquee-item" alt="Simyacı">
+            <img src="https://cdn.timas.com.tr/urun/sefiller-9786054985326.jpg" class="marquee-item" alt="Şeker Portakalı">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11668893/wi:220/wh:32f62ff63" class="marquee-item" alt="Tutunamayanlar">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:12126669/wi:220/wh:1fa38c12a" class="marquee-item" alt="Saatleri Ayarlama Enstitüsü">
+            <img src="https://www.tinkitap.com/bilim-yanilgisi-tum-kitaplar-rupert-sheldrake-230-66-O.jpg" class="marquee-item" alt="Suç ve Ceza">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:1207631/wi:220/wh:1a63c8d49" class="marquee-item" alt="Kürk Mantolu Madonna">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11484453/wi:220/wh:394670a5c" class="marquee-item" alt="1984">
+            <img src="https://www.tinkitap.com/selahaddin-kudus-kralliginin-dususu-tin-tarih-stanley-lane-poole-222-52-O.jpg" class="marquee-item" alt="Simyacı">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11462950/wi:220/wh:b162d5f38" class="marquee-item" alt="Şeker Portakalı">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11221036/wi:220/wh:d428ec94a" class="marquee-item" alt="Tutunamayanlar">
+            <img src="https://img.kitapyurdu.com/v1/getImage/fn:11614703/wi:220/wh:615a8fbbd" class="marquee-item" alt="Saatleri Ayarlama Enstitüsü">
+        </div>
+    </div>
+
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-title reveal">
+                <h2>Özellikleri <span class="gold-gradient-text">Keşfet</span></h2>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 reveal">
+                    <div class="tilt-card">
+                        <div class="feature-icon-box"><i class="fa-brands fa-google"></i></div>
+                        <h4>Google Entegrasyonu</h4>
+                        <p>Hızlı Ekle modülü ile Google veritabanından kapak ve özet bilgilerini otomatik çekin.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal">
+                    <div class="tilt-card">
+                        <div class="feature-icon-box"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                        <h4>Bulut Yedekleme</h4>
+                        <p>Verileriniz ve görselleriniz Cloudinary üzerinde güvenle saklanır. Asla kaybolmaz.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal">
+                    <div class="tilt-card">
+                        <div class="feature-icon-box"><i class="fa-solid fa-pen-nib"></i></div>
+                        <h4>Zengin Notlar</h4>
+                        <p>Okuma deneyiminizi kişiselleştirin. Renkli notlar alın, alıntıları kaydedin.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal">
+                    <div class="tilt-card">
+                        <div class="feature-icon-box"><i class="fa-solid fa-sliders"></i></div>
+                        <h4>Akıllı Filtreleme</h4>
+                        <p>Sayfa sayısı aralığı, puan, tarih ve isme göre gelişmiş sıralama seçenekleri.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal">
+                    <div class="tilt-card">
+                        <div class="feature-icon-box"><i class="fa-solid fa-mobile-screen"></i></div>
+                        <h4>%100 Responsive</h4>
+                        <p>Telefondan, tabletten veya bilgisayardan. Kütüphanenize her yerden erişin.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal">
+                    <div class="tilt-card">
+                        <div class="feature-icon-box"><i class="fa-solid fa-rocket"></i></div>
+                        <h4>Hızlı & Modern</h4>
+                        <p>.NET Core mimarisi ile güçlendirilmiş, ışık hızında çalışan bir arayüz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <div class="section-title reveal">
+                <h2>Sıkça Sorulan <span class="gold-gradient-text">Sorular</span></h2>
+            </div>
+            <div class="accordion-custom reveal">
+                <details>
+                    <summary>Kullanım tamamen ücretsiz mi?</summary>
+                    <div class="faq-content">Evet, şu an için tüm özellikler ücretsizdir. Gelecekte premium özellikler eklense bile temel kütüphane yönetimi ücretsiz kalacaktır.</div>
+                </details>
+                <details>
+                    <summary>Verilerim güvende mi?</summary>
+                    <div class="faq-content">Şifreleriniz modern hash algoritmalarıyla korunur. Kitap verileriniz ise düzenli yedeklenen bulut sunucularda saklanır.</div>
+                </details>
+                <details>
+                    <summary>Mobilden kullanabilir miyim?</summary>
+                    <div class="faq-content">Kesinlikle! Uygulamamız "Mobile First" prensibiyle tasarlanmıştır. Telefonunuzdan rahatlıkla kitap ekleyip not alabilirsiniz.</div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 120px 0; text-align: center; background: linear-gradient(to top, #0a0c1e, #131a38);">
+        <div class="container reveal">
+            <div style="background: linear-gradient(135deg, var(--gold-primary), #6b5541); padding: 70px 40px; border-radius: 30px; box-shadow: 0 20px 60px rgba(139, 111, 71, 0.25);">
+                <h2 style="color: #fff; font-size: 2.8rem; margin-bottom: 20px;">Kütüphaneni Özgürleştir</h2>
+                <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px auto;">
+                    Daha organize, daha akıllı ve daha estetik bir kütüphane deneyimi seni bekliyor.
+                </p>
+                <a href="/Account/Register" class="btn btn-light btn-lg px-5 py-3 fw-bold" style="color: var(--gold-primary); border-radius: 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                    Hemen Hesap Oluştur
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="landing-footer">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <a href="#" class="footer-brand">DijitalKütüphanem</a>
+                    <p>Modern okurlar için dijital arşiv çözümü.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 footer-links">
+                    <h5>Menü</h5>
+                    <ul>
+                        <li><a href="#">Ana Sayfa</a></li>
+                        <li><a href="#features">Özellikler</a></li>
+                        <li><a href="#faq">Destek</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 footer-links">
+                    <h5>Hesap</h5>
+                    <ul>
+                        <li><a href="/Account/Login">Giriş</a></li>
+                        <li><a href="/Account/Register">Kayıt</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 footer-links">
+                    <h5>Sosyal</h5>
+                    <ul>
+                        <li><a href="#"><i class="fa-brands fa-twitter me-2"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fa-brands fa-instagram me-2"></i> Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mt-5 pt-4" style="border-top: 1px solid rgba(255,255,255,0.05); font-size:0.8rem;">
+                &copy; 2026 DijitalKütüphanem. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // --- 1. Preloader ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }, 1200); // 1.2 saniye bekle (Yüklenme hissi için)
+        });
+
+        // --- 2. Typewriter Effect ---
+        const textElement = document.getElementById("typingText");
+        const texts = ["Daha Düzenli.", "Daha Güvenli.", "Daha Akıllı.", "Her Zaman Seninle."];
+        let textIndex = 0, charIndex = 0, isDeleting = false;
+
+        function type() {
+            const currentText = texts[textIndex];
+            if (isDeleting) {
+                textElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentText.length) {
+                isDeleting = true; setTimeout(type, 2000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false; textIndex = (textIndex + 1) % texts.length; setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting ? 50 : 100);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // --- 3. Navbar Scroll ---
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.landing-navbar');
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // --- 4. Scroll Reveal ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 5. 3D Tilt Effect on Cards (Vanilla JS) ---
+        const cards = document.querySelectorAll('.tilt-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+        });
+
+        // --- 6. Particle Animation (Canvas) ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() * 0.5) - 0.25;
+                this.speedY = (Math.random() * 0.5) - 0.25;
+                this.color = 'rgba(139, 111, 71, ' + (Math.random() * 0.3 + 0.1) + ')'; // Gold color
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < 50; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+    </script>
+</body>
+</html>
