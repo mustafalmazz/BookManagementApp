@@ -388,7 +388,7 @@
             height: 100%;
             transform-style: preserve-3d;
             transform: perspective(1000px);
-            transition: transform 0.1s; /* JS ile kontrol edilecek */
+            transition: transform 0.1s;
         }
 
         .feature-icon-box {
@@ -403,7 +403,7 @@
             font-size: 1.8rem;
             margin-bottom: 25px;
             border: 1px solid rgba(139, 111, 71, 0.2);
-            transform: translateZ(20px); /* Derinlik hissi */
+            transform: translateZ(20px);
         }
 
         .tilt-card h4 {
@@ -507,37 +507,392 @@
                 padding-left: 5px;
             }
 
-        /* RESPONSIVE */
+        /* ============================================ */
+        /* ENHANCED MOBILE RESPONSIVE - TAMAMEN YENİ */
+        /* ============================================ */
+
+        /* Tablet (992px ve altı) */
         @@media (max-width: 991px) {
-            .hero-content h1 {
-                font-size: 3rem;
+            .hero-content h1
+
+        {
+            font-size: 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding-top: 120px;
+        }
+
+        .hero-lead {
+            margin: 0 auto 40px auto;
+        }
+
+        .hero-mockup-wrapper {
+            margin-top: 60px;
+            padding: 0 20px;
+        }
+
+        .hero-mockup {
+            transform: none;
+        }
+
+        .navbar-collapse {
+            background: rgba(10, 12, 30, 0.98);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 15px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+        }
+
+        }
+
+        /* Mobil (768px ve altı) - TAM OPTİMİZASYON */
+        @@media (max-width: 768px) {
+            /* Navbar Mobil */
+            .landing-navbar
+
+        {
+            padding: 12px 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.2rem;
+            gap: 8px;
+        }
+
+            .navbar-brand img {
+                height: 32px !important;
             }
 
-            .hero-section {
-                text-align: center;
-                padding-top: 120px;
+        .landing-navbar.scrolled {
+            padding: 10px 0;
+        }
+
+        .navbar-collapse {
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .nav-link-custom {
+            margin: 8px 0;
+            padding: 8px 12px;
+            display: block;
+            text-align: center;
+        }
+
+        /* Butonlar Mobil */
+        .btn-gold-outline, .btn-gold-filled {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+        }
+
+        /* Hero Section Mobil */
+        .hero-section {
+            padding: 100px 0 60px;
+            min-height: auto;
+        }
+
+        .hero-content h1 {
+            font-size: 2rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .typing-container {
+            font-size: 1.8rem;
+            border-right-width: 2px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .hero-lead {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+
+        .hero-section .d-flex.gap-3 {
+            flex-direction: column;
+            gap: 12px !important;
+        }
+
+        .hero-section .mt-5 {
+            margin-top: 30px !important;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .hero-mockup-wrapper {
+            margin-top: 40px;
+            padding: 0 15px;
+        }
+
+        .hero-mockup {
+            border-radius: 15px;
+            box-shadow: -15px 15px 40px rgba(0,0,0,0.6);
+        }
+
+        /* Marquee Mobil */
+        .marquee-section {
+            padding: 30px 0;
+        }
+
+        .marquee-item {
+            width: 100px;
+            height: 150px;
+            margin: 0 15px;
+        }
+
+        /* Section Titles Mobil */
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+        }
+
+            .section-title::after {
+                width: 50px;
+                height: 2px;
             }
 
-            .hero-lead {
-                margin: 0 auto 40px auto;
+        /* Features Section Mobil */
+        .features-section {
+            padding: 60px 0;
+        }
+
+        .tilt-card {
+            padding: 25px 20px;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon-box {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .tilt-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .tilt-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* FAQ Mobil */
+        .faq-section {
+            padding: 60px 0;
+        }
+
+        .accordion-custom {
+            padding: 0 15px;
+        }
+
+        summary {
+            padding: 15px;
+            font-size: 1rem;
+        }
+
+        .faq-content {
+            padding: 0 15px 15px 15px;
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section Mobil */
+        section[style*="padding: 120px"] {
+            padding: 60px 0 !important;
+        }
+
+            section[style*="padding: 120px"] > div > div {
+                padding: 40px 25px !important;
+                border-radius: 20px !important;
             }
 
-            .hero-mockup-wrapper {
-                margin-top: 60px;
-                padding: 0 20px;
+            section[style*="padding: 120px"] h2 {
+                font-size: 1.8rem !important;
+                margin-bottom: 15px !important;
             }
 
-            .hero-mockup {
-                transform: none;
+            section[style*="padding: 120px"] p {
+                font-size: 1rem !important;
+                margin-bottom: 30px !important;
             }
 
-            .navbar-collapse {
-                background: rgba(10, 12, 30, 0.98);
-                padding: 20px;
-                border-radius: 15px;
-                margin-top: 15px;
-                border: 1px solid rgba(139, 111, 71, 0.2);
+            section[style*="padding: 120px"] .btn {
+                width: 100% !important;
+                padding: 15px 30px !important;
+                font-size: 1rem !important;
             }
+
+        /* Footer Mobil */
+        .landing-footer {
+            padding: 50px 0 20px;
+        }
+
+        .footer-brand {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            margin-bottom: 30px;
+        }
+
+            .footer-links h5 {
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+
+            .footer-links li {
+                margin-bottom: 10px;
+            }
+
+        .landing-footer .text-center {
+            font-size: 0.75rem !important;
+            margin-top: 30px !important;
+            padding-top: 20px !important;
+        }
+
+        }
+
+        /* Küçük Mobil (576px ve altı) - EKSTRA OPTİMİZASYON */
+        @@media (max-width: 576px) {
+            .hero-content h1
+
+        {
+            font-size: 1.75rem;
+        }
+
+        .typing-container {
+            font-size: 1.5rem;
+        }
+
+        .hero-lead {
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+        }
+
+        .tilt-card {
+            padding: 20px 15px;
+        }
+
+            .tilt-card h4 {
+                font-size: 1.2rem;
+            }
+
+            .tilt-card p {
+                font-size: 0.9rem;
+            }
+
+        summary {
+            font-size: 0.95rem;
+        }
+
+        .faq-content {
+            font-size: 0.85rem;
+        }
+
+        .marquee-item {
+            width: 80px;
+            height: 120px;
+            margin: 0 10px;
+        }
+
+        .navbar-brand {
+            font-size: 1.1rem;
+        }
+
+            .navbar-brand img {
+                height: 28px !important;
+            }
+
+        }
+
+        /* Çok Küçük Ekranlar (400px ve altı) */
+        @@media (max-width: 400px) {
+            .hero-content h1
+
+        {
+            font-size: 1.5rem;
+        }
+
+        .typing-container {
+            font-size: 1.3rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+        }
+
+        .btn-gold-outline, .btn-gold-filled {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        }
+
+        /* Landscape Mobil Düzeltmeleri */
+        @@media (max-height: 600px) and (orientation: landscape) {
+            .hero-section
+
+        {
+            min-height: auto;
+            padding: 80px 0 40px;
+        }
+
+        .hero-content h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .hero-lead {
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-mockup-wrapper {
+            margin-top: 30px;
+        }
+
+        }
+
+        /* Touch Device Optimizations */
+        @@media (hover: none) and (pointer: coarse) {
+            .hero-mockup:hover
+
+        {
+            transform: rotateY(-12deg) rotateX(5deg);
+        }
+
+        .marquee-item:hover {
+            transform: scale(1);
+            filter: grayscale(30%) brightness(0.8);
+        }
+
+        .btn-gold-filled:hover {
+            transform: none;
+        }
+
+        .btn-gold-outline:hover {
+            background: transparent;
+            color: var(--gold-primary);
+        }
+
         }
     </style>
 </head>
@@ -610,7 +965,7 @@
                 </div>
 
                 <div class="col-lg-6 hero-mockup-wrapper">
-                    <img src="https://placehold.co/800x600/131a38/e8dcc8?text=Uygulama+Aray%C3%BCz%C3%BC" alt="App Interface" class="img-fluid hero-mockup">
+                    <img src="~/images/DijitalKutuphanemHome.png" alt="App Interface" class="img-fluid hero-mockup">
                 </div>
             </div>
         </div>
@@ -639,6 +994,7 @@
             <img src="https://cdn.timas.com.tr/urun/sefiller-9786054985326.jpg" class="marquee-item" alt="Şeker Portakalı">
             <img src="https://img.kitapyurdu.com/v1/getImage/fn:11668893/wi:220/wh:32f62ff63" class="marquee-item" alt="Tutunamayanlar">
             <img src="https://img.kitapyurdu.com/v1/getImage/fn:12126669/wi:220/wh:1fa38c12a" class="marquee-item" alt="Saatleri Ayarlama Enstitüsü">
+
             <img src="https://www.tinkitap.com/bilim-yanilgisi-tum-kitaplar-rupert-sheldrake-230-66-O.jpg" class="marquee-item" alt="Suç ve Ceza">
             <img src="https://img.kitapyurdu.com/v1/getImage/fn:1207631/wi:220/wh:1a63c8d49" class="marquee-item" alt="Kürk Mantolu Madonna">
             <img src="https://img.kitapyurdu.com/v1/getImage/fn:11484453/wi:220/wh:394670a5c" class="marquee-item" alt="1984">
@@ -783,7 +1139,7 @@
                 const preloader = document.getElementById('preloader');
                 preloader.style.opacity = '0';
                 setTimeout(() => preloader.style.display = 'none', 500);
-            }, 1200); // 1.2 saniye bekle (Yüklenme hissi için)
+            }, 1200);
         });
 
         // --- 2. Typewriter Effect ---
@@ -835,7 +1191,7 @@
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
+                const rotateX = ((y - centerY) / centerY) * -10;
                 const rotateY = ((x - centerX) / centerX) * 10;
 
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
@@ -860,7 +1216,7 @@
                 this.size = Math.random() * 2;
                 this.speedX = (Math.random() * 0.5) - 0.25;
                 this.speedY = (Math.random() * 0.5) - 0.25;
-                this.color = 'rgba(139, 111, 71, ' + (Math.random() * 0.3 + 0.1) + ')'; // Gold color
+                this.color = 'rgba(139, 111, 71, ' + (Math.random() * 0.3 + 0.1) + ')';
             }
             update() {
                 this.x += this.speedX;
