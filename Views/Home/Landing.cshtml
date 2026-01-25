@@ -25,7 +25,221 @@
             --text-muted: #a0b0d0;
             --neon-gold-glow: 0 0 20px rgba(139, 111, 71, 0.4);
         }
+        /* --- MYSTIC DOOR ANIMATION (GÜNCELLENMİŞ MOBİL & TASARIM) --- */
+        .door-cta-wrapper {
+            padding: 100px 0 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            perspective: 1200px;
+            overflow: hidden;
+            text-align: center;
+        }
 
+        /* Kapı Kapsayıcı */
+        .door-container {
+            position: relative;
+            width: 200px; /* Mobilde biraz daha küçülttüm */
+            height: 300px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            margin-bottom: 50px; /* Yazı ile kapı arası mesafe */
+        }
+
+        /* Kapı Çerçevesi */
+        .door-frame {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            right: -12px;
+            bottom: 0;
+            border: 6px solid #5c4d3c; /* Biraz daha açık bir ahşap tonu */
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            background: #1a1c2c;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            z-index: 0;
+        }
+
+        /* Kapı Arkasındaki Işık */
+        .light-from-inside {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #fff 10%, var(--gold-light) 50%, var(--gold-primary) 100%);
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 60px var(--gold-primary);
+            overflow: hidden;
+            border-radius: 4px 4px 0 0;
+        }
+
+            .light-from-inside i {
+                font-size: 3.5rem;
+                color: #fff;
+                opacity: 0;
+                transform: scale(0.6) translateZ(-40px);
+                transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s; /* Daha yumuşak geçiş */
+                text-shadow: 0 0 15px rgba(255,255,255,0.9);
+            }
+
+        /* Kapı Kanadı */
+        .door-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2e2e2e;
+            background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px, transparent 2px, transparent 12px), linear-gradient(to bottom, #3a3a3a, #1f1f1f);
+            border: 2px solid #4a3b2a;
+            transform-origin: left;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Tabelayı dikey ortala */
+            border-radius: 4px 4px 0 0;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        /* Kapı Tabelası */
+        .door-sign {
+            background: rgba(10, 12, 30, 0.9);
+            border: 2px solid var(--gold-primary);
+            padding: 10px 18px;
+            color: var(--gold-primary);
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transform: translateZ(2px);
+            transition: all 0.3s ease;
+            backface-visibility: hidden; /* Dönünce arkası görünmesin */
+        }
+
+        /* Kapı Tokmağı */
+        .door-knob {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+            border-radius: 50%;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+        }
+
+        /* İYİLEŞTİRİLMİŞ ALT METİN TASARIMI */
+        .cta-text-wrapper {
+            opacity: 0.8;
+            transition: all 0.4s ease;
+            max-width: 500px;
+            padding: 25px;
+            background: rgba(19, 26, 56, 0.5); /* Hafif bir arka plan kutusu */
+            border: 1px solid rgba(139, 111, 71, 0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            transform: translateY(20px);
+        }
+
+            .cta-text-wrapper h3 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+                color: var(--cream-accent);
+                /* Gradient text efekti için */
+                background: linear-gradient(135deg, var(--cream-accent) 0%, var(--gold-primary) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .cta-text-wrapper p {
+                font-size: 1rem;
+                color: var(--text-muted);
+                margin: 0;
+            }
+
+        /* HOVER EFEKTLERİ */
+        .door-container:hover .door-panel {
+            transform: rotateY(-115deg); /* Biraz daha fazla açılsın */
+        }
+
+        .door-container:hover .door-sign {
+            background: var(--gold-primary);
+            color: #0a0c1e;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 20px var(--neon-gold-glow);
+        }
+
+        .door-container:hover .light-from-inside i {
+            opacity: 1;
+            transform: scale(1) translateZ(0);
+        }
+
+        /* Hover'da alt metnin parlaması */
+        .door-container:hover + .cta-text-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+            border-color: rgba(139, 111, 71, 0.4);
+            box-shadow: 0 10px 30px rgba(139, 111, 71, 0.15);
+        }
+
+        /* ============================================ */
+        /* MOBİL UYUMLULUK (RESPONSIVE) */
+        /* ============================================ */
+        @@media (max-width: 768px) {
+            .door-cta-wrapper
+
+        {
+            padding: 70px 0 90px;
+        }
+
+        .door-container {
+            width: 160px;
+            height: 240px;
+            margin-bottom: 35px;
+        }
+
+        .door-frame {
+            border-width: 5px;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+        }
+
+        .door-sign {
+            font-size: 0.95rem;
+            padding: 8px 14px;
+            letter-spacing: 1px;
+        }
+
+        .light-from-inside i {
+            font-size: 2.8rem;
+        }
+
+        .cta-text-wrapper {
+            max-width: 90%; /* Mobilde daha geniş */
+            padding: 20px 15px;
+        }
+
+            .cta-text-wrapper h3 {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+
+            .cta-text-wrapper p {
+                font-size: 0.9rem;
+            }
+
+        }
         /* --- PRELOADER --- */
         #preloader {
             position: fixed;
@@ -1080,18 +1294,27 @@
         </div>
     </section>
 
-    <section style="padding: 120px 0; text-align: center; background: linear-gradient(to top, #0a0c1e, #131a38);">
-        <div class="container reveal">
-            <div style="background: linear-gradient(135deg, var(--gold-primary), #6b5541); padding: 70px 40px; border-radius: 30px; box-shadow: 0 20px 60px rgba(139, 111, 71, 0.25);">
-                <h2 style="color: #fff; font-size: 2.8rem; margin-bottom: 20px;">Kütüphaneni Özgürleştir</h2>
-                <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px auto;">
-                    Daha organize, daha akıllı ve daha estetik bir kütüphane deneyimi seni bekliyor.
-                </p>
-                <a href="/Account/Register" class="btn btn-light btn-lg px-5 py-3 fw-bold" style="color: var(--gold-primary); border-radius: 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
-                    Hemen Hesap Oluştur
-                </a>
+    <section class="door-cta-wrapper reveal">
+
+        <a href="/Account/Register" style="text-decoration: none;">
+
+            <div class="door-container">
+                <div class="door-frame"></div>
+
+                <div class="light-from-inside">
+                    <i class="fa-solid fa-person-walking-arrow-right"></i>
+                </div>
+
+                <div class="door-panel">
+                    <div class="door-sign">İÇERİ GİR</div>
+                    <div class="door-knob"></div>
+                </div>
             </div>
-        </div>
+
+          
+
+        </a>
+
     </section>
 
     <footer class="landing-footer">

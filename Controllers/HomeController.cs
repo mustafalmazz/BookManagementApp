@@ -18,7 +18,7 @@ namespace BookManagementApp.Controllers
         }
 
         [AllowAnonymous] 
-        public IActionResult Landing()
+        public async Task<IActionResult> Landing()
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
