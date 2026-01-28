@@ -22,11 +22,43 @@
         align-items: center;
         gap: 15px;
         font-weight: 600;
+        animation: slideDown 0.5s ease-out;
     }
 
         .success-message i {
             font-size: 1.5rem;
         }
+
+    .error-message {
+        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+        border: 2px solid #dc3545;
+        color: #721c24;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+        animation: slideDown 0.5s ease-out;
+    }
+
+        .error-message i {
+            font-size: 1.5rem;
+        }
+
+    @@keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     body {
         background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
         font-family: 'Georgia', serif;
@@ -207,7 +239,6 @@
 
     /* --- BUTON RENGİ GÜNCELLEMESİ (KAHVERENGİ) --- */
     .add-btn {
-        /* Eski Yeşil Kaldırıldı, Kahverengi Eklendi */
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         border: none;
         color: #fff;
@@ -217,7 +248,7 @@
         transition: all 0.3s ease;
         text-transform: uppercase;
         font-size: 0.9rem;
-        box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3); /* Gölge rengi de kahveye uyumlu */
+        box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
         width: 100%;
         display: flex;
         align-items: center;
@@ -228,7 +259,6 @@
 
         .add-btn:hover {
             transform: scale(1.02);
-            /* Hover rengi açık kahve */
             background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
             box-shadow: 0 6px 15px rgba(107, 85, 65, 0.5);
         }
@@ -238,10 +268,10 @@
         text-align: center;
         padding: 60px 40px;
         color: #8b6f47;
-        background: rgba(255, 255, 255, 0.6); /* Hafif transparan arka plan */
-        border: 2px dashed #e8dcc8; /* Kesikli şık kenarlık */
+        background: rgba(255, 255, 255, 0.6);
+        border: 2px dashed #e8dcc8;
         border-radius: 20px;
-        margin: 0 auto; /* Sayfanın ortasına hizala */
+        margin: 0 auto;
         max-width: 600px;
         box-shadow: 0 10px 30px rgba(139, 111, 71, 0.1);
         display: flex;
@@ -268,7 +298,7 @@
         font-size: 5rem;
         color: #d4c5b0;
         margin-bottom: 25px;
-        opacity: 1; /* Opacity kaldırıldı, renk verildi */
+        opacity: 1;
     }
 
     /* PAGINATION STİLLERİ */
@@ -353,8 +383,6 @@
             padding: 8px;
             font-size: 0.75rem;
         }
-
-       
     }
 </style>
 
@@ -378,11 +406,10 @@
 </div>
 
 <div class="container-custom">
-
-
     <main class="books-container">
         @{
             var successMessage = TempData["SuccessMessage"] as string;
+            var errorMessage = TempData["ErrorMessage"] as string;
         }
 
         @if (!string.IsNullOrEmpty(successMessage))
@@ -392,6 +419,15 @@
                 @successMessage
             </div>
         }
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="error-message">
+                <i class="fa-solid fa-exclamation-circle"></i>
+                @errorMessage
+            </div>
+        }
+
         @if (hasResults)
         {
             <div class="books-grid">
@@ -407,7 +443,6 @@
                                 @if (!string.IsNullOrEmpty(book.Name) && book.Name.Length > 20)
                                 {
                                     @book.Name.Substring(0, 20)
-
                                     <span>...</span>
                                 }
                                 else
@@ -421,7 +456,6 @@
                                 @if (!string.IsNullOrEmpty(book.Author) && book.Author.Length > 20)
                                 {
                                     @book.Author.Substring(0, 20)
-
                                     <span>...</span>
                                 }
                                 else
@@ -464,16 +498,19 @@
                         </li>
                         @if (startPage > 1)
                         {
-                            <li class="page-item"><a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="1">1</a></li> @if (startPage > 2)
+                            <li class="page-item"><a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="1">1</a></li>
+                            @if (startPage > 2)
                             {
                                 <li class="page-item disabled"><span class="page-link border-0 bg-transparent">...</span></li>
-                            }                  }
+                            }
+                        }
                         @for (int i = startPage; i <= endPage; i++)
                         {
                             <li class="page-item @(i == currentPage ? "active" : "")"><a class="page-link" asp-action="GoogleBooks" asp-all-route-data="routeData" asp-route-page="@i">@i</a></li>
                         }
                         @if (endPage < totalPages)
-                        { @if (endPage < totalPages - 1)
+                        {
+                            @if (endPage < totalPages - 1)
                             {
                                 <li class="page-item disabled"><span class="page-link border-0 bg-transparent">...</span></li>
                             }

@@ -2,12 +2,15 @@
 
 @{
     ViewData["Title"] = "Category Edit";
+    // Controller'dan gelen toplam kitap sayısını al
+    int totalBooks = ViewBag.TotalBooks != null ? (int)ViewBag.TotalBooks : 0;
 }
 
 <style>
+    /* ... Mevcut Stillerin Aynen Kalıyor ... */
     /* Sayfa _Layout.cshtml kullanmıyorsa veya
-              body stilini oradan almıyorsa bu gereklidir.
-            */
+                  body stilini oradan almıyorsa bu gereklidir.
+                */
     body {
         background-color: #0a0c1e;
         color: #e0e0e0;
@@ -86,6 +89,7 @@
         border-radius: 8px;
         box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
         overflow: hidden; /* Köşeler için */
+        margin-bottom: 20px;
     }
 
     .list-group-item {
@@ -114,6 +118,23 @@
         .list-group-item i {
             color: #a0b0d0; /* Daha soluk renk */
         }
+
+    /* Daha Fazla Butonu */
+    .btn-load-more {
+        background-color: #131a38;
+        border: 1px solid #00aaff;
+        color: #00c3ff;
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-load-more:hover {
+            background-color: #00a9db;
+            color: #0a0c1e;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
 </style>
 
 <h1 class="text-center">Kategorileri Düzenle</h1>
@@ -122,7 +143,8 @@
     <div class="col-12 col-md-6 mb-4">
 
         <form method="post" action="Edit">
-            <input type="hidden" asp-for="Category.Id" /> <div class="mb-2">
+            <input type="hidden" asp-for="Category.Id" />
+            <div class="mb-2">
                 <label asp-for="Category.CategoryName">Kategori Adı</label>
                 <input class="form-control" asp-for="Category.CategoryName" />
             </div>
@@ -133,14 +155,66 @@
     </div>
 
     <div class="col-12 col-md-6">
-        <ul class="list-group">
-            <li class="list-group-item active" aria-current="true">Books in category</li>
+        <ul class="list-group" id="bookList">
+            <li class="list-group-item active" aria-current="true">Kitaplar</li>
 
             @foreach (var item in Model.Books)
             {
-
-                <li class="list-group-item"><img src="@item.Image" style="width:50px;" /><b>@item.Name</b> <i>(@item.Author)</i> </li>
+                <li class="list-group-item">
+                    <img src="@item.Image" style="width:50px;" />
+                    <b>@item.Name</b> <i>(@item.Author)</i>
+                </li>
             }
         </ul>
+
+        @if (totalBooks > 20)
+        {
+            <div class="text-center">
+                <button id="loadMoreBtn" class="btn btn-load-more">
+                    Daha Fazla Göster (+20)
+                </button>
+            </div>
+        }
     </div>
 </div>
+
+<script>
+    let skipCount = 20;
+    const totalBooks = @totalBooks;
+
+    document.getElementById('loadMoreBtn')?.addEventListener('click', function() {
+        const btn = this;
+        btn.disabled = true; 
+        btn.innerText = "Yükleniyor...";
+
+        fetch(`/Admin/Category/LoadMoreBooks?skip=${skipCount}`)
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById('bookList');
+
+                data.forEach(book => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+
+                    const imgSrc = book.image ? book.image : '/images/ResimBulunamadi.png';
+
+                    li.innerHTML = `<img src="${imgSrc}" style="width:50px;" /> <b>${book.name}</b> <i>(${book.author})</i>`;
+                    list.appendChild(li);
+                });
+
+                skipCount += 20;
+
+                btn.disabled = false;
+                btn.innerText = "Daha Fazla Göster (+20)";
+
+                if (skipCount >= totalBooks) {
+                    btn.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                btn.disabled = false;
+                btn.innerText = "Hata oluştu, tekrar dene";
+            });
+    });
+</script>

@@ -97,16 +97,25 @@ namespace BookManagementApp.Areas.Admin.Controllers
 
             var category = _context.Categories
                 .Include(x => x.Books)
-                .FirstOrDefault(x => x.Id == id && x.UserId == userId); 
+                .FirstOrDefault(x => x.Id == id && x.UserId == userId);
 
             if (category == null)
             {
                 return NotFound();
             }
 
+            // Toplam kitap sayısını alıyoruz (Butonu gösterip göstermeyeceğimize karar vermek için)
+            var allUserBooksQuery = _context.Books.Where(b => b.UserId == userId);
+            int totalBooks = allUserBooksQuery.Count();
+
+            // İlk 20 tanesini çekiyoruz
+            var firstBatchBooks = allUserBooksQuery.Take(20).ToList();
+
+            ViewBag.TotalBooks = totalBooks; // Toplam sayıyı View'a taşıyoruz
+
             var viewModel = new CategoryEditViewModel
             {
-                Books = _context.Books.Where(b => b.UserId == userId).ToList(),
+                Books = firstBatchBooks,
                 Category = category
             };
 
@@ -137,6 +146,26 @@ namespace BookManagementApp.Areas.Admin.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("List");
+        }
+
+        [HttpGet]
+        public IActionResult LoadMoreBooks(int skip)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return Unauthorized();
+
+            var books = _context.Books
+                .Where(b => b.UserId == userId)
+                .Skip(skip) 
+                .Take(20)   
+                .Select(b => new {
+                    b.Image,
+                    b.Name,
+                    b.Author
+                })
+                .ToList();
+
+            return Json(books);
         }
 
         public IActionResult Delete(int? id)
