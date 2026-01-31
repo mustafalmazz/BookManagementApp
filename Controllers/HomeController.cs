@@ -123,7 +123,7 @@ namespace BookManagementApp.Controllers
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
 
-            int pageSize = 6; // Sayfa başına kitap sayısı
+            int pageSize = 8; // Sayfa başına kitap sayısı
 
             // 1. Temel Sorgu
             var books = _context.Books.Where(u => u.UserId == userId).AsQueryable();

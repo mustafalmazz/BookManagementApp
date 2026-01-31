@@ -8,18 +8,17 @@
     var currentAction = routeData["action"]?.ToString();
 
     bool isGooglePage = currentController == "Home" && currentAction == "GoogleBooks";
-
     string targetAction = isGooglePage ? "GoogleBooks" : "Index";
-
     string placeholderText = isGooglePage ? "Google Kitaplarında Ara..." : "Kütüphanemde Ara...";
 }
 
 <style>
+    /* --- NAVBAR ANA KAPLAYICI --- */
     .book-navbar {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%) !important;
         border: none !important;
-        box-shadow: 0 4px 20px rgba(107, 85, 65, 0.3);
-        padding: 15px 0;
+        box-shadow: 0 2px 10px rgba(107, 85, 65, 0.25);
+        padding: 8px 0;
         margin-bottom: 0px !important;
         position: relative;
     }
@@ -30,64 +29,52 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 1px;
             background: linear-gradient(90deg, transparent, #f5f0e8, transparent);
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
+        /* --- LOGO --- */
         .book-navbar .navbar-brand {
             color: #f5f0e8 !important;
             font-family: 'Georgia', serif;
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s ease;
+            margin-right: 0; /* Flex dağılımı için sıfırlandı */
         }
 
-    .brand-icon {
-        font-size: 1.8rem;
-        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-    }
-
-    .book-navbar .navbar-toggler {
-        border: 2px solid #f5f0e8;
-        background: rgba(245, 240, 232, 0.1);
-        padding: 6px 10px; /* Mobilde biraz küçülttük */
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-        .book-navbar .navbar-toggler:hover {
-            background: rgba(245, 240, 232, 0.2);
-            transform: scale(1.05);
-        }
-
-    .book-navbar .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23f5f0e8' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        width: 1.2em; /* İkonu biraz kibarlaştırdık */
-        height: 1.2em;
+    /* --- NAVİGASYON LİNKLERİ (Eşit Dağılım Ayarı) --- */
+    .navbar-nav {
+        align-items: center;
+        /* BURASI DEĞİŞTİ: Linkleri eşit aralıklarla yayar */
+        justify-content: space-evenly;
+        width: 100%;
     }
 
     .book-navbar .nav-link {
         color: #f5f0e8 !important;
         font-family: 'Georgia', serif;
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         font-weight: 500;
-        padding: 10px 20px !important;
-        margin: 0 30px;
-        border-radius: 10px;
+        padding: 8px 12px !important;
+        /* Margin kaldırıldı, flex space-evenly halledecek */
+        margin: 0;
+        border-radius: 6px;
         transition: all 0.3s ease;
         position: relative;
+        white-space: nowrap; /* Linklerin kırılmasını önler */
     }
 
         .book-navbar .nav-link::before {
             content: '';
             position: absolute;
-            bottom: 5px;
+            bottom: 3px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
@@ -97,36 +84,37 @@
         }
 
         .book-navbar .nav-link:hover {
-            background: rgba(245, 240, 232, 0.15);
+            background: rgba(245, 240, 232, 0.1);
             color: #ffd782 !important;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
             .book-navbar .nav-link:hover::before {
-                width: 70%;
+                width: 60%;
             }
 
         .book-navbar .nav-link.active {
-            background: rgba(245, 240, 232, 0.2);
+            background: rgba(245, 240, 232, 0.15);
             color: #ffd782 !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-    /* --- MASAÜSTÜ ARAMA FORMU (Mevcut) --- */
+    /* --- ARAMA FORMU --- */
     .book-search-form {
         margin-left: auto;
         display: flex;
-        gap: 10px;
+        gap: 8px;
+        align-items: center;
     }
 
     .book-search-input {
-        border: 2px solid rgba(245, 240, 232, 0.3);
-        border-radius: 25px;
-        padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(245, 240, 232, 0.4);
+        border-radius: 20px;
+        padding: 6px 15px;
+        background: rgba(255, 255, 255, 0.15);
         color: #f5f0e8;
         font-family: 'Georgia', serif;
-        min-width: 300px;
+        font-size: 0.9rem;
+        min-width: 250px;
         transition: all 0.3s ease;
         backdrop-filter: blur(5px);
     }
@@ -134,47 +122,40 @@
         .book-search-input::placeholder {
             color: rgba(245, 240, 232, 0.7);
             font-style: italic;
+            font-size: 0.85rem;
         }
 
         .book-search-input:focus {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             border-color: #ffd782;
             color: #f5f0e8;
-            box-shadow: 0 0 0 3px rgba(255, 215, 130, 0.2);
+            box-shadow: 0 0 0 2px rgba(255, 215, 130, 0.2);
             outline: none;
         }
 
     .book-search-btn {
         background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
-        border: 2px solid rgba(245, 240, 232, 0.3);
+        border: 1px solid rgba(245, 240, 232, 0.4);
         color: #f5f0e8;
-        padding: 10px 25px;
-        border-radius: 25px;
+        padding: 6px 18px;
+        border-radius: 20px;
         font-weight: 600;
+        font-size: 0.9rem;
         font-family: 'Georgia', serif;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
         .book-search-btn:hover {
             background: linear-gradient(135deg, #c89666 0%, #a0785a 100%);
             color: #f5f0e8;
-            transform: scale(1.01);
+            transform: scale(1.02);
             border-color: #ffd782;
         }
 
-    .navbar-nav {
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .book-navbar .container-fluid {
-        max-width: 1400px;
-    }
-
+    /* --- DROPDOWN AYARLARI --- */
     @@media (min-width: 992px) {
         .book-navbar .dropdown-menu
 
@@ -182,34 +163,34 @@
         left: 50% !important;
         right: auto !important;
         transform: translateX(-50%) !important;
-        margin-top: 15px !important;
-        border-radius: 15px !important;
+        margin-top: 10px !important;
+        border-radius: 10px !important;
         border: none !important;
-        box-shadow: 0 10px 30px rgba(107, 85, 65, 0.2);
+        box-shadow: 0 8px 25px rgba(107, 85, 65, 0.15);
         text-align: center;
-        min-width: 200px;
-        animation: fadeInDropdown 0.3s ease;
+        min-width: 180px;
+        font-size: 0.9rem;
+        animation: fadeInDropdown 0.2s ease;
     }
 
     .book-navbar .dropdown-menu::before {
         content: '';
         position: absolute;
-        top: -8px;
+        top: -6px;
         left: 50%;
         transform: translateX(-50%);
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-bottom: 8px solid #fff;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid #fff;
     }
 
     }
-
     @@keyframes fadeInDropdown {
         from
 
     {
         opacity: 0;
-        transform: translate(-50%, 10px);
+        transform: translate(-50%, 5px);
     }
 
     to {
@@ -219,10 +200,28 @@
 
     }
 
-    .dropdown-item:active, .dropdown-item:hover {
-        background-color: rgba(139, 111, 71, 0.1) !important;
-        color: #8b6f47 !important;
-        border-radius: 10px;
+    .dropdown-item {
+        padding: 6px 15px;
+    }
+
+        .dropdown-item:active, .dropdown-item:hover {
+            background-color: rgba(139, 111, 71, 0.1) !important;
+            color: #8b6f47 !important;
+            border-radius: 6px;
+        }
+
+    /* --- MOBİL AYARLAR (DOKUNULMADI) --- */
+    .book-navbar .navbar-toggler {
+        border: 1px solid rgba(245, 240, 232, 0.5) !important;
+        padding: 5px 10px;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .book-navbar .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23f5f0e8' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        width: 1em;
+        height: 1em;
     }
 
     @@media (max-width: 768px) {
@@ -230,41 +229,43 @@
 
     {
         text-align: center;
-        margin: 5px 0;
-    }
-
-    .book-navbar {
-        padding: 10px 0;
+        margin: 2px 0;
+        padding: 10px 0 !important;
     }
 
     .mobile-search-form {
-        flex-grow: 1; 
-        margin: 0 10px; 
+        flex-grow: 1;
+        margin: 0 10px;
         position: relative;
     }
 
-    .mobile-search-input {
-        width: 100%;
-        border: 2px solid rgba(245, 240, 232, 0.3);
-        border-radius: 20px;
-        padding: 8px 35px 8px 15px; 
-        background: rgba(255, 255, 255, 0.15);
-        color: #f5f0e8;
-        font-size: 0.95rem;
-        outline: none;
-    }
-
-        .mobile-search-input::placeholder {
-            color: rgba(245, 240, 232, 0.6);
-            font-size: 0.9rem;
+        .mobile-search-input {
+            width: 100%;
+            border: 2px solid rgba(245, 240, 232, 0.3);
+            border-radius: 20px;
+            padding: 8px 35px 8px 15px;
+            background: rgba(255, 255, 255, 0.15);
+            /* Yazı rengini beyaz/krem yapıyoruz */
+            color: #f5f0e8 !important;
+            font-size: 0.95rem;
+            outline: none;
         }
+            /* Placeholder (İpucu Yazısı) Rengi - DÜZELTİLDİ */
+            .mobile-search-input::placeholder {
+                color: #f5f0e8 !important; /* Rengi zorla krem yap */
+                opacity: 0.8; /* Hafif saydamlık (Gri görünmemesi için yüksek tutuldu) */
+            }
+            /* Bazı mobil tarayıcılar (Safari/Chrome) için özel ön ek */
+            .mobile-search-input::-webkit-input-placeholder {
+                color: #f5f0e8 !important;
+                opacity: 0.8;
+            }
 
-        .mobile-search-input:focus {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: #ffd782;
-        }
+            .mobile-search-input:focus {
+                background: rgba(255, 255, 255, 0.25);
+                border-color: #ffd782;
+            }
 
-    /* Mobil Arama İkonu (Input'un içinde) */
     .mobile-search-btn-icon {
         position: absolute;
         right: 10px;
@@ -276,6 +277,10 @@
         padding: 0;
     }
 
+    .book-navbar .navbar-brand {
+        font-size: 1.1rem;
+    }
+
     }
 </style>
 
@@ -283,7 +288,7 @@
     <nav class="navbar navbar-expand-lg navbar-toggleable-sm book-navbar">
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="/images/library.png" style="width:50px;" />
+                <img src="/images/library.png" style="width:35px;" />
                 <span class="d-none d-md-block">DijitalKütüphanem</span>
             </a>
 

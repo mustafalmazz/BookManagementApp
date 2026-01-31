@@ -5,21 +5,26 @@
 }
 
 <style>
-    /* --- YENİ EKLENEN BUTON STİLLERİ: btnNotes için --- */
+    /* --- GENEL AYARLAR --- */
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+        color: #4a3f35;
+    }
 
-    /* Birincil Stil (Daha Dikkat Çekici) */
+    /* --- BUTON STİLLERİ (Kompakt Hale Getirildi - ÜST KISIM İÇİN) --- */
     .btn-notes-primary {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         border: none;
-        color: #f5f0e8; /* Krem beyaz metin */
-        padding: 10px 25px;
+        color: #f5f0e8;
+        padding: 8px 20px;
         border-radius: 25px;
-        font-weight: 500;
-        font-size: 1rem;
+        font-weight: 600;
+        font-size: 0.9rem;
         transition: all 0.3s ease;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.4);
+        box-shadow: 0 4px 10px rgba(107, 85, 65, 0.3);
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -28,20 +33,19 @@
 
         .btn-notes-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(107, 85, 65, 0.6);
+            box-shadow: 0 6px 15px rgba(107, 85, 65, 0.5);
             background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
             color: #f5f0e8;
         }
 
-    /* İkincil Stil (Daha Sade, Çizgili) */
     .btn-notes-secondary {
         background: transparent;
         border: 2px solid #a0785a;
         color: #8b6f47;
-        padding: 10px 25px;
+        padding: 8px 20px;
         border-radius: 25px;
-        font-weight: 700;
-        font-size: 1rem;
+        font-weight: 600;
+        font-size: 0.9rem;
         transition: all 0.3s ease;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -54,25 +58,25 @@
         .btn-notes-secondary:hover {
             background: #8b6f47;
             color: #f5f0e8;
-            transform: translateY(-0.5px);
+            transform: translateY(-1px);
             box-shadow: 0 3px 10px rgba(107, 85, 65, 0.3);
         }
 
     .btn-secondary-mini {
         background: transparent;
-        border: 2px solid #8b6f47;
+        border: 1px solid #8b6f47;
         color: #8b6f47;
-        padding: 6px 14px;
-        border-radius: 20px;
+        padding: 5px 12px;
+        border-radius: 15px;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         transition: all 0.3s ease;
         text-transform: none;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.3px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: 5px;
         text-decoration: none;
         margin-top: 8px;
     }
@@ -80,35 +84,30 @@
         .btn-secondary-mini:hover {
             background: #8b6f47;
             color: #f5f0e8;
-            transform: translateY(-2px);
-            box-shadow: 0 3px 10px rgba(107, 85, 65, 0.3);
+            transform: translateY(-1px);
         }
 
-    body {
-        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
-        font-family: 'Georgia', serif;
-    }
-
+    /* --- LAYOUT --- */
     .details-container {
-        /* padding: 20px 0; */
+        padding: 20px 0;
         max-width: 1200px;
         margin: 0 auto;
     }
 
     .breadcrumb-wrapper {
-        background: rgba(255, 255, 255, 0.5);
-        padding: 15px 25px;
-        border-radius: 15px;
-        margin-bottom: 40px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 2px 10px rgba(107, 85, 65, 0.1);
+        background: rgba(255, 255, 255, 0.6);
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 2px 5px rgba(107, 85, 65, 0.05);
     }
 
     .breadcrumb {
-        background: none;
         margin: 0;
         padding: 0;
         font-family: 'Georgia', serif;
+        font-size: 0.95rem;
     }
 
     .breadcrumb-item a {
@@ -127,11 +126,12 @@
         font-weight: 600;
     }
 
+    /* --- ANA KART YAPISI --- */
     .book-details-card {
         background: #fff9f0;
-        border-radius: 25px;
+        border-radius: 20px;
         overflow: hidden;
-        box-shadow: 0 10px 40px rgba(107, 85, 65, 0.2);
+        box-shadow: 0 8px 30px rgba(107, 85, 65, 0.15);
         position: relative;
     }
 
@@ -141,12 +141,13 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
+            height: 4px;
             background: linear-gradient(90deg, #8b6f47, #6b5541);
         }
 
+    /* --- SOL TARAF (RESİM) --- */
     .image-section {
-        padding: 40px;
+        padding: 30px;
         background: linear-gradient(135deg, #f5ede0 0%, #e8dcc8 100%);
         display: flex;
         align-items: center;
@@ -156,260 +157,118 @@
 
     .book-image-wrapper {
         position: relative;
-        max-width: 450px;
+        max-width: 380px;
         width: 100%;
     }
 
     .book-image {
         width: 100%;
         height: auto;
-        border-radius: 15px;
-        box-shadow: 0 15px 50px rgba(107, 85, 65, 0.4);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(107, 85, 65, 0.3);
         transition: transform 0.4s ease;
     }
 
         .book-image:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
-    .stock-badge {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #48bb78, #38a169);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-weight: 700;
-        font-size: 1rem;
-        box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+    /* --- SAĞ TARAF (BİLGİLER) --- */
+    .info-section {
+        padding: 30px 35px;
+    }
+
+    .book-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #4a3f35;
+        margin-bottom: 10px;
+        line-height: 1.2;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .book-author {
+        font-size: 1.2rem;
+        color: #8b6f47;
+        font-style: italic;
+        margin-bottom: 20px;
         display: flex;
         align-items: center;
         gap: 8px;
     }
 
-        .stock-badge.out-of-stock {
-            background: linear-gradient(135deg, #f56565, #e53e3e);
-            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
-        }
-
-    .info-section {
-        padding: 50px 40px;
-    }
-
-    .book-title {
-        font-size: 2.8rem;
-        font-weight: 800;
-        color: #4a3f35;
-        margin-bottom: 15px;
-        line-height: 1.3;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    }
-
-    .book-author {
-        font-size: 1.5rem;
-        color: #8b6f47;
-        font-style: italic;
-        margin-bottom: 25px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
     .rating {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         color: #8b6f47;
         font-style: italic;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
 
-    .author-icon {
-        font-size: 1.8rem;
-    }
-
-    .book-category-badge {
-        display: inline-block;
-        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
-        color: #f5f0e8;
-        padding: 10px 25px;
-        border-radius: 25px;
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.3);
-    }
-
-    .price-section {
-        background: linear-gradient(135deg, #ffd782 0%, #f5c35a 100%);
-        padding: 25px 30px;
-        border-radius: 20px;
-        margin: 30px 0;
-        box-shadow: 0 8px 25px rgba(255, 215, 130, 0.4);
-    }
-
-    .price-label {
-        font-size: 1.1rem;
-        color: #6b5541;
-        font-weight: 600;
-        margin-bottom: 5px;
-    }
-
-    .price-value {
-        font-size: 3rem;
-        font-weight: 800;
-        color: #4a3f35;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-
+    /* Açıklama Alanı */
     .description-section {
-        margin: 30px 0;
-        padding: 25px;
+        margin: 20px 0;
+        padding: 20px;
         background: rgba(245, 237, 224, 0.5);
-        border-radius: 15px;
-        border-left: 5px solid #8b6f47;
+        border-radius: 12px;
+        border-left: 4px solid #8b6f47;
     }
 
     .description-title {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: 700;
         color: #4a3f35;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
 
     .description-text {
-        font-size: 1.1rem;
-        line-height: 1.8;
+        font-size: 1rem;
+        line-height: 1.6;
         color: #4a3f35;
         text-align: justify;
     }
 
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+    .decorative-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #8b6f47, transparent);
         margin: 30px 0;
     }
 
-    .info-item {
-        background: rgba(255, 255, 255, 0.7);
-        padding: 20px;
-        border-radius: 15px;
-        border: 2px solid rgba(139, 111, 71, 0.2);
-        transition: all 0.3s ease;
+    /* --- BENZER KİTAPLAR BÖLÜMÜ --- */
+    .related-books-section {
+        margin-top: 50px;
     }
 
-        .info-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.2);
-            border-color: #8b6f47;
-        }
-
-    .info-label {
-        font-size: 0.9rem;
-        color: #8b6f47;
-        font-weight: 600;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .info-value {
-        font-size: 1.3rem;
+    .section-title {
+        text-align: center;
         color: #4a3f35;
+        font-size: 2rem;
         font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 15px;
-        margin-top: 40px;
-        flex-wrap: wrap;
-    }
-
-    .btn-primary-custom {
-        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
-        border: none;
-        color: #f5f0e8;
-        padding: 18px 40px;
-        border-radius: 30px;
-        font-weight: 700;
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
+        margin-bottom: 10px;
         letter-spacing: 1px;
-        box-shadow: 0 6px 20px rgba(107, 85, 65, 0.3);
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
     }
 
-        .btn-primary-custom:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(107, 85, 65, 0.5);
-            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
-            color: #f5f0e8;
-        }
-
-    .btn-secondary-custom {
-        background: transparent;
-        border: 3px solid #8b6f47;
-        color: #8b6f47;
-        padding: 15px 35px;
-        border-radius: 30px;
-        font-weight: 700;
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-    }
-
-        .btn-secondary-custom:hover {
-            background: #8b6f47;
-            color: #f5f0e8;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(107, 85, 65, 0.3);
-        }
-
-    .decorative-divider {
-        height: 3px;
-        background: linear-gradient(90deg, transparent, #8b6f47, transparent);
-        margin: 40px 0;
-    }
-
-    /* --- ANA SAYFADAN ALINAN KART STİLLERİ --- */
     .books-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 25px;
-        margin-top: 30px;
-        max-width: 1400px;
-        margin-left: auto;
-        margin-right: auto;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
     }
 
     .book-card {
-        transition: all 0.4s ease;
-        border: none;
-        border-radius: 15px;
-        overflow: visible;
         background: #fff9f0;
-        height: 100%;
-        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.15);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(107, 85, 65, 0.15);
+        transition: all 0.4s ease;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
 
         .book-card::before {
@@ -423,13 +282,13 @@
             background: radial-gradient(circle, rgba(255, 215, 130, 0.6) 0%, rgba(205, 164, 94, 0.4) 30%, rgba(139, 111, 71, 0.2) 60%, transparent 100%);
             transform: translate(-50%, -50%);
             transition: all 0.6s ease;
-            z-index: -1;
+            z-index: 0;
             opacity: 0;
         }
 
         .book-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 19px 19px rgba(107, 85, 65, 0.1);
+            box-shadow: 0 15px 35px rgba(107, 85, 65, 0.25);
         }
 
             .book-card:hover::before {
@@ -438,55 +297,75 @@
                 opacity: 1;
             }
 
-        .book-card .card-img-top {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            transition: all 0.4s ease;
-            border-bottom: 3px solid #8b6f47;
-            border-radius: 15px 15px 0 0;
-        }
+    .card-img-wrapper {
+        position: relative;
+        width: 100%;
+        height: 320px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #f5ede0 0%, #e8dcc8 100%);
+    }
 
-        .book-card .card-body {
-            padding: 20px;
-            background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
-            border-radius: 0 0 15px 15px;
-            display: flex;
-            flex-direction: column;
-        }
+    .card-img-top {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    .book-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .card-body {
+        padding: 20px;
+        background: linear-gradient(to bottom, #fff9f0 0%, #f5ede0 100%);
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        position: relative;
+        z-index: 1;
+    }
 
     .card-title {
         color: #4a3f35;
-        font-size: 1.3rem;
-        font-weight: 600;
+        font-size: 1.1rem;
+        font-weight: 700;
         margin-bottom: 10px;
-        min-height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        min-height: 50px;
         text-align: center;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
     }
 
     .author-name {
         color: #8b6f47;
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-style: italic;
         margin-bottom: 15px;
         font-weight: 500;
         text-align: center;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .details-btn {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         border: none;
         color: #f5f0e8;
-        padding: 12px 30px;
+        padding: 10px 24px;
         border-radius: 25px;
         font-weight: 600;
         transition: all 0.3s ease;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        font-size: 0.8rem;
         box-shadow: 0 4px 12px rgba(107, 85, 65, 0.3);
         text-decoration: none;
         display: inline-block;
@@ -495,220 +374,327 @@
     }
 
         .details-btn:hover {
-            transform: scale(1.01);
+            transform: translateY(-2px);
             color: #f5f0e8;
             background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+            box-shadow: 0 6px 18px rgba(107, 85, 65, 0.4);
         }
 
-    /* --- RESPONSIVE DÜZENLEME BAŞLANGICI --- */
+    .no-related-books {
+        text-align: center;
+        margin-top: 40px;
+        padding: 40px 20px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 15px;
+        color: #8b6f47;
+        font-size: 1.1rem;
+        font-style: italic;
+    }
+
+    /* --- RESPONSIVE KISMI --- */
+    @@media (max-width: 992px) {
+        .books-grid
+
+    {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    }
 
     @@media (max-width: 768px) {
+        /* Container ve Genel Ayarlar */
         .details-container
 
     {
-        padding: 30px 0;
+        padding: 15px 0;
     }
 
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /* Breadcrumb */
     .breadcrumb-wrapper {
-        padding: 10px 15px;
-        margin-bottom: 25px;
+        padding: 8px 15px;
+        margin-bottom: 20px;
+    }
+
+    .breadcrumb {
+        font-size: 0.85rem;
+    }
+
+    /* Kitap Detay Kartı */
+    .book-details-card {
+        border-radius: 15px;
+    }
+
+    /* Resim Bölümü - Mobilde Üstte */
+    .image-section {
+        padding: 25px 20px;
+    }
+
+    .book-image-wrapper {
+        max-width: 280px;
+    }
+
+    .book-image {
+        border-radius: 10px;
+    }
+
+    /* Bilgi Bölümü */
+    .info-section {
+        padding: 25px 20px;
     }
 
     .book-title {
-        font-size: 2rem;
-        line-height: 1.2;
-    }
-
-    /* --- BURASI DEĞİŞTİRİLDİ: Yazar, Kategori, Tarih, Sayfa yan yana (2'li) --- */
-    /* Önceden col-6 olanların mobilde de %50 genişlikte kalmasını sağlıyoruz */
-    .row .book-author.col-6 {
-        flex: 0 0 50%;
-        max-width: 50%;
-        font-size: 0.95rem; /* Fontu mobil için hafif küçülttük */
+        font-size: 1.6rem;
         margin-bottom: 15px;
+        text-align: center;
     }
 
-    /* --- Sadece Puan (col-7) ve Buton (col-5) için düzenleme --- */
-    /* Puan kısmını ve Butonu alt alta (veya sıkışmadan) gösterir */
-    .row .col-7,
-    .row .col-5 {
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .rating {
-        font-size: 1.1rem;
-        margin-bottom: 5px; /* Alt boşluk azaltıldı */
-        justify-content: flex-start;
-        flex-wrap: wrap;
-    }
-
-        .rating i {
-            font-size: 24px !important;
-        }
-
-    .price-value {
-        font-size: 2.2rem;
-    }
-
-    .price-section {
-        padding: 20px;
-        margin: 20px 0;
-    }
-
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-    }
-
-    .btn-primary-custom,
-    .btn-secondary-custom {
-        width: 100%;
-        justify-content: center;
-        font-size: 1rem;
-        padding: 14px 30px;
-    }
-
-    .btn-notes-primary {
-        width: 100%;
-        justify-content: center;
-        font-size: 0.9rem;
-        padding: 10px 20px;
-    }
-
-    .btn-secondary-mini {
-        font-size: 0.8rem;
-        padding: 6px 12px;
-    }
-
-    .image-section {
-        padding: 45px 30px;
-    }
-
-    .info-section {
-        padding: 30px 20px;
-    }
-
-    .stock-badge {
-        top: 10px;
-        right: 10px;
-        padding: 8px 15px;
-        font-size: 0.9rem;
-    }
-
-    .book-category-badge {
-        padding: 8px 20px;
-        font-size: 0.9rem;
-    }
-
+    /* Açıklama Bölümü */
     .description-section {
-        padding: 20px 15px;
-        margin: 20px 0;
+        margin: 15px 0;
+        padding: 15px;
+        border-radius: 10px;
     }
 
     .description-title {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
     }
 
     .description-text {
-        font-size: 1rem;
-        line-height: 1.6;
+        font-size: 0.9rem;
+        line-height: 1.5;
     }
 
-    .info-item {
-        padding: 15px;
-    }
-
-    .info-label {
-        font-size: 0.8rem;
-    }
-
-    .info-value {
-        font-size: 1.1rem;
+    .btn-secondary-mini {
+        font-size: 0.75rem;
+        padding: 5px 10px;
     }
 
     .decorative-divider {
-        margin: 25px 0;
+        margin: 20px 0;
     }
 
-    /* Mobilde kitapları yan yana 2'li göster */
+    /* Kitap Bilgileri - Mobilde Daha Kompakt */
+    .book-author {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        gap: 5px;
+        word-break: break-word;
+    }
+
+        .book-author i {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+    .rating {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+        gap: 6px;
+    }
+
+        /* Rating Yıldızları - Mobilde Daha Küçük */
+        .rating i {
+            font-size: 16px !important;
+        }
+
+    /* Notlar Butonu - Mobilde Full Width */
+    .btn-notes-primary {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        margin-top: 10px;
+    }
+
+    /* Row Düzenleme - Mobilde Stack */
+    .info-section .row {
+        margin-bottom: 8px;
+    }
+
+        .info-section .row > div {
+            margin-bottom: 8px;
+        }
+
+    /* Benzer Kitaplar Bölümü */
+    .related-books-section {
+        margin-top: 35px;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+
+    /* Kitaplar Grid - Mobilde 2'li */
     .books-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
+        margin-top: 20px;
     }
 
-    /* Mobilde kitap kartlarını küçült */
-    .book-card .card-img-top {
+    /* Kitap Kartları - Mobil Optimizasyonu */
+    .book-card {
+        border-radius: 12px;
+    }
+
+    .card-img-wrapper {
         height: 200px;
     }
 
-    .book-card .card-body {
-        padding: 8px;
+    .card-body {
+        padding: 12px;
     }
 
     .card-title {
-        font-size: 0.90rem;
-        min-height: 35px;
-        margin-bottom: 4px;
+        font-size: 0.85rem;
+        min-height: 38px;
+        margin-bottom: 6px;
+        line-height: 1.3;
     }
 
     .author-name {
         font-size: 0.75rem;
-        margin-bottom: 6px;
+        margin-bottom: 10px;
     }
 
-    .details-btn {
-        padding: 8px 15px;
-        font-size: 0.60rem;
-        letter-spacing: 0.5px;
-    }
-
-    }
-
-    /* Ekstra küçük ekranlar için */
-    @@media (max-width: 576px) {
-        .book-title
-
-    {
-        font-size: 1.6rem;
-    }
-
-    .rating {
-        font-size: 1rem;
-    }
-
-        .rating i {
-            font-size: 20px !important;
+        .author-name i {
+            font-size: 0.7rem;
         }
 
-    .price-value {
-        font-size: 1.8rem;
+    .details-btn {
+        padding: 8px 12px;
+        font-size: 0.65rem;
+        border-radius: 20px;
+        letter-spacing: 0.3px;
     }
 
-    .description-title {
-        font-size: 1.2rem;
-    }
-
-    .description-text {
+    /* No Related Books */
+    .no-related-books {
+        margin-top: 25px;
+        padding: 30px 15px;
         font-size: 0.95rem;
     }
 
-    .btn-primary-custom,
-    .btn-secondary-custom {
-        font-size: 0.9rem;
-        padding: 12px 25px;
+        .no-related-books i {
+            font-size: 1.5rem !important;
+        }
+
+    /* Hover Efektlerini Mobilde Kaldır */
+    .book-card:hover {
+        transform: none;
+    }
+
+    .book-image:hover {
+        transform: none;
+    }
+
+    }
+
+    @@media (max-width: 576px) {
+        /* Ekstra Küçük Ekranlar İçin */
+        .book-title
+
+    {
+        font-size: 1.4rem;
+    }
+
+    .book-author {
+        font-size: 1rem;
+        gap: 3px;
+    }
+
+        .book-author i {
+            font-size: 1rem;
+        }
+
+    .description-title {
+        font-size: 1rem;
+    }
+
+    .description-text {
+        font-size: 0.85rem;
+    }
+
+    /* Kitap Kartları Daha Kompakt */
+    .card-img-wrapper {
+        height: 180px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-title {
+        font-size: 0.8rem;
+        min-height: 36px;
+    }
+
+    .author-name {
+        font-size: 0.7rem;
+        margin-bottom: 8px;
+    }
+
+    .details-btn {
+        padding: 7px 10px;
+        font-size: 0.6rem;
+    }
+
+    .books-grid {
+            /* Değişti: 280px yerine 220px yapıldı. Artık satıra daha çok kitap sığıyor */
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+    }
+
+    }
+
+    @@media (max-width: 480px) {
+        /* Çok Küçük Ekranlar */
+        .image-section
+
+    {
+        padding: 20px 15px;
+    }
+
+    .book-image-wrapper {
+        max-width: 250px;
     }
 
     .info-section {
-        padding: 25px 15px;
+        padding: 20px 15px;
     }
 
-    .breadcrumb {
-        font-size: 0.9rem;
+    .book-title {
+        font-size: 1.3rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+    }
+
+    .card-img-wrapper {
+        height: 170px;
+    }
+
+    }
+
+    /* Tablet Yatay - Orta Boyut Ayarları */
+    @@media (min-width: 769px) and (max-width: 991px) {
+        .books-grid
+
+    {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .card-img-wrapper {
+        height: 260px;
     }
 
     }
@@ -773,26 +759,26 @@
                     <div class="decorative-divider"></div>
 
                     <div class="row">
-                        <div class="book-author col-6">
+                        <div class="book-author col-md-6 col-6">
                             <i class="fa-solid fa-feather"></i>
                             @Model.Book.Author
                         </div>
-                        <div class="book-author col-6">
+                        <div class="book-author col-md-6 col-6">
                             <i class="fa-solid fa-layer-group"></i> @Model.Book.Category.CategoryName
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="book-author col-6">
+                        <div class="book-author col-md-6 col-6">
                             <i class="fa-solid fa-calendar"></i>@Model.Book.CreateDate.ToString("dd MMMM yyyy")
                         </div>
-                        <div class="book-author col-6">
+                        <div class="book-author col-md-6 col-6">
                             <i class="fa-solid fa-scroll"></i>@Model.Book.TotalPages Sayfa
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-7">
+                        <div class="col-md-7 col-12">
                             <text class="rating">Puanım/ </text>
                             @if (Model.Book.Rate.HasValue)
                             {
@@ -820,47 +806,61 @@
                                 <span class="text-muted">Henüz Puanlanmadı</span>
                             }
                         </div>
-                        <div class="col-5">
+                        <div class="col-md-5 col-12">
                             <a href="/home/notes/@Model.Book?.Id" class="btn-notes-primary">Aldığım Notlar    <i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         @if (Model.RelatedBooks != null && Model.RelatedBooks.Any())
         {
-            <h2 class="text-center mb-2 my-4" style="color:#4a3f35;">Aynı Kategoriden Kitaplar</h2>
-            <div class="decorative-divider"></div>
+            <div class="related-books-section">
+                <h2 class="section-title">Aynı Kategoriden Kitaplar</h2>
+                <div class="decorative-divider"></div>
 
-            <div class="books-grid">
-                @foreach (var book in Model.RelatedBooks)
-                {
-                    <div class="book-card" data-pages="@book.TotalPages">
-                        <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
-                             class="card-img-top"
-                             alt="@book.Name">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-center">@book.Name</h5>
-                            <p class="author-name text-center"><i class="fa-solid fa-feather"></i> @book.Author</p>
-                            <div class="mt-auto text-center">
-                                <a href="/Home/Details/@book.Id" class="btn details-btn">
-                                    Detayları Gör
-                                </a>
+                <div class="books-grid">
+                    @foreach (var book in Model.RelatedBooks)
+                    {
+                        <div class="book-card">
+                            <div class="card-img-wrapper">
+                                <img src="@(string.IsNullOrEmpty(book.Image) ? "/images/ResimBulunamadi.png" : book.Image)"
+                                     class="card-img-top"
+                                     alt="@book.Name"
+                                     loading="lazy">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" title="@book.Name">
+                                    @book.Name
+                                </h5>
+
+                                <p class="author-name" title="@book.Author">
+                                    <i class="fa-solid fa-feather"></i> @book.Author
+                                </p>
+
+                                <div class="mt-auto text-center">
+                                    <a href="/Home/Details/@book.Id" class="details-btn">
+                                        Detayları Gör
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         }
         else
         {
-            <div class="text-center mt-4 text-muted">
-                Bu kategorideki tek kitap
+            <div class="no-related-books">
+                <i class="fa-solid fa-book-open" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                Bu kategoride başka kitap bulunmamaktadır.
             </div>
         }
 
     </div>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const toggleBtn = document.getElementById("toggleDesc");
