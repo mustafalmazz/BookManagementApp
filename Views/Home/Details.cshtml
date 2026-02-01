@@ -5,6 +5,36 @@
 }
 
 <style>
+    .rating-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .star-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .star-icon {
+        transition: all 0.2s ease;
+    }
+
+        .star-icon:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+
+    .star-rating.rating-mode .star-icon {
+        cursor: pointer !important;
+    }
+
+    .star-rating:not(.rating-mode) .star-icon {
+        cursor: default;
+    }
+
     /* --- GENEL AYARLAR --- */
     body {
         background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
@@ -393,310 +423,303 @@
 
     /* --- RESPONSIVE KISMI --- */
     @@media (max-width: 992px) {
-        .books-grid
-
-    {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-    }
-
+        .books-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
     }
 
     @@media (max-width: 768px) {
+        .star-icon {
+            font-size: 18px !important;
+        }
+
+        .rating-section {
+            justify-content: flex-start;
+            gap: 5px;
+        }
         /* Container ve Genel Ayarlar */
-        .details-container
-
-    {
-        padding: 15px 0;
-    }
-
-    .container {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    /* Breadcrumb */
-    .breadcrumb-wrapper {
-        padding: 8px 15px;
-        margin-bottom: 20px;
-    }
-
-    .breadcrumb {
-        font-size: 0.85rem;
-    }
-
-    /* Kitap Detay Kartı */
-    .book-details-card {
-        border-radius: 15px;
-    }
-
-    /* Resim Bölümü - Mobilde Üstte */
-    .image-section {
-        padding: 25px 20px;
-    }
-
-    .book-image-wrapper {
-        max-width: 280px;
-    }
-
-    .book-image {
-        border-radius: 10px;
-    }
-
-    /* Bilgi Bölümü */
-    .info-section {
-        padding: 25px 20px;
-    }
-
-    .book-title {
-        font-size: 1.6rem;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    /* Açıklama Bölümü */
-    .description-section {
-        margin: 15px 0;
-        padding: 15px;
-        border-radius: 10px;
-    }
-
-    .description-title {
-        font-size: 1.1rem;
-        margin-bottom: 8px;
-    }
-
-    .description-text {
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-
-    .btn-secondary-mini {
-        font-size: 0.75rem;
-        padding: 5px 10px;
-    }
-
-    .decorative-divider {
-        margin: 20px 0;
-    }
-
-    /* Kitap Bilgileri - Mobilde Daha Kompakt */
-    .book-author {
-        font-size: 1rem;
-        margin-bottom: 10px;
-        gap: 5px;
-        word-break: break-word;
-    }
-
-        .book-author i {
-            font-size: 1rem;
-            flex-shrink: 0;
+        .details-container {
+            padding: 15px 0;
         }
 
-    .rating {
-        font-size: 0.95rem;
-        margin-bottom: 12px;
-        gap: 6px;
-    }
-
-        /* Rating Yıldızları - Mobilde Daha Küçük */
-        .rating i {
-            font-size: 16px !important;
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
         }
 
-    /* Notlar Butonu - Mobilde Full Width */
-    .btn-notes-primary {
-        width: 100%;
-        justify-content: center;
-        padding: 10px 16px;
-        font-size: 0.8rem;
-        margin-top: 10px;
-    }
+        /* Breadcrumb */
+        .breadcrumb-wrapper {
+            padding: 8px 15px;
+            margin-bottom: 20px;
+        }
 
-    /* Row Düzenleme - Mobilde Stack */
-    .info-section .row {
-        margin-bottom: 8px;
-    }
+        .breadcrumb {
+            font-size: 0.85rem;
+        }
 
-        .info-section .row > div {
+        /* Kitap Detay Kartı */
+        .book-details-card {
+            border-radius: 15px;
+        }
+
+        /* Resim Bölümü - Mobilde Üstte */
+        .image-section {
+            padding: 25px 20px;
+        }
+
+        .book-image-wrapper {
+            max-width: 280px;
+        }
+
+        .book-image {
+            border-radius: 10px;
+        }
+
+        /* Bilgi Bölümü */
+        .info-section {
+            padding: 25px 20px;
+        }
+
+        .book-title {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Açıklama Bölümü */
+        .description-section {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .description-title {
+            font-size: 1.1rem;
             margin-bottom: 8px;
         }
 
-    /* Benzer Kitaplar Bölümü */
-    .related-books-section {
-        margin-top: 35px;
-    }
-
-    .section-title {
-        font-size: 1.4rem;
-        margin-bottom: 8px;
-    }
-
-    /* Kitaplar Grid - Mobilde 2'li */
-    .books-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin-top: 20px;
-    }
-
-    /* Kitap Kartları - Mobil Optimizasyonu */
-    .book-card {
-        border-radius: 12px;
-    }
-
-    .card-img-wrapper {
-        height: 200px;
-    }
-
-    .card-body {
-        padding: 12px;
-    }
-
-    .card-title {
-        font-size: 0.85rem;
-        min-height: 38px;
-        margin-bottom: 6px;
-        line-height: 1.3;
-    }
-
-    .author-name {
-        font-size: 0.75rem;
-        margin-bottom: 10px;
-    }
-
-        .author-name i {
-            font-size: 0.7rem;
+        .description-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
-    .details-btn {
-        padding: 8px 12px;
-        font-size: 0.65rem;
-        border-radius: 20px;
-        letter-spacing: 0.3px;
-    }
-
-    /* No Related Books */
-    .no-related-books {
-        margin-top: 25px;
-        padding: 30px 15px;
-        font-size: 0.95rem;
-    }
-
-        .no-related-books i {
-            font-size: 1.5rem !important;
+        .btn-secondary-mini {
+            font-size: 0.75rem;
+            padding: 5px 10px;
         }
 
-    /* Hover Efektlerini Mobilde Kaldır */
-    .book-card:hover {
-        transform: none;
-    }
+        .decorative-divider {
+            margin: 20px 0;
+        }
 
-    .book-image:hover {
-        transform: none;
-    }
+        /* Kitap Bilgileri - Mobilde Daha Kompakt */
+        .book-author {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            gap: 5px;
+            word-break: break-word;
+        }
 
+            .book-author i {
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+
+        .rating {
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            gap: 6px;
+        }
+
+            /* Rating Yıldızları - Mobilde Daha Küçük */
+            .rating i {
+                font-size: 16px !important;
+            }
+
+        /* Notlar Butonu - Mobilde Full Width */
+        .btn-notes-primary {
+            width: 100%;
+            justify-content: center;
+            padding: 10px 16px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        /* Row Düzenleme - Mobilde Stack */
+        .info-section .row {
+            margin-bottom: 8px;
+        }
+
+            .info-section .row > div {
+                margin-bottom: 8px;
+            }
+
+        /* Benzer Kitaplar Bölümü */
+        .related-books-section {
+            margin-top: 35px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        /* Kitaplar Grid - Mobilde 2'li */
+        .books-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Kitap Kartları - Mobil Optimizasyonu */
+        .book-card {
+            border-radius: 12px;
+        }
+
+        .card-img-wrapper {
+            height: 200px;
+        }
+
+        .card-body {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            min-height: 38px;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .author-name {
+            font-size: 0.75rem;
+            margin-bottom: 10px;
+        }
+
+            .author-name i {
+                font-size: 0.7rem;
+            }
+
+        .details-btn {
+            padding: 8px 12px;
+            font-size: 0.65rem;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        /* No Related Books */
+        .no-related-books {
+            margin-top: 25px;
+            padding: 30px 15px;
+            font-size: 0.95rem;
+        }
+
+            .no-related-books i {
+                font-size: 1.5rem !important;
+            }
+
+        /* Hover Efektlerini Mobilde Kaldır */
+        .book-card:hover {
+            transform: none;
+        }
+
+        .book-image:hover {
+            transform: none;
+        }
     }
 
     @@media (max-width: 576px) {
         /* Ekstra Küçük Ekranlar İçin */
-        .book-title
+        .book-title {
+            font-size: 1.4rem;
+        }
 
-    {
-        font-size: 1.4rem;
-    }
+        .book-author {
+            font-size: 1rem;
+            gap: 3px;
+        }
 
-    .book-author {
-        font-size: 1rem;
-        gap: 3px;
-    }
+            .book-author i {
+                font-size: 1rem;
+            }
 
-        .book-author i {
+        .description-title {
             font-size: 1rem;
         }
 
-    .description-title {
-        font-size: 1rem;
-    }
+        .description-text {
+            font-size: 0.85rem;
+        }
 
-    .description-text {
-        font-size: 0.85rem;
-    }
+        /* Kitap Kartları Daha Kompakt */
+        .card-img-wrapper {
+            height: 180px;
+        }
 
-    /* Kitap Kartları Daha Kompakt */
-    .card-img-wrapper {
-        height: 180px;
-    }
+        .card-body {
+            padding: 10px;
+        }
 
-    .card-body {
-        padding: 10px;
-    }
+        .card-title {
+            font-size: 0.8rem;
+            min-height: 36px;
+        }
 
-    .card-title {
-        font-size: 0.8rem;
-        min-height: 36px;
-    }
+        .author-name {
+            font-size: 0.7rem;
+            margin-bottom: 8px;
+        }
 
-    .author-name {
-        font-size: 0.7rem;
-        margin-bottom: 8px;
-    }
+        .details-btn {
+            padding: 7px 10px;
+            font-size: 0.6rem;
+        }
 
-    .details-btn {
-        padding: 7px 10px;
-        font-size: 0.6rem;
-    }
-
-    .books-grid {
+        .books-grid {
             /* Değişti: 280px yerine 220px yapıldı. Artık satıra daha çok kitap sığıyor */
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 10px;
-    }
-
+        }
     }
 
     @@media (max-width: 480px) {
         /* Çok Küçük Ekranlar */
-        .image-section
+        .image-section {
+            padding: 20px 15px;
+        }
 
-    {
-        padding: 20px 15px;
-    }
+        .book-image-wrapper {
+            max-width: 250px;
+        }
 
-    .book-image-wrapper {
-        max-width: 250px;
-    }
+        .info-section {
+            padding: 20px 15px;
+        }
 
-    .info-section {
-        padding: 20px 15px;
-    }
+        .book-title {
+            font-size: 1.3rem;
+        }
 
-    .book-title {
-        font-size: 1.3rem;
-    }
+        .section-title {
+            font-size: 1.2rem;
+        }
 
-    .section-title {
-        font-size: 1.2rem;
-    }
-
-    .card-img-wrapper {
-        height: 170px;
-    }
-
+        .card-img-wrapper {
+            height: 170px;
+        }
     }
 
     /* Tablet Yatay - Orta Boyut Ayarları */
     @@media (min-width: 769px) and (max-width: 991px) {
-        .books-grid
+        .books-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
 
-    {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-    }
-
-    .card-img-wrapper {
-        height: 260px;
-    }
-
+        .card-img-wrapper {
+            height: 260px;
+        }
     }
 </style>
 
@@ -732,17 +755,34 @@
                             <h3 class="description-title">
                                 <i class="bi bi-book-half"></i>
                                 Kitap Özeti
+                                <button type="button" id="editDescBtn" class="btn" style="background: none; border: none; color: #8b6f47; padding: 0; margin-left: 10px; cursor: pointer;">
+                                    <i class="fa-solid fa-pen-to-square" style="font-size: 1.1rem;"></i>
+                                </button>
                             </h3>
 
-                            <p id="shortDesc" class="description-text">@shortDesc</p>
+                            <div id="descriptionView">
+                                <p id="shortDesc" class="description-text">@shortDesc</p>
 
-                            @if (Model.Book.Description.Length > 260)
-                            {
-                                <p id="fullDesc" class="description-text" style="display:none;">@Model.Book.Description</p>
-                                <a href="javascript:void(0)" id="toggleDesc" class="btn-secondary-mini">
-                                    Devamını Oku <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            }
+                                @if (Model.Book.Description.Length > 260)
+                                {
+                                    <p id="fullDesc" class="description-text" style="display:none;">@Model.Book.Description</p>
+                                    <a href="javascript:void(0)" id="toggleDesc" class="btn-secondary-mini">
+                                        Devamını Oku <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                }
+                            </div>
+
+                            <div id="descriptionEdit" style="display: none;">
+                                <textarea id="descriptionTextarea" class="form-control" rows="6" style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif; font-size: 1rem; padding: 12px;">@Model.Book.Description</textarea>
+                                <div style="margin-top: 10px; display: flex; gap: 10px;">
+                                    <button type="button" id="saveDescBtn" class="btn-secondary-mini" style="background: #8b6f47; color: #f5f0e8; border: none;">
+                                        <i class="fa-solid fa-check"></i> Kaydet
+                                    </button>
+                                    <button type="button" id="cancelDescBtn" class="btn-secondary-mini">
+                                        <i class="fa-solid fa-xmark"></i> İptal
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     }
                     else
@@ -751,65 +791,204 @@
                             <h3 class="description-title">
                                 <i class="bi bi-book-half"></i>
                                 Kitap Özeti
+                                <button type="button" id="editDescBtn" class="btn" style="background: none; border: none; color: #8b6f47; padding: 0; margin-left: 10px; cursor: pointer;">
+                                    <i class="fa-solid fa-pen-to-square" style="font-size: 1.1rem;"></i>
+                                </button>
                             </h3>
-                            <p class="description-text text-muted"><br /><em>Henüz bu kitaba ait özet eklenmedi.</em><br /><br /></p>
+
+                            <div id="descriptionView">
+                                <p class="description-text text-muted"><br /><em>Henüz bu kitaba ait özet eklenmedi.</em><br /><br /></p>
+                            </div>
+
+                            <div id="descriptionEdit" style="display: none;">
+                                <textarea id="descriptionTextarea" class="form-control" rows="6" style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif; font-size: 1rem; padding: 12px;"></textarea>
+                                <div style="margin-top: 10px; display: flex; gap: 10px;">
+                                    <button type="button" id="saveDescBtn" class="btn-secondary-mini" style="background: #8b6f47; color: #f5f0e8; border: none;">
+                                        <i class="fa-solid fa-check"></i> Kaydet
+                                    </button>
+                                    <button type="button" id="cancelDescBtn" class="btn-secondary-mini">
+                                        <i class="fa-solid fa-xmark"></i> İptal
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     }
 
                     <div class="decorative-divider"></div>
 
-                    <div class="row">
-                        <div class="book-author col-md-6 col-6">
-                            <i class="fa-solid fa-feather"></i>
-                            @Model.Book.Author
+                    <!-- Kitap Bilgileri Başlık ve Düzenle Butonu -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                        <h3 class="description-title" style="margin-bottom: 0;">
+                            <i class="bi bi-info-circle"></i>
+                            Kitap Bilgileri
+                        </h3>
+                        <button type="button" id="editInfoBtn" class="btn" style="background: none; border: none; color: #8b6f47; padding: 0; cursor: pointer;">
+                            <i class="fa-solid fa-pen-to-square" style="font-size: 1.1rem;"></i>
+                        </button>
+                    </div>
+
+                    <!-- Görüntüleme Modu -->
+                    <div id="infoView">
+                        <div class="row">
+                            <div class="book-author col-md-6 col-6">
+                                <i class="fa-solid fa-feather"></i>
+                                @Model.Book.Author
+                            </div>
+                            <div class="book-author col-md-6 col-6">
+                                <i class="fa-solid fa-layer-group"></i> @Model.Book.Category.CategoryName
+                            </div>
+                            <div class="row">
+                                <div class="book-author col-md-6 col-6">
+                                    <i class="fa-solid fa-calendar"></i> @Model.Book.CreateDate.ToString("dd MMMM yyyy")
+                                </div>
+                                <div class="book-author col-md-6 col-6">
+                                    <i class="fa-solid fa-scroll"></i> @Model.Book.TotalPages Sayfa
+                                </div>
+                            </div>
                         </div>
-                        <div class="book-author col-md-6 col-6">
-                            <i class="fa-solid fa-layer-group"></i> @Model.Book.Category.CategoryName
+
+                        <div class="row">
+                            <div class="col-md-7 col-12">
+                                <div class="rating-section">
+                                    <text class="rating" style="line-height: 1; margin-bottom: 0;">Puanım/ </text>
+                                    <div class="star-rating" data-book-id="@Model.Book.Id">
+                                        @if (Model.Book.Rate.HasValue)
+                                        {
+                                            double rate = Convert.ToDouble(Model.Book.Rate.Value);
+                                            int fullStars = (int)Math.Floor(rate);
+                                            bool hasHalfStar = (rate - fullStars) >= 0.5;
+
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= fullStars)
+                                                {
+                                                    <i class="fa-solid fa-star text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                                }
+                                                else if (i == fullStars + 1 && hasHalfStar)
+                                                {
+                                                    <i class="fa-solid fa-star-half-stroke text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa-regular fa-star text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fa-regular fa-star text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-12">
+                                <a href="/home/notes/@Model.Book?.Id" class="btn-notes-primary">Not Al    <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="book-author col-md-6 col-6">
-                            <i class="fa-solid fa-calendar"></i>@Model.Book.CreateDate.ToString("dd MMMM yyyy")
+                    <!-- Düzenleme Modu -->
+                    <div id="infoEdit" style="display: none;">
+                        <div class="row g-3">
+                            <!-- Kitap İsmi -->
+                            <div class="col-12">
+                                <label for="bookNameInput" style="color: #8b6f47; font-weight: 600; margin-bottom: 5px;">
+                                    <i class="fa-solid fa-book"></i> Kitap Adı
+                                </label>
+                                <input type="text" id="bookNameInput" class="form-control" value="@Model.Book.Name"
+                                       style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif;">
+                            </div>
+
+                            <!-- Resim Yükleme -->
+                            <div class="col-12">
+                                <label for="bookImageInput" style="color: #8b6f47; font-weight: 600; margin-bottom: 5px;">
+                                    <i class="fa-solid fa-image"></i> Kitap Resmi
+                                </label>
+                                <input type="file" id="bookImageInput" class="form-control" accept="image/*"
+                                       style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif;">
+                                <small style="color: #8b6f47; font-size: 0.85rem;">Mevcut resim: @(string.IsNullOrEmpty(Model.Book.Image) ? "Yok" : "Var")</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="authorInput" style="color: #8b6f47; font-weight: 600; margin-bottom: 5px;">
+                                    <i class="fa-solid fa-feather"></i> Yazar
+                                </label>
+                                <input type="text" id="authorInput" class="form-control" value="@Model.Book.Author" 
+                                       style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif;">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="categorySelect" style="color: #8b6f47; font-weight: 600; margin-bottom: 5px;">
+                                    <i class="fa-solid fa-layer-group"></i> Kategori
+                                </label>
+                                <select id="categorySelect" class="form-select" 
+                                        style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif;">
+                                    @foreach (var category in Model.AllCategories)
+                                    {
+                                        <option value="@category.Id" @@(category.Id == Model.Book.CategoryId ? "selected" : "")>
+                                            @category.CategoryName
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pagesInput" style="color: #8b6f47; font-weight: 600; margin-bottom: 5px;">
+                                    <i class="fa-solid fa-scroll"></i> Sayfa Sayısı
+                                </label>
+                                <input type="number" id="pagesInput" class="form-control" value="@Model.Book.TotalPages" min="1"
+                                       style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif;">
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: #8b6f47; font-weight: 600; margin-bottom: 5px;">
+                                    <i class="fa-solid fa-star"></i> Puanım
+                                </label>
+                                <div class="rating-section" style="margin-top: 5px;">
+                                    <div class="star-rating rating-mode" id="editStarRating" data-book-id="@Model.Book.Id">
+                                        @if (Model.Book.Rate.HasValue)
+                                        {
+                                            double rate = Convert.ToDouble(Model.Book.Rate.Value);
+                                            int fullStars = (int)Math.Floor(rate);
+                                            bool hasHalfStar = (rate - fullStars) >= 0.5;
+
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= fullStars)
+                                                {
+                                                    <i class="fa-solid fa-star text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                                }
+                                                else if (i == fullStars + 1 && hasHalfStar)
+                                                {
+                                                    <i class="fa-solid fa-star-half-stroke text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa-regular fa-star text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fa-regular fa-star text-warning star-icon" data-rating="@i" style="font-size:20px; cursor: pointer; vertical-align: middle; line-height: 1;"></i>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="book-author col-md-6 col-6">
-                            <i class="fa-solid fa-scroll"></i>@Model.Book.TotalPages Sayfa
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button type="button" id="saveInfoBtn" class="btn-secondary-mini" style="background: #8b6f47; color: #f5f0e8; border: none;">
+                                <i class="fa-solid fa-check"></i> Kaydet
+                            </button>
+                            <button type="button" id="cancelInfoBtn" class="btn-secondary-mini">
+                                <i class="fa-solid fa-xmark"></i> İptal
+                            </button>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-7 col-12">
-                            <text class="rating">Puanım/ </text>
-                            @if (Model.Book.Rate.HasValue)
-                            {
-                                double rate = Convert.ToDouble(Model.Book.Rate.Value);
-                                int fullStars = (int)Math.Floor(rate);
-                                bool hasHalfStar = (rate - fullStars) >= 0.5;
-
-                                @for (int i = 0; i < fullStars; i++)
-                                {
-                                    <i style="font-size:20px;" class="fa-solid fa-star text-warning"></i>
-                                }
-
-                                @if (hasHalfStar)
-                                {
-                                    <i style="font-size:20px;" class="fa-solid fa-star-half-stroke text-warning"></i>
-                                }
-
-                                @for (int i = 0; i < (5 - fullStars - (hasHalfStar ? 1 : 0)); i++)
-                                {
-                                    <i style="font-size:20px;" class="fa-regular fa-star text-warning"></i>
-                                }
-                            }
-                            else
-                            {
-                                <span class="text-muted">Henüz Puanlanmadı</span>
-                            }
-                        </div>
-                        <div class="col-md-5 col-12">
-                            <a href="/home/notes/@Model.Book?.Id" class="btn-notes-primary">Aldığım Notlar    <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
+                  
                 </div>
             </div>
         </div>
@@ -878,6 +1057,224 @@
                     shortDesc.style.display = "block";
                     toggleBtn.innerHTML = 'Devamını Oku <i class="fa-solid fa-arrow-right"></i>';
                 }
+            });
+        }
+
+        // AÇIKLAMA Düzenleme butonu işlevselliği
+        const editDescBtn = document.getElementById("editDescBtn");
+        const saveDescBtn = document.getElementById("saveDescBtn");
+        const cancelDescBtn = document.getElementById("cancelDescBtn");
+        const descView = document.getElementById("descriptionView");
+        const descEdit = document.getElementById("descriptionEdit");
+        const descTextarea = document.getElementById("descriptionTextarea");
+
+        if (editDescBtn) {
+            editDescBtn.addEventListener("click", function () {
+                descView.style.display = "none";
+                descEdit.style.display = "block";
+            });
+        }
+
+        if (cancelDescBtn) {
+            cancelDescBtn.addEventListener("click", function () {
+                descView.style.display = "block";
+                descEdit.style.display = "none";
+            });
+        }
+
+        if (saveDescBtn) {
+            saveDescBtn.addEventListener("click", function () {
+                const newDescription = descTextarea.value;
+                const bookId = @Model.Book.Id;
+
+                fetch('/Home/UpdateDescription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bookId: bookId,
+                        description: newDescription
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Bir hata oluştu: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Bir hata oluştu.');
+                });
+            });
+        }
+
+        // ===== KİTAP BİLGİLERİ DÜZENLEME SİSTEMİ =====
+        const editInfoBtn = document.getElementById('editInfoBtn');
+        const saveInfoBtn = document.getElementById('saveInfoBtn');
+        const cancelInfoBtn = document.getElementById('cancelInfoBtn');
+        const infoView = document.getElementById('infoView');
+        const infoEdit = document.getElementById('infoEdit');
+
+        // Düzenleme moduna geç
+        if (editInfoBtn) {
+            editInfoBtn.addEventListener('click', function () {
+                infoView.style.display = 'none';
+                infoEdit.style.display = 'block';
+                
+                // Düzenleme modundaki yıldızları aktif et
+                const editStars = document.querySelectorAll('#editStarRating .star-icon');
+                editStars.forEach(star => {
+                    star.style.cursor = 'pointer';
+                });
+            });
+        }
+
+        // İptal butonuna tıklandığında
+        if (cancelInfoBtn) {
+            cancelInfoBtn.addEventListener('click', function () {
+                infoView.style.display = 'block';
+                infoEdit.style.display = 'none';
+            });
+        }
+
+        // Kaydet butonuna tıklandığında
+           if (saveInfoBtn) {
+        saveInfoBtn.addEventListener('click', function () {
+            const bookId = @Model.Book.Id;
+            const newBookName = document.getElementById('bookNameInput').value;
+            const newAuthor = document.getElementById('authorInput').value;
+            const newCategoryId = document.getElementById('categorySelect').value;
+            const newPages = document.getElementById('pagesInput').value;
+            const imageFile = document.getElementById('bookImageInput').files[0];
+
+            const currentRating = tempRating !== null ? tempRating : parseFloat(@(Model.Book.Rate ?? 0));
+
+            // FormData kullanarak resim yükleme
+            const formData = new FormData();
+            formData.append('bookId', bookId);
+            formData.append('name', newBookName);
+            formData.append('author', newAuthor);
+            formData.append('categoryId', parseInt(newCategoryId));
+            formData.append('totalPages', parseInt(newPages));
+            formData.append('rating', currentRating);
+
+            if (imageFile) {
+                formData.append('imageFile', imageFile);
+            }
+
+            fetch('/Home/UpdateBookInfo', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Bir hata oluştu: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Bilgiler kaydedilemedi.');
+            });
+        });
+    }
+
+        // ===== YILDIZ PUANLAMA SİSTEMİ =====
+        const viewStarRating = document.querySelector('#infoView .star-rating');
+        const editStarRating = document.querySelector('#editStarRating');
+        let tempRating = null; // Geçici puan tutacak (kaydetmeden önce)
+
+        // Görüntüleme modundaki yıldızlar (sadece görsel, tıklanamaz)
+        if (viewStarRating) {
+            const viewStars = viewStarRating.querySelectorAll('.star-icon');
+            viewStars.forEach(star => {
+                star.style.cursor = 'default';
+            });
+        }
+
+        // Düzenleme modundaki yıldızlar
+        if (editStarRating) {
+            const editStars = editStarRating.querySelectorAll('.star-icon');
+            let currentRating = parseFloat(@(Model.Book.Rate ?? 0));
+
+            editStars.forEach((star, index) => {
+                // Mouse enter - önizleme
+                star.addEventListener('mouseenter', function() {
+                    highlightStars(editStars, index + 1);
+                });
+
+                // Click - puan verme
+                star.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const clickedRating = index + 1;
+
+                    // Eğer aynı yıldıza tekrar tıklanırsa 0.5 yap
+                    if (tempRating !== null && Math.abs(tempRating - clickedRating) < 0.1) {
+                        const newRating = clickedRating - 0.5;
+                        if (newRating >= 0.5) {
+                            tempRating = newRating;
+                            highlightStars(editStars, newRating);
+                        }
+                    } else {
+                        tempRating = clickedRating;
+                        highlightStars(editStars, clickedRating);
+                    }
+                });
+
+                // Double click - 0.5 yıldız seçimi
+                star.addEventListener('dblclick', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const halfRating = index + 0.5;
+                    tempRating = halfRating;
+                    highlightStars(editStars, halfRating);
+                });
+            });
+
+            // Mouse yıldızlardan ayrıldığında son seçilen puanı göster
+            editStarRating.addEventListener('mouseleave', function() {
+                const displayRating = tempRating !== null ? tempRating : currentRating;
+                if (displayRating > 0) {
+                    highlightStars(editStars, displayRating);
+                } else {
+                    resetStars(editStars);
+                }
+            });
+        }
+
+        function highlightStars(stars, rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = (rating % 1) >= 0.5;
+
+            stars.forEach((star, index) => {
+                if (index < fullStars) {
+                    star.className = 'fa-solid fa-star text-warning star-icon';
+                } else if (index === fullStars && hasHalfStar) {
+                    star.className = 'fa-solid fa-star-half-stroke text-warning star-icon';
+                } else {
+                    star.className = 'fa-regular fa-star text-warning star-icon';
+                }
+                star.style.fontSize = '20px';
+                star.style.cursor = 'pointer';
+                star.setAttribute('data-rating', index + 1);
+            });
+        }
+
+        function resetStars(stars) {
+            stars.forEach((star, index) => {
+                star.className = 'fa-regular fa-star text-warning star-icon';
+                star.style.fontSize = '20px';
+                star.style.cursor = 'pointer';
+                star.setAttribute('data-rating', index + 1);
             });
         }
     });

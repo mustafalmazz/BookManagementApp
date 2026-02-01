@@ -1,0 +1,732 @@
+﻿@model Book
+@{
+    ViewData["Title"] = "Yeni Kitap Ekle";
+}
+
+<style>
+    /* --- GENEL AYARLAR --- */
+    body {
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+        color: #4a3f35;
+    }
+
+    /* --- BUTON STİLLERİ --- */
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        border: none;
+        color: #f5f0e8;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 10px rgba(107, 85, 65, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(107, 85, 65, 0.5);
+            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+            color: #f5f0e8;
+        }
+
+    .btn-secondary-custom {
+        background: transparent;
+        border: 2px solid #a0785a;
+        color: #8b6f47;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #8b6f47;
+            color: #f5f0e8;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(107, 85, 65, 0.3);
+        }
+
+    /* --- LAYOUT --- */
+    .add-book-container {
+        padding: 20px 0;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .breadcrumb-wrapper {
+        background: rgba(255, 255, 255, 0.6);
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 2px 5px rgba(107, 85, 65, 0.05);
+    }
+
+    .breadcrumb {
+        margin: 0;
+        padding: 0;
+        font-family: 'Georgia', serif;
+        font-size: 0.95rem;
+    }
+
+    .breadcrumb-item a {
+        color: #8b6f47;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+        .breadcrumb-item a:hover {
+            color: #6b5541;
+        }
+
+    .breadcrumb-item.active {
+        color: #4a3f35;
+        font-weight: 600;
+    }
+
+    /* --- ANA FORM KARTI --- */
+    .add-book-card {
+        background: #fff9f0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(107, 85, 65, 0.15);
+        position: relative;
+    }
+
+        .add-book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b6f47, #6b5541);
+        }
+
+    .card-header-custom {
+        background: linear-gradient(135deg, #f5ede0 0%, #e8dcc8 100%);
+        padding: 30px 35px;
+        border-bottom: 2px solid rgba(139, 111, 71, 0.1);
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #4a3f35;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+
+        .page-title i {
+            font-size: 1.8rem;
+            color: #8b6f47;
+        }
+
+    .page-subtitle {
+        color: #8b6f47;
+        font-size: 1rem;
+        margin-top: 8px;
+        font-style: italic;
+    }
+
+    .card-body-custom {
+        padding: 35px;
+    }
+
+    /* --- FORM ELEMANLARI --- */
+    .form-label-custom {
+        color: #8b6f47;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .form-label-custom i {
+            font-size: 0.9rem;
+        }
+
+        .form-label-custom .required {
+            color: #c9302c;
+            margin-left: 3px;
+        }
+
+    .form-control-custom,
+    .form-select-custom {
+        border: 2px solid #8b6f47;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-family: 'Georgia', serif;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #fff;
+    }
+
+        .form-control-custom:focus,
+        .form-select-custom:focus {
+            border-color: #6b5541;
+            box-shadow: 0 0 0 0.2rem rgba(139, 111, 71, 0.25);
+            outline: none;
+        }
+
+    textarea.form-control-custom {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    /* --- RESİM YÜKLEME ALANI --- */
+    .image-upload-section {
+        background: linear-gradient(135deg, #f5ede0 0%, #e8dcc8 100%);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 25px;
+        border: 2px dashed #8b6f47;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+        .image-upload-section:hover {
+            border-color: #6b5541;
+            background: linear-gradient(135deg, #e8dcc8 0%, #dcc9b0 100%);
+        }
+
+    .image-preview-wrapper {
+        margin-top: 20px;
+        display: none;
+    }
+
+    .image-preview {
+        max-width: 300px;
+        max-height: 400px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(107, 85, 65, 0.3);
+        margin: 0 auto;
+        display: block;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: #8b6f47;
+        margin-bottom: 15px;
+    }
+
+    .upload-text {
+        color: #4a3f35;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .upload-hint {
+        color: #8b6f47;
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+
+    /* --- YILDIZ PUANLAMA --- */
+    .rating-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .star-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .star-icon {
+        font-size: 26px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #ffc107;
+    }
+
+        .star-icon:hover {
+            transform: scale(1.15);
+            filter: brightness(1.2);
+        }
+
+    /* --- FORM BÖLÜM AYRAÇLARI --- */
+    .section-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #8b6f47, transparent);
+        margin: 30px 0;
+    }
+
+    .section-title {
+        color: #4a3f35;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .section-title i {
+            color: #8b6f47;
+        }
+
+    /* --- BUTON GRUBU --- */
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 2px solid rgba(139, 111, 71, 0.1);
+    }
+
+    /* --- VALİDASYON MESAJLARI --- */
+    .text-danger {
+        color: #c9302c;
+        font-size: 0.875rem;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .validation-summary {
+        background: rgba(201, 48, 44, 0.1);
+        border-left: 4px solid #c9302c;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+    }
+
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .validation-summary li {
+            color: #c9302c;
+            margin-bottom: 5px;
+        }
+
+    /* --- RESPONSIVE TASARIM --- */
+    @@media (max-width: 768px) {
+        .add-book-container
+
+    {
+        padding: 15px 0;
+    }
+
+    .breadcrumb-wrapper {
+        padding: 8px 15px;
+        margin-bottom: 20px;
+    }
+
+    .add-book-card {
+        border-radius: 15px;
+    }
+
+    .card-header-custom {
+        padding: 25px 20px;
+    }
+
+    .page-title {
+        font-size: 1.6rem;
+    }
+
+        .page-title i {
+            font-size: 1.4rem;
+        }
+
+    .page-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .card-body-custom {
+        padding: 25px 20px;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+    }
+
+    .form-label-custom {
+        font-size: 0.95rem;
+    }
+
+    .form-control-custom,
+    .form-select-custom {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
+
+    .image-upload-section {
+        padding: 20px 15px;
+    }
+
+    .upload-icon {
+        font-size: 2.5rem;
+    }
+
+    .upload-text {
+        font-size: 1rem;
+    }
+
+    .upload-hint {
+        font-size: 0.85rem;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        max-height: 300px;
+    }
+
+    .star-icon {
+        font-size: 22px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-primary-custom,
+    .btn-secondary-custom {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+
+    .section-divider {
+        margin: 20px 0;
+    }
+
+    }
+
+    @@media (max-width: 576px) {
+        .container
+
+    {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .card-header-custom {
+        padding: 20px 15px;
+    }
+
+    .page-title {
+        font-size: 1.4rem;
+        gap: 8px;
+    }
+
+    .card-body-custom {
+        padding: 20px 15px;
+    }
+
+    .form-control-custom,
+    .form-select-custom {
+        font-size: 0.9rem;
+    }
+
+    .star-icon {
+        font-size: 20px;
+    }
+
+    }
+
+    @@media (max-width: 480px) {
+        .breadcrumb
+
+    {
+        font-size: 0.8rem;
+    }
+
+    .page-title {
+        font-size: 1.3rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.85rem;
+    }
+
+    }
+</style>
+
+<div class="add-book-container">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Home/Index">Kitaplar</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Yeni Kitap Ekle</li>
+            </ol>
+        </nav>
+
+        <!-- Ana Form Kartı -->
+        <div class="add-book-card">
+            <!-- Başlık -->
+            <div class="card-header-custom">
+                <h1 class="page-title">
+                    <i class="fa-solid fa-book-medical"></i>
+                    Yeni Kitap Ekle
+                </h1>
+                <p class="page-subtitle">Kütüphanenize yeni bir kitap ekleyin</p>
+            </div>
+
+            <!-- Form İçeriği -->
+            <div class="card-body-custom">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                    <!-- RESİM YÜKLEME BÖLÜMÜ -->
+                    <div class="image-upload-section">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <div class="upload-text">Kitap Kapağı Yükle</div>
+                        <p class="upload-hint">JPG, PNG veya WEBP formatında resim seçin</p>
+                        <input type="file"
+                               asp-for="Image"
+                               class="form-control-custom"
+                               accept="image/*"
+                               id="imageInput"
+                               style="margin-top: 15px;">
+                        <span asp-validation-for="Image" class="text-danger"></span>
+
+                        <div class="image-preview-wrapper" id="imagePreviewWrapper">
+                            <img id="imagePreview" class="image-preview" alt="Kitap Kapağı Önizleme">
+                        </div>
+                    </div>
+
+                    <!-- TEMEL BİLGİLER -->
+                    <div class="section-title">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Temel Bilgiler
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <!-- Kitap Adı -->
+                        <div class="col-12">
+                            <label asp-for="Name" class="form-label-custom">
+                                <i class="fa-solid fa-book"></i>
+                                Kitap Adı
+                                <span class="required">*</span>
+                            </label>
+                            <input asp-for="Name"
+                                   class="form-control-custom"
+                                   placeholder="Örn: Suç ve Ceza"
+                                   required>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <!-- Yazar -->
+                        <div class="col-md-6">
+                            <label asp-for="Author" class="form-label-custom">
+                                <i class="fa-solid fa-feather"></i>
+                                Yazar
+                                <span class="required">*</span>
+                            </label>
+                            <input asp-for="Author"
+                                   class="form-control-custom"
+                                   placeholder="Örn: Fyodor Dostoyevski"
+                                   required>
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+
+                        <!-- Kategori -->
+                        <div class="col-md-6">
+                            <label asp-for="CategoryId" class="form-label-custom">
+                                <i class="fa-solid fa-layer-group"></i>
+                                Kategori
+                                <span class="required">*</span>
+                            </label>
+                            <select asp-for="CategoryId"
+                                    class="form-select-custom"
+                                    asp-items="ViewBag.Categories"
+                                    required>
+                                <option value="">Kategori Seçiniz</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Sayfa Sayısı -->
+                        <div class="col-md-6">
+                            <label asp-for="TotalPages" class="form-label-custom">
+                                <i class="fa-solid fa-scroll"></i>
+                                Sayfa Sayısı
+                            </label>
+                            <input asp-for="TotalPages"
+                                   type="number"
+                                   class="form-control-custom"
+                                   placeholder="Örn: 350"
+                                   min="1">
+                            <span asp-validation-for="TotalPages" class="text-danger"></span>
+                        </div>
+
+                        <!-- Puan -->
+                        <div class="col-md-6">
+                            <label class="form-label-custom">
+                                <i class="fa-solid fa-star"></i>
+                                Puanım
+                            </label>
+                            <div class="rating-section">
+                                <div class="star-rating" id="starRating">
+                                    <i class="fa-regular fa-star star-icon" data-rating="1"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="2"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="3"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="4"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="5"></i>
+                                </div>
+                                <input type="hidden" asp-for="Rate" id="ratingInput" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- AÇIKLAMA VE NOTLAR -->
+                    <div class="section-title">
+                        <i class="fa-solid fa-file-lines"></i>
+                        Açıklama ve Notlar
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <!-- Açıklama -->
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label-custom">
+                                <i class="fa-solid fa-book-open"></i>
+                                Kitap Özeti
+                            </label>
+                            <textarea asp-for="Description"
+                                      class="form-control-custom"
+                                      rows="4"
+                                      placeholder="Kitap hakkında kısa bir özet yazın..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <!-- Notlar -->
+                        <div class="col-12">
+                            <label asp-for="Notes" class="form-label-custom">
+                                <i class="fa-solid fa-pen"></i>
+                                Notlarım
+                            </label>
+                            <textarea asp-for="Notes"
+                                      class="form-control-custom"
+                                      rows="4"
+                                      placeholder="Kitap hakkında kişisel notlarınız..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Butonlar -->
+                    <div class="button-group">
+                        <button type="submit" class="btn-primary-custom">
+                            <i class="fa-solid fa-check"></i>
+                            Kitabı Kaydet
+                        </button>
+                        <a href="/Home/Index" class="btn-secondary-custom">
+                            <i class="fa-solid fa-xmark"></i>
+                            İptal
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Resim Önizleme
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreviewWrapper').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Yıldız Puanlama Sistemi
+        const stars = document.querySelectorAll('.star-icon');
+        const ratingInput = document.getElementById('ratingInput');
+        let currentRating = 0;
+
+        stars.forEach((star, index) => {
+            // Mouse enter - önizleme
+            star.addEventListener('mouseenter', function() {
+                highlightStars(index + 1);
+            });
+
+            // Mouse leave - orijinal puanı göster
+            star.addEventListener('mouseleave', function() {
+                highlightStars(currentRating);
+            });
+
+            // Click - puan ver
+            star.addEventListener('click', function() {
+                const clickedRating = index + 1;
+
+                // Aynı yıldıza tekrar tıklanırsa 0.5 yap
+                if (Math.abs(currentRating - clickedRating) < 0.1) {
+                    currentRating = clickedRating - 0.5;
+                } else {
+                    currentRating = clickedRating;
+                }
+
+                ratingInput.value = currentRating;
+                highlightStars(currentRating);
+            });
+
+            // Double click - 0.5 yıldız
+            star.addEventListener('dblclick', function(e) {
+                e.preventDefault();
+                currentRating = index + 0.5;
+                ratingInput.value = currentRating;
+                highlightStars(currentRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = (rating % 1) >= 0.5;
+
+            stars.forEach((star, index) => {
+                if (index < fullStars) {
+                    star.className = 'fa-solid fa-star star-icon';
+                } else if (index === fullStars && hasHalfStar) {
+                    star.className = 'fa-solid fa-star-half-stroke star-icon';
+                } else {
+                    star.className = 'fa-regular fa-star star-icon';
+                }
+            });
+        }
+    </script>
+}

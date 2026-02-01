@@ -16,7 +16,10 @@ namespace BookManagementApp.Controllers
         {
             _context = context;
         }
-
+        public IActionResult Create()
+        {
+            return View();
+        }
         [AllowAnonymous] 
         public async Task<IActionResult> Landing()
         {
@@ -191,6 +194,60 @@ namespace BookManagementApp.Controllers
 
             return View(pagedData);
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateBookInfo([FromForm] UpdateBookInfoRequest request, IFormFile imageFile)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "Oturum süresi dolmuş." });
+            }
+
+            try
+            {
+                var book = _context.Books.FirstOrDefault(b => b.Id == request.BookId && b.UserId == userId);
+
+                if (book == null)
+                {
+                    return Json(new { success = false, message = "Kitap bulunamadı." });
+                }
+
+                // Bilgileri güncelle
+                book.Name = request.Name;
+                book.Author = request.Author;
+                book.CategoryId = request.CategoryId;
+                book.TotalPages = request.TotalPages;
+                book.Rate = request.Rating;
+
+                // Resim yükleme
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/books");
+
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    book.Image = "/images/books/" + uniqueFileName;
+                }
+
+                _context.SaveChanges();
+
+                return Json(new { success = true, message = "Kitap bilgileri başarıyla güncellendi." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Bir hata oluştu: " + ex.Message });
+            }
+        }
+
         public IActionResult Details(int? id)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -201,19 +258,79 @@ namespace BookManagementApp.Controllers
             if (id == null)
                 return NotFound();
 
-
             var book = _context.Books
                         .Include(b => b.Category)
                         .FirstOrDefault(b => b.Id == id && b.UserId == userId);
-            var relatedBooks = _context.Books.Where(a => a.CategoryId == book.CategoryId && a.Name != book.Name && a.UserId == userId).Take(8).ToList();
+
             if (book == null)
                 return NotFound();
+
+            var relatedBooks = _context.Books
+                .Where(a => a.CategoryId == book.CategoryId && a.Name != book.Name && a.UserId == userId)
+                .Take(8)
+                .ToList();
+
+            // ⭐ YENİ EKLENEN - Tüm kategorileri getir
+            var allCategories = _context.Categories
+                .Where(c => c.UserId == userId)
+                .OrderBy(c => c.CategoryName)
+                .ToList();
+
             var viewModel = new BookDetailsViewModel
             {
                 Book = book,
-                RelatedBooks = relatedBooks
+                RelatedBooks = relatedBooks,
+                AllCategories = allCategories  // ⭐ YENİ EKLENEN
             };
+
             return View(viewModel);
+        }
+        [HttpPost]
+        public IActionResult UpdateRating([FromBody] UpdateRatingModel model)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "Oturum süresi dolmuş." });
+            }
+
+            if (model.Rating < 0.5m || model.Rating > 5)
+            {
+                return Json(new { success = false, message = "Geçersiz puan değeri." });
+            }
+
+            var book = _context.Books.FirstOrDefault(b => b.Id == model.BookId && b.UserId == userId);
+
+            if (book == null)
+            {
+                return Json(new { success = false, message = "Kitap bulunamadı." });
+            }
+
+            book.Rate = model.Rating;
+            _context.SaveChanges();
+
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public IActionResult UpdateDescription([FromBody] UpdateDescriptionModel model)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "Oturum süresi dolmuş." });
+            }
+
+            var book = _context.Books.FirstOrDefault(b => b.Id == model.BookId && b.UserId == userId);
+
+            if (book == null)
+            {
+                return Json(new { success = false, message = "Kitap bulunamadı." });
+            }
+
+            book.Description = model.Description;
+            _context.SaveChanges();
+
+            return Json(new { success = true });
         }
         //public IActionResult Search(string q)
         //{
