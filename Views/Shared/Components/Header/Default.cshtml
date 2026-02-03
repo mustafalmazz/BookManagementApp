@@ -318,7 +318,7 @@
                                 foreach (var cat in Model.Categories)
                                 {
                                     <li>
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="BooksByCategory" asp-route-id="@cat.Id">
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-categoryId="@cat.Id">
                                             @cat.CategoryName
                                         </a>
                                     </li>

@@ -6,15 +6,19 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq; 
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace BookManagementApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly MyDbContext _context;
-        public HomeController(MyDbContext context)
+        private readonly Cloudinary _cloudinary;
+        public HomeController(MyDbContext context, Cloudinary cloudinary)
         {
             _context = context;
+            _cloudinary = cloudinary;
         }
         public IActionResult Create()
         {
@@ -46,9 +50,9 @@ namespace BookManagementApp.Controllers
         }
         public async Task<IActionResult> GoogleBooks(string q, int page = 1)
         {
-            int pageSize = 12; // Google'dan her seferinde 12 kitap çekelim (Grid yapısına uygun)
+            int pageSize = 12;
 
-            // Eğer arama boşsa boş sayfa döndür
+            // Arama boşsa boş dön
             if (string.IsNullOrWhiteSpace(q))
             {
                 ViewData["CurrentSearch"] = "";
@@ -65,9 +69,24 @@ namespace BookManagementApp.Controllers
             {
                 using (var client = new HttpClient())
                 {
+                    // 1. User-Agent (Bu kısım yine çok önemli, tarayıcı taklidi yapıyoruz)
+                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+
                     int startIndex = (page - 1) * pageSize;
 
-                    var url = $"https://www.googleapis.com/books/v1/volumes?q={q}&startIndex={startIndex}&maxResults={pageSize}";
+                    // --- GÜNCELLENEN KISIM: HEM BAŞLIK HEM YAZAR ARAMASI ---
+                    string searchParam = q;
+
+                    // Eğer kullanıcı özel bir filtre (örn: isbn:) kullanmadıysa biz müdahale ediyoruz
+                    if (!q.Contains(":"))
+                    {
+                        // Parantez içinde (intitle:X OR inauthor:X) diyerek iki alana da bakmasını sağlıyoruz.
+                        // Bu sayede "Victor Hugo" yazınca da "Sefiller" yazınca da sonuç döner.
+                        searchParam = $"(intitle:{q} OR inauthor:{q})";
+                    }
+
+                    // Url'e langRestrict=tr eklemeye devam ediyoruz, bu bot filtresini gevşetiyor.
+                    var url = $"https://www.googleapis.com/books/v1/volumes?q={searchParam}&startIndex={startIndex}&maxResults={pageSize}&printType=books&langRestrict=tr&orderBy=relevance";
 
                     var response = await client.GetAsync(url);
 
@@ -76,10 +95,8 @@ namespace BookManagementApp.Controllers
                         var jsonString = await response.Content.ReadAsStringAsync();
                         var data = JObject.Parse(jsonString);
 
-                        // Toplam sonuç sayısını al (Sayfalama hesaplamak için)
                         totalItems = data["totalItems"]?.Value<int>() ?? 0;
 
-                        // Gelen Kitapları Listeye Çevir
                         var items = data["items"];
                         if (items != null)
                         {
@@ -87,41 +104,62 @@ namespace BookManagementApp.Controllers
                             {
                                 var volume = item["volumeInfo"];
 
+                                // Null check işlemlerini güvenli hale getirelim
+                                string imageLink = volume["imageLinks"]?["thumbnail"]?.ToString() ?? "";
+                                if (!string.IsNullOrEmpty(imageLink))
+                                {
+                                    imageLink = imageLink.Replace("http://", "https://");
+                                }
+
                                 var newBook = new Book
                                 {
-                                    // Google'dan gelen verileri bizim Book modeline eşliyoruz
                                     Name = volume["title"]?.ToString() ?? "İsimsiz Eser",
-                                    Author = volume["authors"] != null ? string.Join(", ", volume["authors"]) : "Bilinmeyen Yazar",
+                                    // Yazar listesi bazen null gelebilir
+                                    Author = volume["authors"] != null
+                                             ? string.Join(", ", volume["authors"].Select(a => a.ToString()))
+                                             : "Bilinmeyen Yazar",
                                     Description = volume["description"]?.ToString(),
                                     TotalPages = volume["pageCount"]?.Value<int>() ?? 0,
-                                    // Resim linkini HTTPS yapıyoruz
-                                    Image = volume["imageLinks"]?["thumbnail"]?.ToString().Replace("http://", "https://")
+                                    Image = imageLink
                                 };
                                 bookList.Add(newBook);
                             }
                         }
                     }
+                    else
+                    {
+                        // --- 2. DÜZELTME: Hata Durumunu Loglama ---
+                        // Eğer Google 403 veya 429 dönerse burada durup hatayı görebilirsin.
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        // Buraya Breakpoint koyarak 'errorContent' değişkenini incele.
+                        // Google'ın neden reddettiği orada yazar.
+                        ViewData["Error"] = $"Google Hatası: {response.StatusCode}";
+                    }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                // Hata olduğunda boş dönmek yerine hatayı görmek için breakpoint koymalısın.
+                // ex.Message sana internet sorunu mu yoksa kod sorunu mu olduğunu söyler.
+                ViewData["Error"] = ex.Message;
             }
 
-
-            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            // Sayfalama Hesabı
+            int totalPages = totalItems > 0 ? (int)Math.Ceiling((double)totalItems / pageSize) : 0;
 
             ViewData["CurrentSearch"] = q;
             ViewData["CurrentPage"] = page;
             ViewData["TotalPages"] = totalPages;
             ViewData["TotalRecords"] = totalItems;
 
+            // Eksik ViewData'ları doldur (Hata almamak için)
             ViewData["CurrentSort"] = "";
             ViewData["CurrentPageCount"] = "";
 
             return View(bookList);
         }
 
-        public async Task<IActionResult> Index(string q, string sortOrder, int? minPage, int? maxPage, int page = 1)
+        public async Task<IActionResult> Index(string q, string sortOrder, int? minPage, int? maxPage, int? categoryId,int page = 1)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
@@ -136,6 +174,12 @@ namespace BookManagementApp.Controllers
             {
                 q = q.ToLower();
                 books = books.Where(b => b.Name.ToLower().Contains(q) || b.Author.ToLower().Contains(q));
+            }
+            //2,5
+            if (categoryId != null && categoryId > 0)
+            {
+                books = books.Where(b => b.CategoryId == categoryId);
+                ViewData["CurrentCategory"] = categoryId; // Sayfalama yaparken kategori kaybolmasın diye view'a gönderiyoruz
             }
 
             // 3. Manuel Sayfa Sayısı Filtresi (Min - Max)
@@ -217,26 +261,38 @@ namespace BookManagementApp.Controllers
                 book.Author = request.Author;
                 book.CategoryId = request.CategoryId;
                 book.TotalPages = request.TotalPages;
-                book.Rate = request.Rating;
+                 book.Rate = request.Rating; // Puanlama genelde ayrı metodla yapılıyor ama formdan geliyorsa açabilirsin.
 
-                // Resim yükleme
+                // -----------------------------------------------------------
+                // RESİM YÜKLEME KISMI (CLOUDINARY ENTEGRASYONU)
+                // -----------------------------------------------------------
                 if (imageFile != null && imageFile.Length > 0)
                 {
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/books");
-
-                    if (!Directory.Exists(uploadsFolder))
-                        Directory.CreateDirectory(uploadsFolder);
-
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    try
                     {
-                        await imageFile.CopyToAsync(fileStream);
-                    }
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(imageFile.FileName, imageFile.OpenReadStream()),
+                            Transformation = new Transformation().Width(800).Crop("limit")
+                        };
 
-                    book.Image = "/images/books/" + uniqueFileName;
+                        // _cloudinary nesnesinin Constructor'da tanımlı olması gerekir!
+                        var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+                        if (uploadResult.Error != null)
+                        {
+                            return Json(new { success = false, message = "Cloudinary Hatası: " + uploadResult.Error.Message });
+                        }
+
+                        // Resim URL'sini veritabanına kaydet
+                        book.Image = uploadResult.SecureUrl.ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { success = false, message = "Resim yüklenirken hata oluştu: " + ex.Message });
+                    }
                 }
+                // -----------------------------------------------------------
 
                 _context.SaveChanges();
 
@@ -247,7 +303,6 @@ namespace BookManagementApp.Controllers
                 return Json(new { success = false, message = "Bir hata oluştu: " + ex.Message });
             }
         }
-
         public IActionResult Details(int? id)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
