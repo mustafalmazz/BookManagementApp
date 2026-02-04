@@ -15,10 +15,12 @@ namespace BookManagementApp.Controllers
     {
         private readonly MyDbContext _context;
         private readonly Cloudinary _cloudinary;
-        public HomeController(MyDbContext context, Cloudinary cloudinary)
+        private readonly IConfiguration _configuration;
+        public HomeController(MyDbContext context, Cloudinary cloudinary, IConfiguration configuration)
         {
             _context = context;
             _cloudinary = cloudinary;
+            _configuration = configuration;
         }
         public IActionResult Create()
         {
@@ -69,24 +71,20 @@ namespace BookManagementApp.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    // 1. User-Agent (Bu kısım yine çok önemli, tarayıcı taklidi yapıyoruz)
-                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+                    // 1. API Key'i appsettings.json dosyasından okuyoruz
+                    string apiKey = _configuration["GoogleBooks:ApiKey"];
+
+                    // 2. User-Agent (Yine de ekli kalsın, iyi bir pratiktir)
+                    client.DefaultRequestHeaders.Add("User-Agent", "DijitalKutuphanem/1.0");
 
                     int startIndex = (page - 1) * pageSize;
 
-                    // --- GÜNCELLENEN KISIM: HEM BAŞLIK HEM YAZAR ARAMASI ---
-                    string searchParam = q;
+                    // --- GÜNCELLENEN KISIM: TEMİZ VE RESMİ URL ---
+                    // Artık 'intitle' vs. gibi hilelere gerek yok. 
+                    // "q={q}" diyerek hem başlıkta, hem yazarda, hem açıklamada arar.
+                    // "&key={apiKey}" parametresi ile Google bizi tanır ve sonuçları verir.
 
-                    // Eğer kullanıcı özel bir filtre (örn: isbn:) kullanmadıysa biz müdahale ediyoruz
-                    if (!q.Contains(":"))
-                    {
-                        // Parantez içinde (intitle:X OR inauthor:X) diyerek iki alana da bakmasını sağlıyoruz.
-                        // Bu sayede "Victor Hugo" yazınca da "Sefiller" yazınca da sonuç döner.
-                        searchParam = $"(intitle:{q} OR inauthor:{q})";
-                    }
-
-                    // Url'e langRestrict=tr eklemeye devam ediyoruz, bu bot filtresini gevşetiyor.
-                    var url = $"https://www.googleapis.com/books/v1/volumes?q={searchParam}&startIndex={startIndex}&maxResults={pageSize}&printType=books&langRestrict=tr&orderBy=relevance";
+                    var url = $"https://www.googleapis.com/books/v1/volumes?q={q}&startIndex={startIndex}&maxResults={pageSize}&printType=books&langRestrict=tr&key={apiKey}";
 
                     var response = await client.GetAsync(url);
 
@@ -103,21 +101,58 @@ namespace BookManagementApp.Controllers
                             foreach (var item in items)
                             {
                                 var volume = item["volumeInfo"];
+                                var imageLinks = volume["imageLinks"];
 
-                                // Null check işlemlerini güvenli hale getirelim
-                                string imageLink = volume["imageLinks"]?["thumbnail"]?.ToString() ?? "";
+                                string imageLink = "";
+
+                                if (imageLinks != null)
+                                {
+                                    // --- GÜVENLİ KALİTE SEÇİMİ ---
+                                    // API'nin sunduğu en yüksek kaliteyi sırasıyla kontrol ediyoruz.
+                                    // Elle zoom parametresini değiştirmiyoruz, API ne veriyorsa onu alıyoruz.
+
+                                    if (imageLinks["extraLarge"] != null)
+                                    {
+                                        imageLink = imageLinks["extraLarge"].ToString();
+                                    }
+                                    else if (imageLinks["large"] != null)
+                                    {
+                                        imageLink = imageLinks["large"].ToString();
+                                    }
+                                    else if (imageLinks["medium"] != null)
+                                    {
+                                        imageLink = imageLinks["medium"].ToString();
+                                    }
+                                    else if (imageLinks["thumbnail"] != null)
+                                    {
+                                        // Yüksek kalite yoksa standart olanı alıyoruz.
+                                        imageLink = imageLinks["thumbnail"].ToString();
+                                    }
+
+                                    // Sadece "kıvrık sayfa" efektini siliyoruz (Bu çözünürlükle oynamaz, sadece resmi düz kare yapar)
+                                    if (!string.IsNullOrEmpty(imageLink))
+                                    {
+                                        imageLink = imageLink.Replace("&edge=curl", "");
+                                    }
+                                }
+
+                                // HTTPS Güvenliği
                                 if (!string.IsNullOrEmpty(imageLink))
                                 {
                                     imageLink = imageLink.Replace("http://", "https://");
                                 }
 
+                                // Yazar bilgisi güvenliği
+                                string authorText = "Bilinmeyen Yazar";
+                                if (volume["authors"] != null)
+                                {
+                                    authorText = string.Join(", ", volume["authors"].Select(a => a.ToString()));
+                                }
+
                                 var newBook = new Book
                                 {
                                     Name = volume["title"]?.ToString() ?? "İsimsiz Eser",
-                                    // Yazar listesi bazen null gelebilir
-                                    Author = volume["authors"] != null
-                                             ? string.Join(", ", volume["authors"].Select(a => a.ToString()))
-                                             : "Bilinmeyen Yazar",
+                                    Author = authorText,
                                     Description = volume["description"]?.ToString(),
                                     TotalPages = volume["pageCount"]?.Value<int>() ?? 0,
                                     Image = imageLink
@@ -128,20 +163,15 @@ namespace BookManagementApp.Controllers
                     }
                     else
                     {
-                        // --- 2. DÜZELTME: Hata Durumunu Loglama ---
-                        // Eğer Google 403 veya 429 dönerse burada durup hatayı görebilirsin.
+                        // Hata durumunda loglama (Geliştirme aşamasında hatayı görmek için)
                         var errorContent = await response.Content.ReadAsStringAsync();
-                        // Buraya Breakpoint koyarak 'errorContent' değişkenini incele.
-                        // Google'ın neden reddettiği orada yazar.
-                        ViewData["Error"] = $"Google Hatası: {response.StatusCode}";
+                        ViewData["Error"] = $"Google Hatası: {response.StatusCode} - {errorContent}";
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Hata olduğunda boş dönmek yerine hatayı görmek için breakpoint koymalısın.
-                // ex.Message sana internet sorunu mu yoksa kod sorunu mu olduğunu söyler.
-                ViewData["Error"] = ex.Message;
+                ViewData["Error"] = "Bağlantı Hatası: " + ex.Message;
             }
 
             // Sayfalama Hesabı
@@ -151,8 +181,6 @@ namespace BookManagementApp.Controllers
             ViewData["CurrentPage"] = page;
             ViewData["TotalPages"] = totalPages;
             ViewData["TotalRecords"] = totalItems;
-
-            // Eksik ViewData'ları doldur (Hata almamak için)
             ViewData["CurrentSort"] = "";
             ViewData["CurrentPageCount"] = "";
 
