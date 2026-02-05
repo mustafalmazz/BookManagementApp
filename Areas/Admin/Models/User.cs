@@ -25,6 +25,10 @@ namespace BookManagementApp.Areas.Admin.Models
         public DateTime? PasswordResetTokenExpires { get; set; }
         [StringLength(20)]
         public string Role { get; set; } = "User";
+        public string? ProfileImageUrl { get; set; }
+        public int YearlyReadingGoal { get; set; }
+        
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         public ICollection<Book>? Books { get; set; }
         public ICollection<Category>? Categories { get; set; }
