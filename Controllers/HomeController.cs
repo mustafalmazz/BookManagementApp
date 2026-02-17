@@ -350,7 +350,7 @@ namespace BookManagementApp.Controllers
 
             var relatedBooks = _context.Books
                 .Where(a => a.CategoryId == book.CategoryId && a.Name != book.Name && a.UserId == userId)
-                .Take(8)
+                .Take(10)
                 .ToList();
 
             // ⭐ YENİ EKLENEN - Tüm kategorileri getir
