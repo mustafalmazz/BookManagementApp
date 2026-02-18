@@ -27,7 +27,9 @@ namespace BookManagementApp.Areas.Admin.Models
         public string Role { get; set; } = "User";
         public string? ProfileImageUrl { get; set; }
         public int YearlyReadingGoal { get; set; }
-        
+        public int MonthlyReadingGoal { get; set; }
+        public int MonthlyPagesRead { get; set; }
+
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         public ICollection<Book>? Books { get; set; }

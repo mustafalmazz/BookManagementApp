@@ -2,23 +2,25 @@
 using BookManagementApp.Areas.Admin.Models;
 using BookManagementApp.Models;
 using Microsoft.EntityFrameworkCore;
-using CloudinaryDotNet; // EKLENDI
-using CloudinaryDotNet.Actions; // EKLENDI
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace BookManagementApp.Controllers
 {
     public class ProfileController : Controller
     {
         private readonly MyDbContext _context;
-        private readonly IConfiguration _configuration; // Cloudinary ayarlarını okumak için
+        private readonly IConfiguration _configuration;
 
         public ProfileController(MyDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
+
+        // --- 1. YILLIK HEDEF GÜNCELLEME ---
         [HttpPost]
-        public IActionResult UpdateGoal([FromForm] int goal)
+        public IActionResult UpdateYearlyGoal([FromForm] int goal)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return Json(new { success = false, message = "Oturum kapalı. Lütfen tekrar giriş yapın." });
@@ -33,21 +35,46 @@ namespace BookManagementApp.Controllers
 
             return Json(new { success = false, message = "Kullanıcı veritabanında bulunamadı." });
         }
+
+        // --- 2. AYLIK HEDEF VE OKUNAN SAYFA GÜNCELLEME (GÜNCELLENDİ) ---
+        // Artık hem hedefi hem de okunan sayfa sayısını manuel alıyor.
+        [HttpPost]
+        public IActionResult UpdateMonthlyGoal([FromForm] int goal, [FromForm] int readPages)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return Json(new { success = false, message = "Oturum kapalı." });
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                // Hem hedefi hem de manuel girilen okunan sayfayı kaydediyoruz
+                user.MonthlyReadingGoal = goal;
+                user.MonthlyPagesRead = readPages;
+
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "Kullanıcı veritabanında bulunamadı." });
+        }
+
         public IActionResult Index()
         {
+            // 1. Oturum Kontrolü
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
 
+            // 2. Kullanıcıyı Çek
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null) return NotFound();
 
+            // 3. Kullanıcının Kitaplarını Çek
             var userBooks = _context.Books
                                     .Include(b => b.Category)
                                     .Where(b => b.UserId == userId)
                                     .ToList();
 
-            if (user == null) return NotFound();
-
-            // İstatistikler
+            // 4. İstatistikler: Favori Kategori Hesaplama
             var favCategoryGroup = userBooks
                                     .GroupBy(b => b.Category != null ? b.Category.CategoryName : "Diğer")
                                     .OrderByDescending(g => g.Count())
@@ -55,28 +82,41 @@ namespace BookManagementApp.Controllers
 
             string favCategoryName = favCategoryGroup != null ? favCategoryGroup.Key : "Henüz Yok";
 
+            var now = DateTime.Now;
+
+            // 5. ViewModel'i Doldur
             var model = new UserProfileViewModel
             {
+                // Kullanıcı Bilgileri
                 UserName = user.UserName,
                 Role = user.Role ?? "Üye",
                 JoinDate = user.CreateDate,
-
-                // Resim yolu (Cloudinary URL'i veya hazır avatar URL'i)
                 ProfileImageUrl = user.ProfileImageUrl,
 
+                // Genel İstatistikler
                 TotalBooks = userBooks.Count,
                 TotalCategories = userBooks.Select(b => b.CategoryId).Distinct().Count(),
                 TotalPagesRead = (int)userBooks.Sum(b => b.TotalPages ?? 0),
                 TotalMoneySpent = userBooks.Sum(b => b.Price ?? 0),
+
                 FavoriteCategory = favCategoryName,
-                BooksReadThisYear = userBooks.Count(b => b.CreateDate.Year == DateTime.Now.Year),
-                YearlyReadingGoal = user.YearlyReadingGoal
+
+                // --- GÜNCELLENEN KISIMLAR ---
+
+                // Yıllık İstatistik (Otomatik kalabilir - Kitap Sayısı)
+                BooksReadThisYear = userBooks.Count(b => b.CreateDate.Year == now.Year),
+                YearlyReadingGoal = user.YearlyReadingGoal,
+
+                // Aylık İstatistik (Manuel Giriş - Sayfa Sayısı)
+                // Veritabanındaki kayıtlı manuel veriyi çekiyoruz
+                MonthlyReadingGoal = user.MonthlyReadingGoal,
+                MonthlyPagesRead = user.MonthlyPagesRead
             };
 
             return View(model);
         }
 
-        // --- CLOUDINARY İLE GÜNCELLENEN METOT ---
+        // --- AVATAR GÜNCELLEME ---
         [HttpPost]
         public async Task<IActionResult> UpdateAvatar(IFormFile file, string avatarUrl)
         {
@@ -88,29 +128,24 @@ namespace BookManagementApp.Controllers
 
             try
             {
-                // SENARYO 1: Dosya Yükleme (Cloudinary'ye Gönder)
+                // SENARYO 1: Dosya Yükleme (Cloudinary)
                 if (file != null && file.Length > 0)
                 {
-                    // 1. Cloudinary Ayarlarını Al
                     string cloudName = _configuration["CloudinarySettings:CloudName"];
                     string apiKey = _configuration["CloudinarySettings:ApiKey"];
                     string apiSecret = _configuration["CloudinarySettings:ApiSecret"];
 
-                    // 2. Cloudinary Hesabını Oluştur
                     Account account = new Account(cloudName, apiKey, apiSecret);
                     Cloudinary cloudinary = new Cloudinary(account);
 
-                    // 3. Dosyayı Stream'e Çevir ve Yükleme Parametrelerini Hazırla
                     using (var stream = file.OpenReadStream())
                     {
                         var uploadParams = new ImageUploadParams()
                         {
                             File = new FileDescription(file.FileName, stream),
-                            // ÖNEMLİ: Avatar için yüz odaklı kare kırpma (Opsiyonel ama önerilir)
                             Transformation = new Transformation().Width(150).Height(150).Crop("fill").Gravity("face")
                         };
 
-                        // 4. Yükle
                         var uploadResult = await cloudinary.UploadAsync(uploadParams);
 
                         if (uploadResult.Error != null)
@@ -118,11 +153,10 @@ namespace BookManagementApp.Controllers
                             return Json(new { success = false, message = "Cloudinary hatası: " + uploadResult.Error.Message });
                         }
 
-                        // 5. Gelen güvenli (HTTPS) URL'i kaydet
                         user.ProfileImageUrl = uploadResult.SecureUrl.AbsoluteUri;
                     }
                 }
-                // SENARYO 2: Hazır Avatar Seçimi (Direkt URL Kaydet)
+                // SENARYO 2: Hazır Avatar Seçimi
                 else if (!string.IsNullOrEmpty(avatarUrl))
                 {
                     user.ProfileImageUrl = avatarUrl;

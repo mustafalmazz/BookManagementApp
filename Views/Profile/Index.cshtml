@@ -3,9 +3,21 @@
 @{
     ViewData["Title"] = "Profil Özetim";
 
-    int progressPercentage = Model.YearlyReadingGoal > 0
-        ? Math.Min(100, (int)((double)Model.BooksReadThisYear / Model.YearlyReadingGoal * 100))
+    // --- YILLIK ---
+    int yearlyRead = Model.BooksReadThisYear;      // DB'den gelen otomatik sayı
+    int yearlyGoal = Model.YearlyReadingGoal;      // Senin belirlediğin hedef
+
+    int yearlyProgress = yearlyGoal > 0
+        ? Math.Min(100, (int)((double)yearlyRead / yearlyGoal * 100))
         : 0;
+
+    // --- AYLIK (DÜZELTİLDİ) ---
+    int monthlyRead = Model.MonthlyPagesRead; 
+    int monthlyGoal = Model.MonthlyReadingGoal;    // Senin modal'dan girdiğin manuel hedef
+
+    int monthlyProgress = monthlyGoal > 0
+         ? Math.Min(100, (int)((double)monthlyRead / monthlyGoal * 100))
+         : 0;
 }
 
 <style>
@@ -15,7 +27,166 @@
         font-family: 'Georgia', serif;
         color: #4a3f35;
     }
+    /* --- KİTAP BAHÇESİ (GAMIFICATION) STİLLERİ --- */
+    .garden-card {
+        background: linear-gradient(180deg, #e6f7ff 0%, #ffffff 80%, #e8f5e9 100%); /* Gökyüzünden çimene geçiş */
+        border-radius: 20px;
+        padding: 30px;
+        border: 4px solid #fff;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        min-height: 350px; /* Ağaç için yer */
+    }
 
+    /* Güneş Efekti */
+    .sun {
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        width: 80px;
+        height: 80px;
+        background: #ffd700;
+        border-radius: 50%;
+        box-shadow: 0 0 40px #ffeb3b;
+        opacity: 0.8;
+        animation: sunPulse 5s infinite alternate;
+    }
+
+    @@keyframes sunPulse {
+        from
+
+    {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    to {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    }
+
+    /* Ağaç Sahnesi */
+    .tree-stage {
+        height: 180px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .tree-icon {
+        font-size: 0rem; /* Başlangıçta görünmez */
+        transition: all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Zıplama efekti */
+        filter: drop-shadow(0 10px 5px rgba(0,0,0,0.1));
+    }
+
+    /* Büyüme Aşamaları Renkleri */
+    .stage-seed {
+        color: #8d6e63;
+    }
+    /* Tohum - Kahve */
+    .stage-sprout {
+        color: #8bc34a;
+    }
+    /* Filiz - Açık Yeşil */
+    .stage-sapling {
+        color: #4caf50;
+    }
+    /* Fidan - Yeşil */
+    .stage-tree {
+        color: #2e7d32;
+    }
+    /* Ağaç - Koyu Yeşil */
+    .stage-master { /* Tamamlanmış - Altın/Meyveli */
+        color: #388e3c;
+        text-shadow: 0 0 20px #ffeb3b;
+    }
+
+    /* Hedef Metinleri */
+    .goal-text-overlay {
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(5px);
+        padding: 10px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        border: 1px solid rgba(0,0,0,0.05);
+        margin-top: -20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .water-btn {
+        background: #29b6f6;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(41, 182, 246, 0.4);
+        transition: transform 0.2s;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
+
+        .water-btn:hover {
+            transform: scale(1.1) rotate(-15deg);
+            background: #039be5;
+        }
+
+        .water-btn:active {
+            transform: scale(0.9);
+        }
+
+    /* Su Damlası Animasyonu */
+    .water-drop {
+        position: absolute;
+        background: #29b6f6;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    @@keyframes dropFall {
+        0%
+
+    {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100px) scale(0);
+        opacity: 0;
+    }
+
+    }
+    /* Toggle Buton Stilleri */
+    .btn-outline-secondary.active {
+        background-color: #8b6f47 !important;
+        color: #fff !important;
+        border-color: #8b6f47 !important;
+    }
+
+    .btn-outline-secondary {
+        color: #8b6f47;
+        border-color: #8b6f47;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #f5f0e8;
+            color: #6b5541;
+            border-color: #8b6f47;
+        }
     .profile-container {
         max-width: 1200px;
         margin: 40px auto;
@@ -685,12 +856,13 @@
         gap: 5px;
     }
 
-        .d-flex.justify-content-between.mb-2 > div {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+            .d-flex.justify-content-between.mb-2 > div {
+                width: 100%;
+                display: flex;
+                justify-content: flex-start; /* Sola yasla ve birleşik olsun */
+                gap: 10px; /* Hedef yazısı, sayı ve ikon arasına boşluk koy */
+                align-items: center;
+            }
 
     }
 
@@ -787,40 +959,115 @@
 
     <div class="bottom-grid">
         <div class="feature-card">
-            <div class="feature-title"><i class="fa-solid fa-bullseye" style="color: #a0785a;"></i> Yıllık Okuma Hedefi</div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="feature-title mb-0"><i class="fa-solid fa-bullseye" style="color: #a0785a;"></i> Okuma Hedefim</div>
 
-            <div class="d-flex justify-content-between mb-2 align-items-center">
-                <span style="font-weight:bold; color:#4a3f35;">@Model.BooksReadThisYear Kitap</span>
-                <div style="color:#8b6f47;">
-                    Hedef: @if (Model.YearlyReadingGoal == 0)
-                    {
-                        <text><i>Belirlenmedi</i></text>
-                    }
-                    else
-                    {
-                        @Model.YearlyReadingGoal
-                    }
-                    <a href="javascript:void(0)" class="ms-2" style="color: #a0785a; text-decoration: none;" data-bs-toggle="modal" data-bs-target="#goalModal">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </a>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-secondary active" id="btnShowYearly" onclick="switchGoal('yearly')">Yıllık</button>
+                    <button type="button" class="btn btn-outline-secondary" id="btnShowMonthly" onclick="switchGoal('monthly')">Aylık</button>
                 </div>
             </div>
 
-            <div class="progress-container">
-                <div class="progress-bar-custom" id="goalProgressBar" data-width="@progressPercentage%">@progressPercentage%</div>
+            <div id="yearlyGoalSection">
+                <div class="d-flex justify-content-between mb-2 align-items-center">
+                    <span style="font-weight:bold; color:#4a3f35;">@Model.BooksReadThisYear Kitap (Yıllık)</span>
+                    <div style="color:#8b6f47;">
+                        Hedef:
+                        @if (Model.YearlyReadingGoal == 0)
+                        {
+                            <text><i>Yok</i></text>
+                        }
+                        else
+                        {
+                            <b>@Model.YearlyReadingGoal</b>
+                        }
+                        <a href="javascript:void(0)" class="ms-2" style="color: #a0785a;" data-bs-toggle="modal" data-bs-target="#goalModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar-custom" id="yearlyProgressBar" style="width: 0%" data-width="@yearlyProgress%">@yearlyProgress%</div>
+                </div>
+
+                <p style="font-size:0.9rem; color:#666; margin-top:10px;" id="yearlyMessage">
+                    @if (yearlyProgress == 0)
+                    {
+                        <span>"Bin millik bir yolculuk tek bir adımla başlar." - Lao Tzu</span>
+                    }
+                    else if (yearlyProgress < 25)
+                    {
+                        <span>Başlangıç harika! Ritmi yakaladın, devam et. 🚀</span>
+                    }
+                    else if (yearlyProgress < 50)
+                    {
+                        <span>Yolu yarılamaya az kaldı! Kitapların dünyası seni bekliyor. 📖</span>
+                    }
+                    else if (yearlyProgress < 75)
+                    {
+                        <span>Yarıyı geçtin! Harika bir okuma disiplinin var. 🔥</span>
+                    }
+                    else if (yearlyProgress < 100)
+                    {
+                        <span>Çok az kaldı! Hedefine ulaşmak üzeresin, son düzlük! 🏁</span>
+                    }
+                    else
+                    {
+                        <span>🏆 TEBRİKLER! Yıllık hedefini tamamladın! Sen gerçek bir kitap kurdusun! 🥇</span>
+                    }
+                </p>
             </div>
 
-            <p style="font-size:0.9rem; color:#666; margin-top:10px;">
-                @if (progressPercentage == 0)
-                {
-                    <i>"Hedefi Olmayan Gemiye Hiçbir Rüzgar Yardım Etmez..."</i>
-                }
-                else
-                {
-                    @(progressPercentage >= 100 ? "Tebrikler! Yıllık hedefini tamamladın! ✅" : "Harika gidiyorsun, okumaya devam! 📚")
-                }
+            <div id="monthlyGoalSection" style="display: none;">
+                <div class="d-flex justify-content-between mb-2 align-items-center">
+                    <span style="font-weight:bold; color:#4a3f35;">
+                        @monthlyRead Sayfa <small class="text-muted">(Okunan)</small>
+                    </span>
 
-            </p>
+                    <div style="color:#8b6f47;">
+                        Hedef:
+                        @if (monthlyGoal == 0)
+                        {
+                            <text><i>Belirlenmedi</i></text>
+                        }
+                        else
+                        {
+                            <b>@monthlyGoal</b>
+                        }
+                        <a href="javascript:void(0)" class="ms-2" style="color: #a0785a;" data-bs-toggle="modal" data-bs-target="#monthlyGoalModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar-custom" id="monthlyProgressBar" style="width: 0%; background: linear-gradient(90deg, #48bb78, #38a169);" data-width="@monthlyProgress%">@monthlyProgress%</div>
+                </div>
+
+                <p style="font-size:0.9rem; color:#666; margin-top:10px;" id="monthlyMessage">
+                    @if (monthlyProgress == 0)
+                    {
+                        <span>"Henüz başlamadın mı? Hadi bir sayfa çevir! 📖"</span>
+                    }
+                    else if (monthlyProgress < 25)
+                    {
+                        <span>Sayfalar akmaya başladı. Harika gidiyorsun! 🚀</span>
+                    }
+                    else if (monthlyProgress < 75)
+                    {
+                        <span>Yarıyı geçtin! Kitapların dünyasında kaybolmak gibisi yok. 🔥</span>
+                    }
+                    else if (monthlyProgress < 100)
+                    {
+                        <span>Son sayfalar! Bu ayın şampiyonu olmak üzeresin. 🏁</span>
+                    }
+                    else
+                    {
+                        <span>🏆 TEBRİKLER! Aylık sayfa hedefini tamamladın! 🥇</span>
+                    }
+                </p>
+            </div>
         </div>
         <div class="feature-card">
             <div class="feature-title"><i class="fa-solid fa-heart" style="color: #a0785a;"></i> Favori Türün</div>
@@ -892,7 +1139,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="monthlyGoalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fs-6">Aylık İlerlemeyi Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <label class="small text-muted mb-1">Okunan Sayfa:</label>
+                <input type="number" id="manualReadInput" class="form-control text-center mb-3" value="@monthlyRead" placeholder="0">
 
+                <label class="small text-muted mb-1">Aylık Hedef:</label>
+                <input type="number" id="manualGoalInput" class="form-control text-center" value="@monthlyGoal" placeholder="1000">
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-sm btn-save-custom w-100" id="saveMonthlyGoalBtn">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="goalModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content custom-modal-content">
@@ -913,13 +1180,45 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Sayfa yüklendiğinde varsayılan olan Yıllık barını doldur
         setTimeout(function() {
-            const bar = document.getElementById('goalProgressBar');
+            const bar = document.getElementById('yearlyProgressBar');
             if(bar) bar.style.width = bar.getAttribute('data-width');
         }, 300);
     });
 
-    // --- AVATAR İŞLEMLERİ (MEVCUT) ---
+    // --- TAB GEÇİŞ İŞLEMİ ---
+    function switchGoal(type) {
+        const yearlySec = document.getElementById('yearlyGoalSection');
+        const monthlySec = document.getElementById('monthlyGoalSection');
+        const btnYearly = document.getElementById('btnShowYearly');
+        const btnMonthly = document.getElementById('btnShowMonthly');
+
+        if (type === 'yearly') {
+            yearlySec.style.display = 'block';
+            monthlySec.style.display = 'none';
+            btnYearly.classList.add('active');
+            btnMonthly.classList.remove('active');
+
+            setTimeout(() => {
+                const bar = document.getElementById('yearlyProgressBar');
+                if(bar) bar.style.width = bar.getAttribute('data-width');
+            }, 100);
+
+        } else {
+            yearlySec.style.display = 'none';
+            monthlySec.style.display = 'block';
+            btnYearly.classList.remove('active');
+            btnMonthly.classList.add('active');
+
+            setTimeout(() => {
+                const bar = document.getElementById('monthlyProgressBar');
+                if(bar) bar.style.width = bar.getAttribute('data-width');
+            }, 100);
+        }
+    }
+
+    // --- AVATAR İŞLEMLERİ ---
     let selectedAvatarUrl = "";
     let uploadedFile = null;
 
@@ -930,36 +1229,137 @@
         uploadedFile = null;
     }
 
-    document.getElementById('customAvatarFile').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            uploadedFile = file;
-            selectedAvatarUrl = "";
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('uploadPreview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+    const fileInput = document.getElementById('customAvatarFile');
+    if(fileInput){
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadedFile = file;
+                selectedAvatarUrl = "";
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('uploadPreview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+                }
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
-        }
-    });
+        });
+    }
 
-    document.getElementById('saveAvatarBtn').addEventListener('click', function() {
-        const formData = new FormData();
-        if (uploadedFile) {
-            formData.append('file', uploadedFile);
-        } else if (selectedAvatarUrl) {
-            formData.append('avatarUrl', selectedAvatarUrl);
-        } else {
-            alert("Lütfen bir avatar seçin veya fotoğraf yükleyin.");
+    const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+    if(saveAvatarBtn){
+        saveAvatarBtn.addEventListener('click', function() {
+            const formData = new FormData();
+            if (uploadedFile) {
+                formData.append('file', uploadedFile);
+            } else if (selectedAvatarUrl) {
+                formData.append('avatarUrl', selectedAvatarUrl);
+            } else {
+                alert("Lütfen bir avatar seçin veya fotoğraf yükleyin.");
+                return;
+            }
+
+            const btn = this;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...';
+            btn.disabled = true;
+
+            fetch('/Profile/UpdateAvatar', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert("Hata: " + data.message);
+                    btn.innerHTML = 'Kaydet';
+                    btn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                alert("Bir hata oluştu.");
+                btn.innerHTML = 'Kaydet';
+                btn.disabled = false;
+            });
+        });
+    }
+
+    // --- YILLIK HEDEF GÜNCELLEME (DÜZELTİLDİ) ---
+    const saveGoalBtn = document.getElementById('saveGoalBtn');
+    if(saveGoalBtn){
+        saveGoalBtn.addEventListener('click', function() {
+            const newGoal = document.getElementById('newGoalInput').value;
+            // DÜZELTME: Artık özel URL'e gidiyor (/Profile/UpdateYearlyGoal)
+            updateReadingGoal(newGoal, this, '/Profile/UpdateYearlyGoal');
+        });
+    }
+
+    // --- AYLIK HEDEF GÜNCELLEME (DÜZELTİLDİ) ---
+    const saveMonthlyBtn = document.getElementById('saveMonthlyGoalBtn');
+     if(saveMonthlyBtn){
+         saveMonthlyBtn.addEventListener('click', function() {
+             // İki değeri de alıyoruz
+             const readVal = document.getElementById('manualReadInput').value;
+             const goalVal = document.getElementById('manualGoalInput').value;
+
+             if(goalVal < 1 || readVal < 0) {
+                 alert("Lütfen geçerli değerler giriniz.");
+                 return;
+             }
+
+             const btnElement = this;
+             const oldText = btnElement.innerHTML;
+             btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
+             btnElement.disabled = true;
+
+             const formData = new URLSearchParams();
+             formData.append('goal', goalVal);
+             formData.append('readPages', readVal); // Controller'daki parametre isimleri
+
+             fetch('/Profile/UpdateMonthlyGoal', {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                 body: formData
+             })
+             .then(response => response.json())
+             .then(data => {
+                 if (data.success) {
+                     location.reload();
+                 } else {
+                     alert("Hata: " + data.message);
+                     btnElement.innerHTML = oldText;
+                     btnElement.disabled = false;
+                 }
+             })
+             .catch(error => {
+                 console.error('Hata:', error);
+                 btnElement.innerHTML = oldText;
+                 btnElement.disabled = false;
+             });
+         });
+     }
+    // --- ORTAK HEDEF GÜNCELLEME FONKSİYONU ---
+    // endpointUrl parametresi eklendi
+    function updateReadingGoal(goalValue, btnElement, endpointUrl) {
+        if(goalValue < 1) {
+            alert("Lütfen geçerli bir hedef giriniz.");
             return;
         }
 
-        const btn = this;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...';
-        btn.disabled = true;
+        const oldText = btnElement.innerHTML;
+        btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
+        btnElement.disabled = true;
 
-        fetch('/Profile/UpdateAvatar', {
+        const formData = new URLSearchParams();
+        formData.append('goal', goalValue);
+
+        // Dinamik URL kullanımı
+        fetch(endpointUrl, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
             body: formData
         })
         .then(response => response.json())
@@ -968,62 +1368,15 @@
                 location.reload();
             } else {
                 alert("Hata: " + data.message);
-                btn.innerHTML = 'Kaydet';
-                btn.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error('Hata:', error);
-            alert("Bir hata oluştu.");
-            btn.innerHTML = 'Kaydet';
-            btn.disabled = false;
-        });
-    });
-
-    // --- HEDEF GÜNCELLEME İŞLEMİ ---
-    document.getElementById('saveGoalBtn').addEventListener('click', function() {
-        // 1. Değeri al
-        const newGoal = document.getElementById('newGoalInput').value;
-
-        // 2. Kontrol et
-        if(newGoal < 1) {
-            alert("Lütfen geçerli bir hedef giriniz.");
-            return;
-        }
-
-        // 3. Butonu kilitle
-        const btn = this;
-        const oldText = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
-        btn.disabled = true;
-
-        // 4. VERİYİ HAZIRLA (Controller [FromForm] beklediği için URLSearchParams kullanıyoruz)
-        const formData = new URLSearchParams();
-        formData.append('goal', newGoal);
-
-        // 5. Gönder
-        fetch('/Profile/UpdateGoal', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded' // ÖNEMLİ: Form formatı
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload(); // Başarılıysa sayfayı yenile
-            } else {
-                alert("Hata: " + data.message);
-                btn.innerHTML = oldText;
-                btn.disabled = false;
+                btnElement.innerHTML = oldText;
+                btnElement.disabled = false;
             }
         })
         .catch(error => {
             console.error('Hata:', error);
             alert("Bir bağlantı hatası oluştu.");
-            btn.innerHTML = oldText;
-            btn.disabled = false;
+            btnElement.innerHTML = oldText;
+            btnElement.disabled = false;
         });
-    });
+    }
 </script>

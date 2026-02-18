@@ -17,7 +17,10 @@
         // Ekstra Özellikler
         public string? FavoriteCategory { get; set; } // En çok kitabı olan kategori
         public int YearlyReadingGoal { get; set; }  // Örn: Yıllık hedef (sabit veya db'den)
+        public int MonthlyReadingGoal { get; set; }
+        public int MonthlyPagesRead { get; set; }
         public int BooksReadThisYear { get; set; } // Bu yıl okunanlar
+        public int BooksReadThisMonth { get; set; } 
         public User? User { get; set; }
     }
 }
