@@ -1,240 +1,143 @@
 ﻿<!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewData["Title"] - Admin Panel</title>
-
+    <meta name="viewport" content="width=device-width, initial-1.0" />
+    <title>@ViewData["Title"] - BookManagementApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BookManagementApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
+        html {
+            height: 100%;
+        }
+
         body {
             min-height: 100vh;
-            display: flex;
-            /* Ana arka plan koyu lacivert */
-            background-color: #0a0c1e;
-            color: #e0e0e0; /* Varsayılan metin rengi */
-            transition: all 0.3s;
+            margin: 0;
+            position: relative;
         }
 
-        .sidebar {
-            width: 240px;
-            /* Kart/Form arka planıyla aynı koyu mavi */
-            background-color: #10152f;
-            color: white;
-            flex-shrink: 0;
-            /* İçerikten ayırmak için neon mavi sınır ve parıltı */
-            border-right: 1px solid #00aaff;
-            box-shadow: 3px 0 15px rgba(0, 170, 255, 0.2);
-            z-index: 1000; /* Mobilde üstte kalması için */
-            transition: all 0.3s ease;
+        .header-wrapper {
+            position: relative;
+            z-index: 10;
         }
 
-            /* Sidebar Başlığı (Admin Panel) */
-            .sidebar h4 {
-                color: #ffffff;
-                text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
-                border-bottom: 1px solid #1f2a52;
-                padding-bottom: 15px;
-            }
-
-            /* Link ikonları için boşluk */
-            .sidebar .nav-link i {
-                margin-right: 10px;
-                width: 20px; /* İkonların hizalı durması için */
-            }
-
-            .sidebar .nav-link {
-                /* Pasif link rengi */
-                color: #a0b0d0;
-                transition: all 0.3s ease;
-                border-left: 3px solid transparent; /* Aktif durum için yer tutucu */
-                padding-left: 17px; /* 20px - 3px */
-            }
-
-                /* Aktif ve Hover Durumu */
-                .sidebar .nav-link.active,
-                .sidebar .nav-link:hover {
-                    /* Neon Mavi/Cyan */
-                    color: #00d9ff;
-                    /* Hover arka planı */
-                    background-color: #1a2452;
-                    /* Aktif/Hover parıltısı */
-                    text-shadow: 0 0 5px rgba(0, 217, 255, 0.7);
-                    border-left: 3px solid #00d9ff;
-                    padding-left: 17px;
-                }
-
-                /* Aktif durum (Bootstrap 'active' sınıfı) */
-                .sidebar .nav-link.active {
-                    font-weight: 500;
-                }
-
-            /* Sidebar ayırıcı çizgisi */
-            .sidebar hr {
-                border-color: #1f2a52;
-            }
-
-            /* "Siteye Dön" Butonu (Neon Mavi Outline) */
-            .sidebar .btn-outline-light {
-                color: #00c3ff;
-                border-color: #00c3ff;
-                transition: all 0.3s ease;
-            }
-
-                .sidebar .btn-outline-light:hover {
-                    background-color: #00c3ff;
-                    color: #0a0c1e;
-                    box-shadow: 0 0 15px #00c3ff;
-                }
-
-
-        .content {
-            flex-grow: 1;
-            padding: 30px; /* İçeriğe biraz daha fazla boşluk */
-            height: 100vh;
-            overflow-y: auto; /* İçerik taşarsa kaydırma çubuğu */
-            width: 100%; /* Mobilde tam genişlik olması için */
-        }
-
-        /* --- RESPONSIVE CSS EKLEMELERİ --- */
-
-        /* Menü açma butonu (Sadece mobilde görünür) */
-        .menu-toggle-btn {
-            display: none;
+        .hanging-book-container {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            z-index: 999;
-            background-color: #10152f;
-            border: 1px solid #00aaff;
-            color: #00aaff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
+            top: 100%;
+            /* DÜZELTME BURADA: Header'daki margin boşluğunu kapatmak için ipleri yukarı çektik */
+            margin-top: -6px;
+            z-index: 1040;
+            pointer-events: none;
+            transform-origin: top center;
+            perspective: 1000px;
         }
 
-        /* Mobil Ekranlar İçin (768px altı) */
-        @@media (max-width: 768px) {
-            .sidebar
-
-        {
-            position: fixed;
-            left: -240px; /* Varsayılan olarak ekran dışına it */
-            height: 100vh;
-            top: 0;
+        .rope {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to right, #6d4c3a, #8d6e63, #6d4c3a);
+            margin: 0 auto;
+            border-radius: 1px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        .sidebar.active {
-            left: 0; /* Class eklenince ekrana gelsin */
+        .book-icon {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #4a2d1f;
+            line-height: 1;
+            position: relative;
+            transform-style: preserve-3d;
         }
 
-        .content {
-            padding-top: 60px; /* Üstteki buton için boşluk */
-        }
-
-        .menu-toggle-btn {
-            display: block; /* Mobilde butonu göster */
-        }
-
-        /* Menü açıldığında arkaplanı karartmak için overlay */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 998;
-            backdrop-filter: blur(2px);
-        }
-
-            .sidebar-overlay.active {
-                display: block;
+            .book-icon::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -5px;
+                width: 5px;
+                height: 100%;
+                background-color: #5c3e2e;
+                transform: rotateY(90deg) translateZ(-5px);
+                transform-origin: left;
+                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.4);
             }
 
+            .book-icon::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: -5px;
+                width: 5px;
+                height: 100%;
+                background-color: #5c3e2e;
+                transform: rotateY(-90deg) translateZ(-5px);
+                transform-origin: right;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.4);
+            }
+
+            .book-icon .fas.fa-book {
+                text-shadow: -1px -1px 0 #3b2419, 1px 1px 0 #5f4236, 0 5px 10px rgba(0, 0, 0, 0.5);
+            }
+
+        .hanging-book-container.left {
+            left: 30px;
+            animation: gentle-swing 6s infinite ease-in-out;
+        }
+
+        .hanging-book-container.right {
+            right: 30px;
+            animation: gentle-swing 6s infinite ease-in-out;
+            animation-delay: -3s;
+        }
+
+        @@keyframes gentle-swing {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(6deg);
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .hanging-book-container {
+                display: none;
+            }
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="header-wrapper">
+        @await Component.InvokeAsync("Header")
 
-    <button class="menu-toggle-btn" id="menuToggle">
-        <i class="bi bi-list" style="font-size: 1.5rem;"></i>
-    </button>
-
-    <div class="sidebar d-flex flex-column p-3" id="sidebarMenu">
-        <h4 class="text-center mb-4"><img src="~/images/admin.png" style="max-width:30px;" />Raflarını Yönet</h4>
-        <ul class="nav nav-pills flex-column mb-auto">
-
-            <li class="nav-item">
-                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "DashBoard" ? "active" : "")"
-                   asp-area="Admin" asp-controller="DashBoard" asp-action="Index">
-                    <i class="bi bi-speedometer2"></i> Genel Bakış
-                </a>
-            </li>
-            <li>
-                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Books" ? "active" : "")"
-                   asp-area="Admin" asp-controller="Books" asp-action="List">
-                    <i class="bi bi-book"></i> Kitaplar
-                </a>
-            </li>
-            <li>
-                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
-                   asp-area="Admin" asp-controller="Category" asp-action="List">
-                    <i class="bi bi-folder"></i> Kategoriler
-                </a>
-            </li>
-            <li>
-                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Account" ? "active" : "")"
-                   asp-area="Admin" asp-controller="Account" asp-action="Index">
-                    <i class="bi bi-person-circle"></i> Hesap Ayarları
-                </a>
-            </li>
-        </ul>
-
-        <hr />
-
-        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-light mt-auto">Kitaplığa Dön</a>
+        <div class="hanging-book-container left">
+            <div class="rope"></div>
+            <div class="book-icon"><i class="fas fa-book"></i></div>
+        </div>
+        <div class="hanging-book-container right">
+            <div class="rope"></div>
+            <div class="book-icon"><i class="fas fa-book"></i></div>
+        </div>
     </div>
 
-    <div class="content">
-        <main role="main" class="pb-3">
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3 pt-1 pt-md-4">
             @RenderBody()
         </main>
     </div>
 
+    @await Component.InvokeAsync("Footer")
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('#menuToggle').click(function () {
-                $('#sidebarMenu').toggleClass('active');
-                $('#sidebarOverlay').toggleClass('active');
-            });
-
-            // Karartıya basınca menüyü kapat
-            $('#sidebarOverlay').click(function () {
-                $('#sidebarMenu').removeClass('active');
-                $('#sidebarOverlay').removeClass('active');
-            });
-        });
-    </script>
-
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
 </body>
 </html>

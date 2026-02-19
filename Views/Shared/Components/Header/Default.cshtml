@@ -345,7 +345,7 @@
                                 <a class="dropdown-item logout-item" asp-area="" asp-controller="Profile" asp-action="Index">
                                     Profil Özetim
                                 </a>
-                                @if (Model.User.Role == "SuperAdmin")
+                                @if (Model.User != null && Model.User.Role == "SuperAdmin")
                                 {
                                     <a class="dropdown-item logout-item" asp-area="SuperAdmin" asp-controller="Dashboard" asp-action="Index">
                                         Sistemi Yönet
@@ -359,11 +359,31 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a class="nav-link" style="white-space: nowrap;" asp-area="" asp-action="GoogleBooks" asp-controller="Home" role="button">
-                            Hızlı Kitap
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="manageLibraryDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false" style="white-space: nowrap;">
+                            <i class="fa-solid fa-book-open"></i> Kitap İşlemleri
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="manageLibraryDropdown">
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-action="GoogleBooks" asp-controller="Home">
+                                    <i class="fa-solid fa-bolt" style="color: #a0785a;"></i> Hızlı Kitap Ekle
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-area="Admin" asp-action="Create" asp-controller="Books">
+                                    <i class="fa-solid fa-book-medical" style="color: #8b6f47;"></i> Kitap Ekle
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-area="Admin" asp-action="Create" asp-controller="Category">
+                                    <i class="fa-solid fa-layer-group" style="color: #8b6f47;"></i> Kategori Ekle
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li>
                         <a class="nav-link" asp-area="" asp-action="SendMeMessage" asp-controller="Home" role="button">
                             <i class="bi bi-phone"></i> İletişim

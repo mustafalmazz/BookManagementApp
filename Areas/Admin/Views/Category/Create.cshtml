@@ -1,94 +1,126 @@
 ﻿@model Category
 
 @{
-    ViewData["Title"] = "Category Add";
+    ViewData["Title"] = "Yeni Kategori Ekle";
 }
 
 <style>
-    /* Sayfa _Layout.cshtml kullanmıyorsa veya
-          body stilini oradan almıyorsa bu gereklidir.
-        */
+    /* --- GENEL TEMA VE ARKA PLAN --- */
     body {
-        background-color: #0a0c1e;
-        color: #e0e0e0;
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+        color: #4a3f35;
     }
 
-    /* Başlık: Neon Mavi Parıltı */
     h1 {
-        color: #ffffff;
-        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+        color: #4a3f35;
+        font-weight: 800;
+        margin-top: 40px;
     }
 
-    /* Ayırıcı Çizgi */
     hr {
-        border-color: #1f2a52;
-        opacity: 0.5;
+        border-color: #8b6f47;
+        opacity: 0.2;
+        max-width: 600px;
+        margin: 15px auto 40px auto;
     }
 
-    /* --- Form Stilleri --- */
-
-    /* Formun kendisini bir kart gibi göster */
-    form {
-        background: #10152f;
-        border: 1px solid #00aaff;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
-        padding: 30px;
-        /* col-8 ile birlikte merkezlemek için mx-auto eklendi */
+    /* --- FORM KARTI STİLLERİ --- */
+    .category-form {
+        background: #fff9f0;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px; /* Tek input olduğu için daha dar ve şık bir kart */
+        margin: 0 auto;
+        box-shadow: 0 10px 30px rgba(107, 85, 65, 0.15);
+        border: 2px solid rgba(139, 111, 71, 0.05);
     }
 
-    /* Form Etiketleri */
     .form-label {
-        color: #a0b0d0;
-        font-weight: 500;
+        color: #8b6f47;
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 1.05rem;
     }
 
-    /* Input Kutuları */
     .form-control {
-        background-color: #131a38;
-        color: #e0e0e0;
-        border: 1px solid #1f2a52;
-        border-radius: 6px;
+        background-color: #fff;
+        color: #4a3f35;
+        border: 2px solid #e8dcc8;
+        border-radius: 12px;
+        padding: 15px;
+        transition: all 0.3s ease;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1rem;
     }
 
-        /* Input Odaklanma (Focus) Efekti */
         .form-control:focus {
-            background-color: #131a38;
-            color: #e0e0e0;
-            border-color: #00d9ff;
-            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+            background-color: #fff;
+            color: #4a3f35;
+            border-color: #8b6f47;
+            box-shadow: 0 0 10px rgba(139, 111, 71, 0.15);
             outline: 0;
         }
 
-    /* --- Buton Stilleri --- */
-
-    /* "Add" Butonu (Neon Mavi) */
-    .btn-primary {
-        background-color: #00c3ff;
-        border-color: #00c3ff;
-        color: #0a0c1e; /* Kontrast için koyu metin */
+    /* --- BUTON STİLLERİ --- */
+    .btn-submit {
+        background: linear-gradient(135deg, #8b6f47, #6b5541);
+        border: none;
+        color: #fff;
         transition: all 0.3s ease;
-        font-weight: 600;
-        width: 100%; /* Diğer formlarla tutarlı */
-        padding: 10px;
+        font-weight: 700;
+        width: 100%;
+        padding: 14px;
         font-size: 1.1rem;
+        border-radius: 12px;
+        font-family: 'Georgia', serif;
     }
 
-        .btn-primary:hover {
-            background-color: #00a9db;
-            border-color: #00a9db;
-            box-shadow: 0 0 12px #00c3ff;
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #a0785a, #8b6f47);
+            box-shadow: 0 8px 20px rgba(107, 85, 65, 0.2);
+            color: #fff;
+            transform: translateY(-3px);
         }
 
+    /* Geri Dön Linki */
+    .back-link {
+        color: #8b6f47;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: color 0.2s ease;
+        display: inline-block;
+        margin-top: 15px;
+    }
+
+        .back-link:hover {
+            color: #4a3f35;
+            text-decoration: underline;
+        }
 </style>
 
-<h1 class="text-center">Yeni Kategori Ekle</h1>
-<hr />
+<div class="container">
+    <h1 class="text-center">
+        <i class="fa-solid fa-layer-group" style="color: #a0785a;"></i> Yeni Kategori Ekle
+    </h1>
+    <hr />
 
-<form action="Create" method="post" class="col-8 mx-auto">
-    <div class="mb-2">
-        <label class="form-label" asp-for="@Model.CategoryName">Category Name</label>
-        <input class="form-control" asp-for="@Model.CategoryName" />
-    </div>
-    <button class="btn btn-primary mt-3">Add</button>
-</form>
+    <form action="Create" method="post" class="category-form">
+        <div class="mb-4">
+            <label class="form-label" asp-for="CategoryName">Kategori Adı</label>
+            <input class="form-control" asp-for="CategoryName" placeholder="Örn: Kişisel Gelişim" autocomplete="off" />
+            <span asp-validation-for="CategoryName" class="text-danger mt-1 d-block" style="font-size:0.85rem;"></span>
+        </div>
+
+        <button type="submit" class="btn btn-submit">
+            <i class="fa-solid fa-plus"></i> Kategori Ekle
+        </button>
+
+        <div class="text-center mt-3">
+            <a href="/Admin/Category/Index" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Listeye Dön
+            </a>
+        </div>
+    </form>
+</div>

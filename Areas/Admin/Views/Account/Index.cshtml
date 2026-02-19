@@ -4,156 +4,523 @@
     ViewData["Title"] = "Hesap Bilgilerim";
 }
 
-
 <style>
-    /* Sayfa _Layout.cshtml kullanmıyorsa veya
-          body stilini oradan almıyorsa bu gereklidir.
-        */
+    /* --- GENEL TEMA VE ARKA PLAN --- */
     body {
-        background-color: #0a0c1e;
-        color: #e0e0e0;
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        font-family: 'Georgia', serif;
+        color: #4a3f35;
     }
 
-    /* Başlık: Neon Mavi Parıltı */
-    h1 {
-        color: #ffffff;
-        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
-    }
-
-    /* Ayırıcı Çizgi */
-    hr {
-        border-color: #1f2a52;
-        opacity: 0.5;
-    }
-
-    /* --- Form Stilleri --- */
-
-    /* Formun kendisini bir kart gibi göster (Önceki tasarımlarla uyum için) */
-    form {
-        background: #10152f;
-        border: 1px solid #00aaff;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
-        padding: 30px;
-        max-width: 800px; /* Formun çok genişlemesini engelle */
-        margin: 0 auto; /* Ortala */
-    }
-
-    /* Form Etiketleri */
-    .form-label {
-        color: #a0b0d0;
-        font-weight: 500;
-    }
-
-    /* Input ve Select Kutuları */
-    .form-control,
-    .form-select {
-        background-color: #131a38; /* Koyu mavi input alanı */
-        color: #e0e0e0;
-        border: 1px solid #1f2a52; /* Koyu sınır */
-        border-radius: 6px;
-    }
-
-        /* Input/Select Odaklanma (Focus) Efekti */
-        .form-control:focus,
-        .form-select:focus {
-            background-color: #131a38;
-            color: #e0e0e0;
-            border-color: #00d9ff; /* Neon mavi sınır */
-            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5); /* Neon parıltı */
-            outline: 0;
-        }
-
-    /* Select (Dropdown) okunu temaya uyarla */
-    .form-select {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a0b0d0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-        background-position: right 0.75rem center;
-        background-repeat: no-repeat;
-        background-size: 16px 12px;
-    }
-
-    /* Dosya Yükleme (File Input) Butonunu temaya uyarla */
-    .form-control[type="file"] {
-        color: #a0b0d0;
-    }
-
-    .form-control::file-selector-button {
-        background-color: #00c3ff;
-        border: none;
-        color: #0a0c1e; /* Koyu metin */
-        padding: 8px 12px;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-        margin-right: 15px;
-    }
-
-    .form-control:hover::file-selector-button {
-        background-color: #00a9db;
-        box-shadow: 0 0 8px #00c3ff;
-    }
-
-    /* Mevcut Kitap Resmini Stilize Et (YENİ EKLENDİ) */
-    form img {
-        margin-top: 15px;
-        border-radius: 6px;
-        border: 1px solid #1f2a52;
-    }
-
-
-    /* --- Buton Stilleri --- */
-
-    /* "Save" Butonu (Neon Mavi) */
-    .btn-primary {
-        background-color: #00c3ff;
-        border-color: #00c3ff;
-        color: #0a0c1e; /* Kontrast için koyu metin */
-        transition: all 0.3s ease;
-        font-weight: 600;
-        width: 100%; /* Butonu tam genişlik yap */
-        padding: 10px;
-        font-size: 1.1rem;
-    }
-
-        .btn-primary:hover {
-            background-color: #00a9db;
-            border-color: #00a9db;
-            box-shadow: 0 0 12px #00c3ff;
-        }
-    .alert-neon-success {
-        padding: 15px;
-        margin: 20px auto; 
-        border: 1px solid #00d9ff; 
-        background-color: #0b1e33; 
-        color: #ffffff; 
-        border-radius: 8px;
+    /* --- ÜST BİLGİ ALANI --- */
+    .page-header {
         text-align: center;
-        font-weight: 600;
-        box-shadow: 0 0 10px rgba(0, 217, 255, 0.6);
-        max-width: 800px; 
+        margin-top: 40px;
+        margin-bottom: 30px;
     }
+
+        .page-header h1 {
+            color: #4a3f35;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #8b6f47;
+            font-style: italic;
+        }
+
+    /* --- FORM KARTI --- */
+    .account-card {
+        background: #fff9f0;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        margin: 0 auto;
+        box-shadow: 0 10px 30px rgba(107, 85, 65, 0.15);
+        border: 2px solid rgba(139, 111, 71, 0.05);
+        position: relative;
+    }
+
+    /* --- YENİ EKLENEN ANA KAPSAYICI --- */
+    .avatar-container-final {
+        position: relative;
+        width: 104px;
+        height: 104px;
+        margin: -90px auto 30px auto;
+        cursor: pointer;
+    }
+
+    /* --- MEVCUT AVATAR STİLLERİ --- */
+    .account-avatar-wrapper {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #fff9f0 0%, #e6dac8 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #5c4b3d;
+        box-shadow: 0 5px 15px rgba(107, 85, 65, 0.2);
+        border: 4px solid #fff;
+        overflow: hidden;
+    }
+
+        .account-avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    /* --- İKON STİLLERİ --- */
+    .avatar-edit-overlay {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        background: #4a3f35;
+        color: #fff;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #fff9f0;
+        transition: all 0.3s ease;
+        opacity: 0.9;
+        font-size: 0.9rem;
+        z-index: 10;
+    }
+
+    .avatar-container-final:hover .avatar-edit-overlay {
+        transform: scale(1.1);
+        background: #a0785a;
+        opacity: 1;
+    }
+
+    /* --- INPUT STİLLERİ --- */
+    .form-label {
+        color: #8b6f47;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .input-group-custom {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+        .input-group-custom i.left-icon {
+            position: absolute;
+            bottom: 24px; /* Inputun altından yukarı iter */
+            transform: translateY(50%); /* İkonun tam merkezini metnin merkezine sabitler */
+            left: 18px; /* Soldan hizalamayı bir tık iyileştirdik */
+            color: #a0785a;
+            opacity: 0.7;
+            font-size: 1rem; /* Yazı boyutuyla eşitlendi */
+        }
+
+        .input-group-custom i.toggle-password {
+            position: absolute;
+            bottom: 24px;
+            transform: translateY(50%);
+            right: 18px;
+            color: #a0785a;
+            opacity: 0.7;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            font-size: 1rem;
+        }
+
+            .input-group-custom i.toggle-password:hover {
+                opacity: 1;
+                color: #4a3f35;
+            }
+
+        .input-group-custom .form-control {
+            background-color: #fff;
+            color: #4a3f35;
+            border: 2px solid #e8dcc8;
+            border-radius: 12px;
+            padding: 12px 45px; /* Soldan ve sağdan ikonlar için boşluk */
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 500;
+        }
+
+            /* DEĞİŞİKLİK BURADA */
+            .input-group-custom .form-control:focus {
+                background-color: #fff;
+                color: #4a3f35;
+                border-color: #8b6f47;
+                box-shadow: 0 0 10px rgba(139, 111, 71, 0.15);
+                outline: 0;
+            }
+
+    .password-hint {
+        display: block;
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+
+    #passwordError {
+        display: none;
+        color: #d32f2f;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        margin-left: 5px;
+        font-family: 'Segoe UI', sans-serif;
+        font-weight: 600;
+    }
+
+    /* --- BUTON --- */
+    .btn-submit {
+        background: linear-gradient(135deg, #8b6f47, #6b5541);
+        border: none;
+        color: #fff;
+        transition: all 0.3s ease;
+        font-weight: 700;
+        width: 100%;
+        padding: 14px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        font-family: 'Georgia', serif;
+        margin-top: 10px;
+    }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #a0785a, #8b6f47);
+            box-shadow: 0 8px 20px rgba(107, 85, 65, 0.2);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+    /* --- BAŞARI MESAJI (ALERT) --- */
+    .custom-alert {
+        max-width: 500px;
+        margin: 0 auto 30px auto;
+        background-color: #e8f5e9;
+        border: 1px solid #4caf50;
+        color: #2e7d32;
+        border-radius: 12px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 10px rgba(76, 175, 80, 0.1);
+    }
+
+        .custom-alert i {
+            font-size: 1.5rem;
+        }
+
+    /* --- MODAL (AVATAR) STİLLERİ --- */
+    .custom-modal-content {
+        background: #fff9f0;
+        border-radius: 20px;
+        border: none;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(139, 111, 71, 0.2);
+    }
+
+    .modal-title {
+        color: #4a3f35;
+        font-weight: 700;
+        font-family: 'Georgia', serif;
+    }
+
+    .nav-tabs .nav-link {
+        color: #8b6f47;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+    }
+
+        .nav-tabs .nav-link.active {
+            color: #4a3f35;
+            background: transparent;
+            border-bottom: 3px solid #a0785a;
+        }
+
+    .avatar-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        padding: 20px 0;
+    }
+
+    .avatar-option {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all 0.2s ease;
+        object-fit: cover;
+    }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected {
+            border-color: #a0785a;
+            box-shadow: 0 0 10px rgba(160, 120, 90, 0.5);
+            transform: scale(1.1);
+        }
+
+    .btn-save-custom {
+        background: linear-gradient(135deg, #8b6f47, #6b5541);
+        color: #fff;
+        border-radius: 20px;
+        padding: 8px 25px;
+        border: none;
+    }
+
+        .btn-save-custom:hover {
+            background: linear-gradient(135deg, #a0785a, #8b6f47);
+            color: #fff;
+        }
 </style>
 
+<div class="container">
 
-<h1 class="text-center">Hesap Bilgilerim</h1>
-<hr />
-
-<form method="post" asp-action="Index" asp-area="Admin">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <label class="form-label" asp-for="UserName">Kullanıcı Adı</label>
-    <input class="form-control" asp-for="UserName" />
+    <div class="page-header">
+        <h1>Hesap Ayarları</h1>
+        <p>Giriş bilgilerinizi güvenle güncelleyin.</p>
     </div>
-    <div class="mb-2">
-        <label class="form-label" asp-for="PasswordHash">Şifre</label>
-        <input class="form-control" asp-for="PasswordHash" />
-    </div>
-    <button type="submit" class="btn btn-primary mt-3 mb-3">Güncelle</button>
-</form>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert-neon-success mb-4" role="alert">
-        @TempData["SuccessMessage"]
-    </div>
-}
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="custom-alert">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+                <strong>Başarılı!</strong><br />
+                @TempData["SuccessMessage"]
+            </div>
+        </div>
+    }
 
+    <div class="account-card mt-5">
+
+        <div class="avatar-container-final" data-bs-toggle="modal" data-bs-target="#avatarModal">
+
+            <div class="account-avatar-wrapper">
+                @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                {
+                    <img src="@Model.ProfileImageUrl" alt="Profil Fotoğrafı">
+                }
+                else
+                {
+                    @(string.IsNullOrEmpty(Model.UserName) ? "U" : Model.UserName.Substring(0, 1).ToUpper())
+                }
+            </div>
+
+            <div class="avatar-edit-overlay">
+                <i class="fa-solid fa-camera"></i>
+            </div>
+        </div>
+
+        <form id="accountForm" method="post" asp-action="Index" asp-area="Admin">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ProfileImageUrl" />
+
+            <div class="input-group-custom">
+                <label class="form-label" asp-for="UserName">Kullanıcı Adı</label>
+                <i class="fa-solid fa-at left-icon"></i>
+                <input class="form-control" asp-for="UserName" placeholder="Kullanıcı adınız..." autocomplete="off" required />
+            </div>
+
+            <div class="input-group-custom">
+                <label class="form-label" asp-for="PasswordHash">Yeni Şifre</label>
+                <i class="fa-solid fa-lock-open left-icon"></i>
+                <input class="form-control" id="newPassword" asp-for="PasswordHash" type="password" placeholder="Yeni şifre belirleyin..." autocomplete="new-password" />
+                <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('newPassword', this)"></i>
+            </div>
+
+            <div class="input-group-custom">
+                <label class="form-label" asp-for="ConfirmPassword">Yeni Şifre (Tekrar)</label>
+                <i class="fa-solid fa-lock left-icon"></i>
+                <input class="form-control" id="confirmPassword" asp-for="ConfirmPassword" type="password" placeholder="Şifrenizi tekrar girin..." autocomplete="new-password" />
+                <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('confirmPassword', this)"></i>
+
+                <div id="passwordError">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Şifreler uyuşmuyor!
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-submit">
+                <i class="fa-solid fa-floppy-disk me-2"></i> Bilgileri Güncelle
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="avatarModalLabel"><i class="fa-solid fa-user-pen"></i> Profil Fotoğrafı Seç</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs mb-3" id="avatarTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="select-tab" data-bs-toggle="tab" data-bs-target="#select-pane" type="button" role="tab">Hazır Avatar</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-pane" type="button" role="tab">Fotoğraf Yükle</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="avatarTabsContent">
+                    <div class="tab-pane fade show active" id="select-pane" role="tabpanel">
+                        <div class="text-center mb-2 text-muted small">Bir karakter seç:</div>
+                        <div class="avatar-grid">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3906/3906607.png" class="avatar-option" onclick="selectAvatar(this)">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4042/4042356.png" class="avatar-option" onclick="selectAvatar(this)">
+                            <img src="https://cdn-icons-png.flaticon.com/512/523/523461.png" class="avatar-option" onclick="selectAvatar(this)">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4086/4086679.png" class="avatar-option" onclick="selectAvatar(this)">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4042/4042422.png" class="avatar-option" onclick="selectAvatar(this)">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4086/4086577.png" class="avatar-option" onclick="selectAvatar(this)">
+                            <img src="https://cdn-icons-png.flaticon.com/512/189/189162.png" class="avatar-option" onclick="selectAvatar(this)">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4322/4322991.png" class="avatar-option" onclick="selectAvatar(this)">
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="upload-pane" role="tabpanel">
+                        <div class="mb-3 text-center">
+                            <label for="customAvatarFile" class="form-label text-muted">Bilgisayarından bir fotoğraf seç</label>
+                            <input class="form-control" type="file" id="customAvatarFile" accept="image/*">
+                        </div>
+                        <div class="text-center mt-3">
+                            <div id="uploadPreview" style="width: 100px; height: 100px; border-radius: 50%; background: #e8dcc8; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                <span class="text-muted small">Önizleme</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-sm btn-save-custom" id="saveAvatarBtn">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- YENİ: ŞİFRE GÖSTER/GİZLE FONKSİYONU ---
+    function togglePasswordVisibility(inputId, iconElement) {
+        var input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            iconElement.classList.remove('fa-eye');
+            iconElement.classList.add('fa-eye-slash');
+        } else {
+            input.type = "password";
+            iconElement.classList.remove('fa-eye-slash');
+            iconElement.classList.add('fa-eye');
+        }
+    }
+
+    // --- ŞİFRE EŞLEŞME KONTROLÜ ---
+    document.getElementById('accountForm').addEventListener('submit', function(e) {
+        var pwd = document.getElementById('newPassword').value;
+        var confirmPwd = document.getElementById('confirmPassword').value;
+        var errorMsg = document.getElementById('passwordError');
+        var confirmInput = document.getElementById('confirmPassword');
+
+        if (pwd !== confirmPwd) {
+            e.preventDefault();
+            errorMsg.style.display = 'block';
+            confirmInput.style.borderColor = '#d32f2f';
+        } else {
+            errorMsg.style.display = 'none';
+        }
+    });
+
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        var pwd = document.getElementById('newPassword').value;
+        if(this.value === pwd || this.value === '') {
+            document.getElementById('passwordError').style.display = 'none';
+            this.style.borderColor = '#e8dcc8';
+        }
+    });
+
+    // --- AVATAR GÜNCELLEME İŞLEMLERİ (ProfileController'a gider) ---
+    let selectedAvatarUrl = "";
+    let uploadedFile = null;
+
+    function selectAvatar(imgElement) {
+        document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
+        imgElement.classList.add('selected');
+        selectedAvatarUrl = imgElement.src;
+        uploadedFile = null;
+    }
+
+    const fileInput = document.getElementById('customAvatarFile');
+    if(fileInput){
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadedFile = file;
+                selectedAvatarUrl = "";
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('uploadPreview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+    if(saveAvatarBtn){
+        saveAvatarBtn.addEventListener('click', function() {
+            const formData = new FormData();
+            if (uploadedFile) {
+                formData.append('file', uploadedFile);
+            } else if (selectedAvatarUrl) {
+                formData.append('avatarUrl', selectedAvatarUrl);
+            } else {
+                alert("Lütfen bir avatar seçin veya fotoğraf yükleyin.");
+                return;
+            }
+
+            const btn = this;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...';
+            btn.disabled = true;
+
+            // Arka planda daha önce yazdığımız Profile Controller içindeki metoda gönderir
+            fetch('/Profile/UpdateAvatar', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Başarılıysa sayfayı yenile ki yeni resim görünsün
+                } else {
+                    alert("Hata: " + data.message);
+                    btn.innerHTML = 'Kaydet';
+                    btn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                alert("Bir hata oluştu.");
+                btn.innerHTML = 'Kaydet';
+                btn.disabled = false;
+            });
+        });
+    }
+</script>
