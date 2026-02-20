@@ -20,7 +20,10 @@
         public int MonthlyReadingGoal { get; set; }
         public int MonthlyPagesRead { get; set; }
         public int BooksReadThisYear { get; set; } // Bu yıl okunanlar
-        public int BooksReadThisMonth { get; set; } 
+        public int BooksReadThisMonth { get; set; }
+        public int TodayStudyMinutes { get; set; }
+        public int ThisMonthStudyMinutes { get; set; }
+        public int TotalPomodoroCompleted { get; set; }
         public User? User { get; set; }
     }
 }

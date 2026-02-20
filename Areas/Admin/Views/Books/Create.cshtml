@@ -68,7 +68,7 @@
         border: 2px solid #e8dcc8 !important;
         background-color: #fff !important;
         color: #4a3f35 !important;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Input içi daha okunaklı düz font */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
         .search-input:focus {
@@ -77,7 +77,7 @@
         }
 
     /* --- FORM STİLLERİ --- */
-    form {
+    .add-book-form {
         background: #fff9f0;
         border-radius: 20px;
         padding: 40px;
@@ -88,47 +88,48 @@
         position: relative;
     }
 
-    .form-label {
-        color: #8b6f47;
-        font-weight: 600;
-        margin-bottom: 8px;
-        font-size: 0.95rem;
-    }
+        .add-book-form .form-label {
+            color: #8b6f47;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
 
-    .form-control, .form-select {
-        background-color: #fff;
-        color: #4a3f35;
-        border: 2px solid #e8dcc8;
-        border-radius: 10px;
-        padding: 12px 15px;
-        transition: all 0.3s ease;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-        .form-control:focus, .form-select:focus {
+        .add-book-form .form-control,
+        .add-book-form .form-select {
             background-color: #fff;
             color: #4a3f35;
-            border-color: #8b6f47;
-            box-shadow: 0 0 10px rgba(139, 111, 71, 0.15);
-            outline: 0;
-        }
-
-        /* Dosya Yükleme Butonu Özelleştirmesi */
-        .form-control::file-selector-button {
-            background: #8b6f47;
-            border: none;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 6px;
+            border: 2px solid #e8dcc8;
+            border-radius: 10px;
+            padding: 12px 15px;
             transition: all 0.3s ease;
-            margin-right: 15px;
-            font-weight: 600;
-            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .form-control:hover::file-selector-button {
-            background: #6b5541;
-        }
+            .add-book-form .form-control:focus,
+            .add-book-form .form-select:focus {
+                background-color: #fff;
+                color: #4a3f35;
+                border-color: #8b6f47;
+                box-shadow: 0 0 10px rgba(139, 111, 71, 0.15);
+                outline: 0;
+            }
+
+            .add-book-form .form-control::file-selector-button {
+                background: #8b6f47;
+                border: none;
+                color: #fff;
+                padding: 8px 16px;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+                margin-right: 15px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            .add-book-form .form-control:hover::file-selector-button {
+                background: #6b5541;
+            }
 
     /* Kaydet Butonu */
     .btn-submit {
@@ -161,100 +162,197 @@
         display: flex;
         align-items: center;
     }
+
+    /* =========================================
+           YENİ EKLENEN RESPONSIVE (MOBİL) AYARLARI
+           ========================================= */
+
+    /* Tablet Görünümü (992px altı) */
+    @@media (max-width: 992px) {
+        .add-book-form, .search-card
+
+    {
+        padding: 30px;
+    }
+
+    }
+
+    /* Mobil Görünüm (768px altı) */
+    @@media (max-width: 768px) {
+        h1
+
+    {
+        font-size: 1.8rem;
+        margin-top: 10px;
+    }
+
+    .add-book-form {
+        padding: 20px 15px;
+        border-radius: 15px;
+    }
+
+    .search-card {
+        padding: 20px 15px;
+        border-radius: 15px;
+    }
+
+    /* Form içindeki yan yana olan kolonları mobilde alt alta diz (Zaten Bootstrap row-col mantığı bunu yapar ama boşlukları düzenliyoruz) */
+    .row > .col-md-6,
+    .row > .col-md-4 {
+        margin-bottom: 15px !important;
+    }
+
+    /* Resim Önizleme kutusunu mobilde dikey yap */
+    #imagePreviewContainer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+        #imagePreviewContainer span {
+            margin-left: 0 !important;
+            font-size: 0.9rem;
+        }
+
+    /* Dosya Yükleme Butonu Mobilde taşmasın */
+    .add-book-form .form-control[type="file"] {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+
+    .add-book-form .form-control::file-selector-button {
+        padding: 6px 10px;
+        margin-right: 10px;
+        font-size: 0.85rem;
+    }
+
+    }
+
+    /* Çok küçük ekranlar (480px altı) */
+    @@media (max-width: 480px) {
+        /* Arama inputu ve butonunu mobilde alt alta al */
+        .search-card .input-group
+
+    {
+        flex-direction: column;
+    }
+
+    .search-card .search-input {
+        border-radius: 10px !important;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .search-card .btn-search {
+        border-radius: 10px !important;
+        width: 100%;
+        padding: 12px;
+    }
+
+    .btn-submit {
+        font-size: 1.1rem;
+        padding: 12px;
+    }
+
+    }
 </style>
 
-<h1 class="text-center">Kütüphaneye Kitap Ekle</h1>
-<hr />
+<div class="container-fluid px-3 px-md-4 mt-4">
 
-<div class="search-card">
-    <div class="search-card-title">
-        <i class="fa-solid fa-magnifying-glass" style="color: #a0785a;"></i> Google Kitaplardan Hızlı Ekle
+    <h1 class="text-center">Kütüphaneye Kitap Ekle</h1>
+    <hr />
+
+    <div class="search-card">
+        <div class="search-card-title">
+            <i class="fa-solid fa-magnifying-glass" style="color: #a0785a;"></i> Google Kitaplardan Hızlı Ekle
+        </div>
+        <div class="input-group">
+            <input type="text" id="googleSearchInput" class="form-control search-input" placeholder="Kitap Adı veya ISBN Giriniz..." />
+            <button class="btn btn-search" type="button" onclick="searchGoogleBook()">Ara</button>
+        </div>
+        <div id="searchStatus" class="mt-3" style="font-size: 0.95rem; font-weight: 500;"></div>
     </div>
-    <div class="input-group">
-        <input type="text" id="googleSearchInput" class="form-control search-input" placeholder="Kitap Adı veya ISBN Giriniz..." />
-        <button class="btn btn-search" type="button" onclick="searchGoogleBook()">Ara</button>
-    </div>
-    <div id="searchStatus" class="mt-3" style="font-size: 0.95rem; font-weight: 500;"></div>
+
+    <form class="add-book-form" method="post" asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="Image" id="HiddenImageUrl" />
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label" asp-for="Name">Kitap Adı</label>
+                <input class="form-control" asp-for="Name" id="BookName" placeholder="Örn: Sefiller" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label" asp-for="Author">Yazar</label>
+                <input class="form-control" asp-for="Author" id="BookAuthor" placeholder="Örn: Victor Hugo" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Description">Kitap Özeti / Arka Kapak</label>
+            <textarea class="form-control" asp-for="Description" id="BookDescription" rows="4" placeholder="Kitabın konusundan kısaca bahsedin..."></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Notes">Kişisel Notlarım</label>
+            <input class="form-control" asp-for="Notes" placeholder="Daha sonra da eklenebilir." />
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label" asp-for="TotalPages">Toplam Sayfa</label>
+                <input class="form-control" asp-for="TotalPages" type="number" id="BookPageCount" placeholder="Örn: 350" />
+                <span asp-validation-for="TotalPages" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label" asp-for="Rate">Puan (1-5)</label>
+                <input class="form-control" asp-for="Rate" type="number" min="1" max="5" step="0.1" placeholder="Örn: 4.5" />
+                <span asp-validation-for="Rate" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label" asp-for="Price">Kitap Fiyatı (₺)</label>
+                <input class="form-control" asp-for="Price" type="number" step="0.01" placeholder="İsteğe bağlı" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Kategori</label>
+            <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
+                <option value="">-- Kategori Seçiniz --</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Image">Kitap Kapağı (Resim)</label>
+
+            <div id="imagePreviewContainer" style="display:none;">
+                <img id="googleImagePreview" src="" style="max-height: 120px; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+                <span style="color: #6b5541; margin-left: 15px; font-weight: 500;">
+                    <i class="fa-solid fa-check-circle" style="color: #4caf50;"></i> Google'dan kapak resmi otomatik seçildi.
+                    <br><small class="text-muted" style="font-weight: normal;">Değiştirmek isterseniz aşağıdan farklı bir dosya yükleyebilirsiniz.</small>
+                </span>
+            </div>
+
+            <input class="form-control mt-2" type="file" name="ImageFile" id="imageFileInput" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-submit">
+            <i class="fa-solid fa-book-medical"></i> Kitabı Kütüphaneme Ekle
+        </button>
+    </form>
+
 </div>
-
-<form method="post" asp-action="Create" enctype="multipart/form-data">
-    <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
-    <input type="hidden" asp-for="Image" id="HiddenImageUrl" />
-
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label" asp-for="Name">Kitap Adı</label>
-            <input class="form-control" asp-for="Name" id="BookName" placeholder="Örn: Sefiller" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label class="form-label" asp-for="Author">Yazar</label>
-            <input class="form-control" asp-for="Author" id="BookAuthor" placeholder="Örn: Victor Hugo" />
-            <span asp-validation-for="Author" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label" asp-for="Description">Kitap Özeti / Arka Kapak</label>
-        <textarea class="form-control" asp-for="Description" id="BookDescription" rows="4" placeholder="Kitabın konusundan kısaca bahsedin..."></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label" asp-for="Notes">Kişisel Notlarım</label>
-        <input class="form-control" asp-for="Notes" placeholder="Daha sonra da eklenebilir." />
-        <span asp-validation-for="Notes" class="text-danger"></span>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label class="form-label" asp-for="TotalPages">Toplam Sayfa</label>
-            <input class="form-control" asp-for="TotalPages" type="number" id="BookPageCount" placeholder="Örn: 350" />
-            <span asp-validation-for="TotalPages" class="text-danger"></span>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <label class="form-label" asp-for="Rate">Puan (1-5)</label>
-            <input class="form-control" asp-for="Rate" type="number" min="1" max="5" step="0.1" placeholder="Örn: 4.5" />
-            <span asp-validation-for="Rate" class="text-danger"></span>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <label class="form-label" asp-for="Price">Kitap Fiyatı (₺)</label>
-            <input class="form-control" asp-for="Price" type="number" step="0.01" placeholder="İsteğe bağlı" />
-            <span asp-validation-for="Price" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Kategori</label>
-        <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
-            <option value="">-- Kategori Seçiniz --</option>
-        </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label" asp-for="Image">Kitap Kapağı (Resim)</label>
-
-        <div id="imagePreviewContainer" style="display:none;">
-            <img id="googleImagePreview" src="" style="max-height: 120px; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
-            <span style="color: #6b5541; margin-left: 15px; font-weight: 500;">
-                <i class="fa-solid fa-check-circle" style="color: #4caf50;"></i> Google'dan kapak resmi otomatik seçildi.
-                <br><small class="text-muted" style="font-weight: normal;">Değiştirmek isterseniz aşağıdan farklı bir dosya yükleyebilirsiniz.</small>
-            </span>
-        </div>
-
-        <input class="form-control mt-2" type="file" name="ImageFile" id="imageFileInput" />
-        <span asp-validation-for="Image" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-submit">
-        <i class="fa-solid fa-book-medical"></i> Kitabı Kütüphaneme Ekle
-    </button>
-</form>
 
 <script>
     function searchGoogleBook() {

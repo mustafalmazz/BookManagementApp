@@ -84,16 +84,39 @@ namespace BookManagementApp.Controllers
 
             var now = DateTime.Now;
 
+            // =========================================================
+            // YENİ EKLENEN KISIM: ÇALIŞMA (POMODORO) İSTATİSTİKLERİ
+            // =========================================================
+
+            // Kullanıcının tüm çalışma verilerini veritabanından çek (Listeye çevirki bellekte işlesin)
+            var userSessions = _context.StudySessions
+                                       .Where(s => s.UserId == userId)
+                                       .ToList();
+
+            // Bugün çalışılan toplam dakika (CreatedAt tarihinin sadece Gün/Ay/Yıl kısmına bakıyoruz)
+            int todayStudyMins = userSessions
+                .Where(s => s.CreatedAt.Date == now.Date)
+                .Sum(s => s.DurationInMinutes);
+
+            // Bu ay çalışılan toplam dakika (Aynı yıl ve aynı ayda olanları topla)
+            int monthStudyMins = userSessions
+                .Where(s => s.CreatedAt.Year == now.Year && s.CreatedAt.Month == now.Month)
+                .Sum(s => s.DurationInMinutes);
+
+            // Başarıyla tamamlanmış Pomodoro sayısı
+            int completedPomodoros = userSessions
+                .Count(s => s.SessionType == "Pomodoro" && s.IsCompleted);
+
+            // =========================================================
+
             // 5. ViewModel'i Doldur
             var model = new UserProfileViewModel
             {
-                // Kullanıcı Bilgileri
                 UserName = user.UserName,
                 Role = user.Role ?? "Üye",
                 JoinDate = user.CreateDate,
                 ProfileImageUrl = user.ProfileImageUrl,
 
-                // Genel İstatistikler
                 TotalBooks = userBooks.Count,
                 TotalCategories = userBooks.Select(b => b.CategoryId).Distinct().Count(),
                 TotalPagesRead = (int)userBooks.Sum(b => b.TotalPages ?? 0),
@@ -101,16 +124,16 @@ namespace BookManagementApp.Controllers
 
                 FavoriteCategory = favCategoryName,
 
-                // --- GÜNCELLENEN KISIMLAR ---
-
-                // Yıllık İstatistik (Otomatik kalabilir - Kitap Sayısı)
                 BooksReadThisYear = userBooks.Count(b => b.CreateDate.Year == now.Year),
                 YearlyReadingGoal = user.YearlyReadingGoal,
 
-                // Aylık İstatistik (Manuel Giriş - Sayfa Sayısı)
-                // Veritabanındaki kayıtlı manuel veriyi çekiyoruz
                 MonthlyReadingGoal = user.MonthlyReadingGoal,
-                MonthlyPagesRead = user.MonthlyPagesRead
+                MonthlyPagesRead = user.MonthlyPagesRead,
+
+                // --- YENİ EKLENEN DEĞERLERİ MODELE AKTARIYORUZ ---
+                TodayStudyMinutes = todayStudyMins,
+                ThisMonthStudyMinutes = monthStudyMins,
+                TotalPomodoroCompleted = completedPomodoros
             };
 
             return View(model);

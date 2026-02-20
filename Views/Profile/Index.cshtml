@@ -2,6 +2,11 @@
 @model UserProfileViewModel
 @{
     ViewData["Title"] = "Profil Özetim";
+    int todayHours = Model.TodayStudyMinutes / 60;
+    int todayMins = Model.TodayStudyMinutes % 60;
+
+    int monthHours = Model.ThisMonthStudyMinutes / 60;
+    int monthMins = Model.ThisMonthStudyMinutes % 60;
 
     // --- YILLIK ---
     int yearlyRead = Model.BooksReadThisYear;      // DB'den gelen otomatik sayı
@@ -28,6 +33,45 @@
         color: #4a3f35;
     }
 
+    .study-stats-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .study-stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px dashed rgba(139, 111, 71, 0.2);
+    }
+
+        .study-stat-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+    .study-stat-label {
+        font-weight: 600;
+        color: #6b5541;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+    }
+
+    .study-stat-value {
+        font-weight: 800;
+        color: #4a3f35;
+        font-size: 1.1rem;
+    }
+
+        .study-stat-value span {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #8b6f47;
+        }
     .btn-edit-profile {
         background: transparent;
         color: #8b6f47;
@@ -1092,11 +1136,52 @@
             </div>
         </div>
         <div class="feature-card">
-            <div class="feature-title"><i class="fa-solid fa-heart" style="color: #a0785a;"></i> Favori Türün</div>
-            <h3 style="font-size:2rem; color:#8b6f47; font-weight:800; margin-bottom:20px;">
-                @(string.IsNullOrEmpty(Model.FavoriteCategory) ? "Henüz Belirlenmedi" : Model.FavoriteCategory)
-            </h3>
-            <div class="quote-box">"Kitaplar, ruhun aynasıdır." <br><span style="font-size:0.8rem; display:block; margin-top:5px;">- Virginia Woolf</span></div>
+            <div class="feature-title">
+                <i class="fa-solid fa-stopwatch" style="color: #a0785a;"></i> Çalışma İstatistikleri
+            </div>
+
+            <ul class="study-stats-list">
+                <li class="study-stat-item">
+                    <div class="study-stat-label">
+                        <i class="fa-solid fa-sun" style="color: #ff9800;"></i> Bugün
+                    </div>
+                    <div class="study-stat-value">
+                        @if (todayHours > 0)
+                        {
+                            <text>@todayHours<span>sa</span></text>
+                        }
+                        @todayMins<span>dk</span>
+                    </div>
+                </li>
+
+                <li class="study-stat-item">
+                    <div class="study-stat-label">
+                        <i class="fa-solid fa-calendar-days" style="color: #2196f3;"></i> Bu Ay
+                    </div>
+                    <div class="study-stat-value">
+                        @if (monthHours > 0)
+                        {
+                            <text>@monthHours<span>sa</span></text>
+                        }
+                        @monthMins<span>dk</span>
+                    </div>
+                </li>
+
+                <li class="study-stat-item">
+                    <div class="study-stat-label">
+                        <i class="fa-solid fa-fire" style="color: #f44336;"></i> Tamamlanan Pomodoro
+                    </div>
+                    <div class="study-stat-value">
+                        @Model.TotalPomodoroCompleted <span>adet</span>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="text-center mt-3">
+                <a href="/Pomodoro/Index" class="btn btn-sm" style="background: #e8dcc8; color: #6b5541; font-weight: 600; border-radius: 20px; padding: 5px 15px;">
+                    <i class="fa-solid fa-play"></i> Odaklanma Odasına Git
+                </a>
+            </div>
         </div>
     </div>
 </div>

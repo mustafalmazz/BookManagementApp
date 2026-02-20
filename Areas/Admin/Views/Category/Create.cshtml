@@ -30,37 +30,37 @@
         background: #fff9f0;
         border-radius: 20px;
         padding: 40px;
-        max-width: 500px; /* Tek input olduğu için daha dar ve şık bir kart */
+        max-width: 500px;
         margin: 0 auto;
         box-shadow: 0 10px 30px rgba(107, 85, 65, 0.15);
         border: 2px solid rgba(139, 111, 71, 0.05);
     }
 
-    .form-label {
-        color: #8b6f47;
-        font-weight: 600;
-        margin-bottom: 10px;
-        font-size: 1.05rem;
-    }
+        .category-form .form-label {
+            color: #8b6f47;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
 
-    .form-control {
-        background-color: #fff;
-        color: #4a3f35;
-        border: 2px solid #e8dcc8;
-        border-radius: 12px;
-        padding: 15px;
-        transition: all 0.3s ease;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 1rem;
-    }
-
-        .form-control:focus {
+        .category-form .form-control {
             background-color: #fff;
             color: #4a3f35;
-            border-color: #8b6f47;
-            box-shadow: 0 0 10px rgba(139, 111, 71, 0.15);
-            outline: 0;
+            border: 2px solid #e8dcc8;
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
         }
+
+            .category-form .form-control:focus {
+                background-color: #fff;
+                color: #4a3f35;
+                border-color: #8b6f47;
+                box-shadow: 0 0 10px rgba(139, 111, 71, 0.15);
+                outline: 0;
+            }
 
     /* --- BUTON STİLLERİ --- */
     .btn-submit {
@@ -98,9 +98,43 @@
             color: #4a3f35;
             text-decoration: underline;
         }
+
+    /* =========================================
+           YENİ EKLENEN RESPONSIVE (MOBİL) AYARLARI
+           ========================================= */
+
+    /* Mobil Görünüm (768px altı) */
+    @@media (max-width: 768px) {
+        h1
+
+    {
+        font-size: 1.8rem; /* Mobilde başlığı küçült */
+        margin-top: 20px;
+    }
+
+    .category-form {
+        padding: 30px 20px; /* İç boşluğu küçült */
+        border-radius: 15px;
+    }
+
+        .category-form .form-label {
+            font-size: 0.95rem;
+        }
+
+        .category-form .form-control {
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+
+    .btn-submit {
+        padding: 12px;
+        font-size: 1.05rem;
+    }
+
+    }
 </style>
 
-<div class="container">
+<div class="container px-3 px-md-0 mt-4">
     <h1 class="text-center">
         <i class="fa-solid fa-layer-group" style="color: #a0785a;"></i> Yeni Kategori Ekle
     </h1>
