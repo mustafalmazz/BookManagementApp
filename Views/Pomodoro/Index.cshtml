@@ -101,7 +101,7 @@
     /* ── ODA PANELİ (Merkez Kart) ── */
     .room-panel {
         width: 100%;
-        max-width: 580px;
+        max-width: 900px;
         position: relative;
     }
 
@@ -704,7 +704,7 @@
     /* ── GENEL KAPSAYICI ── */
     .container-override {
         width: 100%;
-        max-width: 680px;
+        max-width: 900px;
         margin: 0 auto;
         position: relative;
     }
@@ -1166,7 +1166,7 @@
             } else if (currentMode === 'LongBreak' && elapsedSeconds >= (LONG_BREAK_MINUTES * 60)) {
                 finishBreak();
             }
-        }, 10); // NOT: Test için 100x hız. Gerçek kullanımda 1000 yap.
+        }, 1000); // NOT: Test için 100x hız. Gerçek kullanımda 1000 yap.
     }
 
     function pauseTimer() {
