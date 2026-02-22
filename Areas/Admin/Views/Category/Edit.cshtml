@@ -1,168 +1,272 @@
 ﻿@model CategoryEditViewModel
 
 @{
-    ViewData["Title"] = "Category Edit";
-    // Controller'dan gelen toplam kitap sayısını al
+    ViewData["Title"] = "Kategori Düzenle";
     int totalBooks = ViewBag.TotalBooks != null ? (int)ViewBag.TotalBooks : 0;
 }
 
 <style>
-    /* ... Mevcut Stillerin Aynen Kalıyor ... */
-    /* Sayfa _Layout.cshtml kullanmıyorsa veya
-                  body stilini oradan almıyorsa bu gereklidir.
-                */
+    /* ============================================================
+           KATEGORİ DÜZENLEME — Kütüphane Konsepti
+           Typography: Playfair Display + Crimson Pro
+        ============================================================ */
+
+    @@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+    /* ── CSS DEĞİŞKENLERİ ── */
+    :root {
+        --cream: #f7f2e8;
+        --parchment: #ede4d0;
+        --linen: #e0d5be;
+        --tan: #c9b99a;
+        --walnut: #8b6f47;
+        --mahogany: #6b4f37;
+        --espresso: #3d2b1f;
+        --ink: #2a1f16;
+        --leaf: #4a7c59;
+        --leaf-dark: #2e5940;
+    }
+
+    /* Sayfa Arka Planı (Keten Dokusu) */
     body {
-        background-color: #0a0c1e;
-        color: #e0e0e0;
+        background-color: var(--parchment);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        color: var(--ink);
+        font-family: 'Crimson Pro', Georgia, serif;
     }
 
-    /* Başlık: Neon Mavi Parıltı */
+    /* ── BAŞLIK VE AYIRICI ── */
     h1 {
-        color: #ffffff;
-        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        color: var(--espresso);
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 5px;
     }
 
-    /* Ayırıcı Çizgi */
-    hr {
-        border-color: #1f2a52;
-        opacity: 0.5;
+    .header-ornament {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
     }
 
-    /* --- Form Stilleri (Sol Sütun) --- */
+    .ornament-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--walnut), transparent);
+        width: 150px;
+    }
 
-    /* Formu kart gibi göster */
-    form {
-        background: #10152f;
-        border: 1px solid #00aaff;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+    .ornament-diamond {
+        width: 6px;
+        height: 6px;
+        background: var(--walnut);
+        transform: rotate(45deg);
+    }
+
+    /* ── FORM STİLLERİ (Sadece "edit-form-card" içindekileri etkiler) ── */
+    .edit-form-card {
+        background: var(--cream);
+        border: 1px solid rgba(139, 111, 71, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(61, 43, 31, 0.08);
         padding: 30px;
-        height: 100%; /* Sütun yüksekliğini eşitlemek için */
+        /* Yükseklik sorunu çözümü: Form sayfa kaydırıldıkça ekranda kalsın istiyorsan yapışkan yapabilirsin */
+        position: sticky;
+        top: 20px;
     }
 
-    /* Form Etiketleri */
-    .form-label, label[asp-for] {
-        color: #a0b0d0;
-        font-weight: 500;
-    }
-
-    /* Input Kutuları */
-    .form-control {
-        background-color: #131a38;
-        color: #e0e0e0;
-        border: 1px solid #1f2a52;
-        border-radius: 6px;
-    }
-
-        /* Input Odaklanma (Focus) Efekti */
-        .form-control:focus {
-            background-color: #131a38;
-            color: #e0e0e0;
-            border-color: #00d9ff;
-            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
-            outline: 0;
+        .edit-form-card .form-label,
+        .edit-form-card label[asp-for] {
+            color: var(--espresso);
+            font-weight: 600;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: block;
         }
 
-    /* "Save" Butonu (Neon Mavi) */
-    .btn-primary {
-        background-color: #00c3ff;
-        border-color: #00c3ff;
-        color: #0a0c1e;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        width: 100%; /* Form butonuyla uyumlu */
-        padding: 10px;
-        font-size: 1.1rem;
-    }
-
-        .btn-primary:hover {
-            background-color: #00a9db;
-            border-color: #00a9db;
-            box-shadow: 0 0 12px #00c3ff;
+        /* Header'ı bozmaması için seçici daraltıldı */
+        .edit-form-card .form-control {
+            background-color: var(--parchment);
+            color: var(--ink);
+            border: 1px solid var(--tan);
+            border-radius: 6px;
+            padding: 12px 15px;
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
         }
+
+            .edit-form-card .form-control:focus {
+                background-color: #fff;
+                border-color: var(--walnut);
+                box-shadow: 0 0 5px rgba(139, 111, 71, 0.3);
+                outline: 0;
+            }
+
+        .edit-form-card .btn-primary {
+            background: linear-gradient(160deg, var(--leaf), var(--leaf-dark));
+            border: none;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 10px rgba(74, 124, 89, 0.3);
+            margin-top: 15px;
+        }
+
+            .edit-form-card .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(74, 124, 89, 0.4);
+                background: linear-gradient(160deg, #5a9469, var(--leaf));
+            }
 
     /* --- Liste Stilleri (Sağ Sütun) --- */
-
-    .list-group {
-        /* Kart görünümü */
-        border: 1px solid #00aaff;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
-        overflow: hidden; /* Köşeler için */
+    .list-group-custom {
+        border: 1px solid rgba(139, 111, 71, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(61, 43, 31, 0.08);
+        overflow: hidden;
         margin-bottom: 20px;
+        background: var(--cream);
+        padding-left: 0;
+        list-style: none;
     }
 
-    .list-group-item {
-        background-color: #10152f;
-        color: #e0e0e0;
-        border-bottom: 1px solid #1f2a52; /* Ayırıcı */
-        border-top: none;
-        border-left: none;
-        border-right: none;
+        .list-group-custom .list-group-item {
+            background-color: transparent;
+            color: var(--ink);
+            border-bottom: 1px dashed rgba(139, 111, 71, 0.3);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.05rem;
+        }
+
+            .list-group-custom .list-group-item.active {
+                background-color: var(--linen);
+                color: var(--espresso);
+                font-family: 'Playfair Display', Georgia, serif;
+                font-weight: 700;
+                font-size: 1.2rem;
+                border-bottom: 2px solid var(--tan);
+                z-index: 1;
+            }
+
+            .list-group-custom .list-group-item:last-child {
+                border-bottom: none;
+            }
+
+            .list-group-custom .list-group-item b {
+                color: var(--espresso);
+                font-weight: 600;
+            }
+
+            .list-group-custom .list-group-item i {
+                color: var(--walnut);
+                font-style: italic;
+                font-size: 0.95rem;
+            }
+
+    /* Kitap Görseli */
+    .book-thumb {
+        width: 45px;
+        height: 65px;
+        object-fit: cover;
+        border-radius: 4px;
+        box-shadow: 2px 2px 8px rgba(61, 43, 31, 0.2);
+        border: 1px solid rgba(139, 111, 71, 0.2);
     }
-
-        /* Başlık Öğesi */
-        .list-group-item.active {
-            background-color: #131a38; /* Tablo başlığı gibi */
-            color: #a0b0d0;
-            font-weight: 600;
-            border-color: #1f2a52;
-        }
-
-        /* Son öğenin alt çizgisini kaldır */
-        .list-group-item:last-child {
-            border-bottom: none;
-        }
-
-        /* Yazar (italik) metni */
-        .list-group-item i {
-            color: #a0b0d0; /* Daha soluk renk */
-        }
 
     /* Daha Fazla Butonu */
     .btn-load-more {
-        background-color: #131a38;
-        border: 1px solid #00aaff;
-        color: #00c3ff;
+        background-color: var(--linen);
+        border: 1px solid var(--tan);
+        color: var(--espresso);
         width: 100%;
-        padding: 10px;
+        padding: 12px;
         border-radius: 8px;
         transition: all 0.3s ease;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        margin-bottom: 40px;
     }
 
         .btn-load-more:hover {
-            background-color: #00a9db;
-            color: #0a0c1e;
-            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+            background-color: var(--tan);
+            color: var(--ink);
+            border-color: var(--walnut);
         }
+
+    /* --- MOBİL UYUM --- */
+    @@media (max-width: 768px) {
+        .edit-form-card
+
+    {
+        position: relative; /* Mobilde sticky özelliğini iptal et */
+        top: 0;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .list-group-custom .list-group-item {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+
+    .book-thumb {
+        width: 40px;
+        height: 55px;
+    }
+
+    }
 </style>
 
-<h1 class="text-center">Kategorileri Düzenle</h1>
-<hr />
-<div class="row">
-    <div class="col-12 col-md-6 mb-4">
+<h1>Kategoriyi Düzenle</h1>
+<div class="header-ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line"></div>
+</div>
 
-        <form method="post" action="Edit">
+<div class="row align-items-start">
+    <div class="col-12 col-md-5 col-lg-4 mb-4">
+        <form method="post" action="Edit" class="edit-form-card">
             <input type="hidden" asp-for="Category.Id" />
-            <div class="mb-2">
-                <label asp-for="Category.CategoryName">Kategori Adı</label>
-                <input class="form-control" asp-for="Category.CategoryName" />
+            <div class="mb-3">
+                <label asp-for="Category.CategoryName" class="form-label">Kategori Adı</label>
+                <input class="form-control" asp-for="Category.CategoryName" placeholder="Kategori ismini girin..." />
             </div>
-            <button class="btn btn-primary mt-3">
-                Kaydet
+            <button class="btn btn-primary">
+                <i class="fa-solid fa-check"></i> Kaydet
             </button>
+            <a asp-action="List" class="btn btn-load-more mt-3 border-0 shadow-none text-center d-block text-decoration-none" style="background: transparent; color: var(--walnut);">
+                <i class="fa-solid fa-arrow-left"></i> Geri Dön
+            </a>
         </form>
     </div>
 
-    <div class="col-12 col-md-6">
-        <ul class="list-group" id="bookList">
-            <li class="list-group-item active" aria-current="true">Kitaplar</li>
+    <div class="col-12 col-md-7 col-lg-8">
+        <ul class="list-group-custom" id="bookList">
+            <li class="list-group-item active" aria-current="true">
+                <i class="fa-solid fa-book-open me-2" style="color: var(--espresso);"></i> Bu Kategorideki Eserler (@totalBooks)
+            </li>
 
             @foreach (var item in Model.Books)
             {
                 <li class="list-group-item">
-                    <img src="@item.Image" style="width:50px;" />
-                    <b>@item.Name</b> <i>(@item.Author)</i>
+                    <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/ResimBulunamadi.png" : item.Image)" class="book-thumb" alt="@item.Name" />
+                    <div>
+                        <b>@item.Name</b><br />
+                        <i>@item.Author</i>
+                    </div>
                 </li>
             }
         </ul>
@@ -171,7 +275,7 @@
         {
             <div class="text-center">
                 <button id="loadMoreBtn" class="btn btn-load-more">
-                    Daha Fazla Göster (+20)
+                    Daha Fazla Eser Göster (+20) <i class="fa-solid fa-chevron-down ms-1"></i>
                 </button>
             </div>
         }
@@ -184,8 +288,8 @@
 
     document.getElementById('loadMoreBtn')?.addEventListener('click', function() {
         const btn = this;
-        btn.disabled = true; 
-        btn.innerText = "Yükleniyor...";
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...';
 
         fetch(`/Admin/Category/LoadMoreBooks?skip=${skipCount}`)
             .then(response => response.json())
@@ -198,14 +302,20 @@
 
                     const imgSrc = book.image ? book.image : '/images/ResimBulunamadi.png';
 
-                    li.innerHTML = `<img src="${imgSrc}" style="width:50px;" /> <b>${book.name}</b> <i>(${book.author})</i>`;
+                    li.innerHTML = `
+                        <img src="${imgSrc}" class="book-thumb" alt="${book.name}" />
+                        <div>
+                            <b>${book.name}</b><br/>
+                            <i>${book.author}</i>
+                        </div>
+                    `;
                     list.appendChild(li);
                 });
 
                 skipCount += 20;
 
                 btn.disabled = false;
-                btn.innerText = "Daha Fazla Göster (+20)";
+                btn.innerHTML = 'Daha Fazla Eser Göster (+20) <i class="fa-solid fa-chevron-down ms-1"></i>';
 
                 if (skipCount >= totalBooks) {
                     btn.style.display = 'none';
@@ -214,7 +324,7 @@
             .catch(error => {
                 console.error('Hata:', error);
                 btn.disabled = false;
-                btn.innerText = "Hata oluştu, tekrar dene";
+                btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Hata oluştu, tekrar dene';
             });
     });
 </script>

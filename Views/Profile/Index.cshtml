@@ -1134,7 +1134,15 @@
                     }
                 </p>
             </div>
+
+            <div class="motivation-quote-area mt-4" style="border-top: 1px dashed rgba(139, 111, 71, 0.2); padding-top: 15px; text-align: center;">
+                <p id="dailyQuoteText" style="font-family: 'Georgia', serif; font-size: 0.95rem; color: #6b5541; font-style: italic; margin-bottom: 5px; line-height: 1.4;">
+                    </p>
+                <small id="dailyQuoteAuthor" style="color: #8b6f47; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.5px;">
+                    </small>
+            </div>
         </div>
+        
         <div class="feature-card">
             <div class="feature-title">
                 <i class="fa-solid fa-stopwatch" style="color: #a0785a;"></i> Çalışma İstatistikleri
@@ -1286,12 +1294,35 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Sayfa yüklendiğinde varsayılan olan Yıllık barını doldur
-        setTimeout(function() {
+    const quotes = [
+        { text: "Okumak, bir insanın zihnini seyahate çıkarmasıdır.", author: "Victor Hugo" },
+        { text: "Bugün okuyan, yarın yönetir.", author: "Margaret Fuller" },
+        { text: "Kitapsız bir oda, ruhsuz bir beden gibidir.", author: "Marcus Tullius Cicero" },
+        { text: "İyi bir kitap, en iyi arkadaştır.", author: "Jacques-Bénigne Bossuet" },
+        { text: "Okumak, iki ruh arasında gizli bir sohbettir.", author: "Alphonse de Lamartine" },
+        { text: "Her okunan kitap, zihinde açılan yeni bir penceredir.", author: "Anonim" },
+        { text: "Eğer bir kitap sizi dünyadan koparamıyorsa, o kitap okunmaya değmez.", author: "Carl Sagan" },
+        { text: "Bir saatlik okuma, dünyadaki bütün dertleri unutturur.", author: "Charles de Montesquieu" },
+        { text: "Kitaplar, zekanın çocuklarıdır.", author: "Jonathan Swift" },
+        { text: "Okuduğumuz kitaplar sadece dünyamızı değil, kendimizi de değiştirir.", author: "Haruki Murakami" }
+    ];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Progress bar
+        setTimeout(function () {
             const bar = document.getElementById('yearlyProgressBar');
-            if(bar) bar.style.width = bar.getAttribute('data-width');
+            if (bar) bar.style.width = bar.getAttribute('data-width');
         }, 300);
+
+        // Rastgele söz
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const selectedQuote = quotes[randomIndex];
+        const quoteTextElement = document.getElementById('dailyQuoteText');
+        const quoteAuthorElement = document.getElementById('dailyQuoteAuthor');
+        if (quoteTextElement && quoteAuthorElement) {
+            quoteTextElement.innerHTML = `"${selectedQuote.text}"`;
+            quoteAuthorElement.innerText = `- ${selectedQuote.author}`;
+        }
     });
 
     // --- TAB GEÇİŞ İŞLEMİ ---
@@ -1306,21 +1337,18 @@
             monthlySec.style.display = 'none';
             btnYearly.classList.add('active');
             btnMonthly.classList.remove('active');
-
             setTimeout(() => {
                 const bar = document.getElementById('yearlyProgressBar');
-                if(bar) bar.style.width = bar.getAttribute('data-width');
+                if (bar) bar.style.width = bar.getAttribute('data-width');
             }, 100);
-
         } else {
             yearlySec.style.display = 'none';
             monthlySec.style.display = 'block';
             btnYearly.classList.remove('active');
             btnMonthly.classList.add('active');
-
             setTimeout(() => {
                 const bar = document.getElementById('monthlyProgressBar');
-                if(bar) bar.style.width = bar.getAttribute('data-width');
+                if (bar) bar.style.width = bar.getAttribute('data-width');
             }, 100);
         }
     }
@@ -1337,14 +1365,14 @@
     }
 
     const fileInput = document.getElementById('customAvatarFile');
-    if(fileInput){
-        fileInput.addEventListener('change', function(event) {
+    if (fileInput) {
+        fileInput.addEventListener('change', function (event) {
             const file = event.target.files[0];
             if (file) {
                 uploadedFile = file;
                 selectedAvatarUrl = "";
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     document.getElementById('uploadPreview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
                 }
                 reader.readAsDataURL(file);
@@ -1353,8 +1381,8 @@
     }
 
     const saveAvatarBtn = document.getElementById('saveAvatarBtn');
-    if(saveAvatarBtn){
-        saveAvatarBtn.addEventListener('click', function() {
+    if (saveAvatarBtn) {
+        saveAvatarBtn.addEventListener('click', function () {
             const formData = new FormData();
             if (uploadedFile) {
                 formData.append('file', uploadedFile);
@@ -1369,87 +1397,82 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...';
             btn.disabled = true;
 
-            fetch('/Profile/UpdateAvatar', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert("Hata: " + data.message);
+            fetch('/Profile/UpdateAvatar', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert("Hata: " + data.message);
+                        btn.innerHTML = 'Kaydet';
+                        btn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                    alert("Bir hata oluştu.");
                     btn.innerHTML = 'Kaydet';
                     btn.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Hata:', error);
-                alert("Bir hata oluştu.");
-                btn.innerHTML = 'Kaydet';
-                btn.disabled = false;
-            });
+                });
         });
     }
 
-    // --- YILLIK HEDEF GÜNCELLEME (DÜZELTİLDİ) ---
+    // --- YILLIK HEDEF GÜNCELLEME ---
     const saveGoalBtn = document.getElementById('saveGoalBtn');
-    if(saveGoalBtn){
-        saveGoalBtn.addEventListener('click', function() {
+    if (saveGoalBtn) {
+        saveGoalBtn.addEventListener('click', function () {
             const newGoal = document.getElementById('newGoalInput').value;
-            // DÜZELTME: Artık özel URL'e gidiyor (/Profile/UpdateYearlyGoal)
             updateReadingGoal(newGoal, this, '/Profile/UpdateYearlyGoal');
         });
     }
 
-    // --- AYLIK HEDEF GÜNCELLEME (DÜZELTİLDİ) ---
+    // --- AYLIK HEDEF GÜNCELLEME ---
     const saveMonthlyBtn = document.getElementById('saveMonthlyGoalBtn');
-     if(saveMonthlyBtn){
-         saveMonthlyBtn.addEventListener('click', function() {
-             // İki değeri de alıyoruz
-             const readVal = document.getElementById('manualReadInput').value;
-             const goalVal = document.getElementById('manualGoalInput').value;
+    if (saveMonthlyBtn) {
+        saveMonthlyBtn.addEventListener('click', function () {
+            const readVal = document.getElementById('manualReadInput').value;
+            const goalVal = document.getElementById('manualGoalInput').value;
 
-             if(goalVal < 1 || readVal < 0) {
-                 alert("Lütfen geçerli değerler giriniz.");
-                 return;
-             }
+            if (goalVal < 1 || readVal < 0) {
+                alert("Lütfen geçerli değerler giriniz.");
+                return;
+            }
 
-             const btnElement = this;
-             const oldText = btnElement.innerHTML;
-             btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
-             btnElement.disabled = true;
+            const btnElement = this;
+            const oldText = btnElement.innerHTML;
+            btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
+            btnElement.disabled = true;
 
-             const formData = new URLSearchParams();
-             formData.append('goal', goalVal);
-             formData.append('readPages', readVal); // Controller'daki parametre isimleri
+            const formData = new URLSearchParams();
+            formData.append('goal', goalVal);
+            formData.append('readPages', readVal);
 
-             fetch('/Profile/UpdateMonthlyGoal', {
-                 method: 'POST',
-                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                 body: formData
-             })
-             .then(response => response.json())
-             .then(data => {
-                 if (data.success) {
-                     location.reload();
-                 } else {
-                     alert("Hata: " + data.message);
-                     btnElement.innerHTML = oldText;
-                     btnElement.disabled = false;
-                 }
-             })
-             .catch(error => {
-                 console.error('Hata:', error);
-                 btnElement.innerHTML = oldText;
-                 btnElement.disabled = false;
-             });
-         });
-     }
+            fetch('/Profile/UpdateMonthlyGoal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert("Hata: " + data.message);
+                        btnElement.innerHTML = oldText;
+                        btnElement.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                    btnElement.innerHTML = oldText;
+                    btnElement.disabled = false;
+                });
+        });
+    }
+
     // --- ORTAK HEDEF GÜNCELLEME FONKSİYONU ---
-    // endpointUrl parametresi eklendi
     function updateReadingGoal(goalValue, btnElement, endpointUrl) {
-        if(goalValue < 1) {
+        if (goalValue < 1) {
             alert("Lütfen geçerli bir hedef giriniz.");
             return;
         }
@@ -1461,29 +1484,26 @@
         const formData = new URLSearchParams();
         formData.append('goal', goalValue);
 
-        // Dinamik URL kullanımı
         fetch(endpointUrl, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert("Hata: " + data.message);
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert("Hata: " + data.message);
+                    btnElement.innerHTML = oldText;
+                    btnElement.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                alert("Bir bağlantı hatası oluştu.");
                 btnElement.innerHTML = oldText;
                 btnElement.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error('Hata:', error);
-            alert("Bir bağlantı hatası oluştu.");
-            btnElement.innerHTML = oldText;
-            btnElement.disabled = false;
-        });
+            });
     }
 </script>

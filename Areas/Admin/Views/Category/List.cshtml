@@ -1,259 +1,311 @@
 ﻿@model IEnumerable<Category>
 
 @{
-    ViewData["Title"] = "Category List";
+    ViewData["Title"] = "Kategori Listesi";
 }
 
 <style>
-    /* Sayfa _Layout.cshtml kullanmıyorsa veya
-               body stilini oradan almıyorsa bu gereklidir.
-            */
+    /* ============================================================
+           KATEGORİ LİSTESİ — Kütüphane Konsepti
+           Typography: Playfair Display + DM Serif Text
+        ============================================================ */
+
+    @@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+    /* ── CSS DEĞİŞKENLERİ ── */
+    :root {
+        --cream: #f7f2e8;
+        --parchment: #ede4d0;
+        --linen: #e0d5be;
+        --tan: #c9b99a;
+        --walnut: #8b6f47;
+        --mahogany: #6b4f37;
+        --espresso: #3d2b1f;
+        --ink: #2a1f16;
+        --leaf: #4a7c59;
+        --leaf-dark: #2e5940;
+        --ember: #c0622a;
+    }
+
+    /* Sayfa Arka Planı (Keten Dokusu) */
     body {
-        background-color: #0a0c1e;
-        color: #e0e0e0;
+        background-color: var(--parchment);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        color: var(--ink);
+        font-family: 'Crimson Pro', Georgia, serif;
     }
 
-    /* Başlık: Neon Mavi Parıltı */
+    /* ── BAŞLIK VE AYIRICI ── */
     h1 {
-        color: #ffffff;
-        text-shadow: 0 0 5px #00d9ff, 0 0 10px #00d9ff;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        color: var(--espresso);
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 5px;
     }
 
-    /* Ayırıcı Çizgi */
-    hr {
-        border-color: #1f2a52;
-        opacity: 0.5;
+    .header-ornament {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
     }
 
-    /* --- Buton Stilleri --- */
-
-    /* "Add New" Butonu (Neon Yeşil) */
-    .btn-outline-success {
-        color: #00ff6a;
-        border-color: #00ff6a;
-        background-color: transparent;
-        transition: all 0.3s ease;
+    .ornament-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--walnut), transparent);
+        width: 150px;
     }
 
-        .btn-outline-success:hover {
-            background-color: #00ff6a;
-            color: #0a0c1e; /* Neon arka plan üzerinde koyu metin */
-            box-shadow: 0 0 15px #00ff6a;
-        }
-
-    /* "Delete" Butonu (Neon Kırmızı/Pembe) */
-    .btn-danger {
-        background-color: #ff006a;
-        border-color: #ff006a;
-        color: #ffffff;
-        transition: all 0.3s ease;
+    .ornament-diamond {
+        width: 6px;
+        height: 6px;
+        background: var(--walnut);
+        transform: rotate(45deg);
     }
 
-        .btn-danger:hover {
-            background-color: #e0005c;
-            border-color: #e0005c;
-            box-shadow: 0 0 12px #ff006a;
-        }
-
-    /* "Edit" Butonu (Neon Mavi) - Book List'teki btn-primary ile aynı */
-    .btn-success, .btn-primary {
-        background-color: #00c3ff;
-        border-color: #00c3ff;
-        color: #0a0c1e; /* Kontrast için koyu metin */
-        transition: all 0.3s ease;
-    }
-
-        .btn-success:hover, .btn-primary:hover {
-            background-color: #00a9db;
-            border-color: #00a9db;
-            box-shadow: 0 0 12px #00c3ff;
-        }
-
-    /* "Kitap Eklenmemiş" Uyarısı (Neon Kırmızı/Pembe) */
-    .text-danger {
-        color: #ff006a !important;
-        font-weight: 500;
-        text-shadow: 0 0 5px rgba(255, 0, 106, 0.5);
-    }
-
-
-    /* --- Tablo Stilleri --- */
-
-    .table {
-        color: #e0e0e0;
-        background-color: #10152f;
-        /* Neon çerçeve ve parıltı */
-        border: 1px solid #00aaff;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
-        border-collapse: separate;
-        border-spacing: 0;
-        overflow: hidden;
-        margin-bottom: 0; /* Responsive div içinde boşluk yapmasın */
-    }
-
-        /* Tablo Başlığı */
-        .table thead th {
-            color: #a0b0d0;
-            border-bottom: 2px solid #1f2a52;
-            background-color: #131a38;
-            border-top: none;
-            vertical-align: middle;
-            white-space: nowrap; /* Başlıkların mobilde kırılmasını önler */
-        }
-
-        /* Tablo Hücreleri */
-        .table td, .table th {
-            border-color: #1f2a52;
-            vertical-align: middle;
-        }
-
-    /* Çizgili (Striped) Renkler */
-    .table-striped > tbody > tr:nth-of-type(odd) > * {
-        background-color: #10152f;
-        color: #e0e0e0;
-    }
-
-    .table-striped > tbody > tr:nth-of-type(even) > * {
-        background-color: #131a38;
-        color: #e0e0e0;
-    }
-
-    /* Hover (Dinamiklik) */
-    .table-hover > tbody > tr:hover > * {
-        background-color: #1a2452;
-        color: #ffffff;
-    }
-
-    .search-form {
-        margin-bottom: 20px;
+    /* ── ÜST AKSİYON ÇUBUĞU (Arama & Buton) ── */
+    .top-action-bar {
+        background: var(--cream);
         padding: 20px;
-        background: #10152f;
-        border: 1px solid #1f2a52;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(61, 43, 31, 0.08);
+        border: 1px solid rgba(139, 111, 71, 0.2);
     }
 
-        /* Input Alanı */
-        .search-form .form-control {
-            background-color: #131a38;
-            color: #e0e0e0;
-            border: 1px solid #1f2a52;
+    /* Arama Formu */
+    .search-form .form-control {
+        background-color: var(--parchment);
+        color: var(--ink);
+        border: 1px solid var(--tan);
+        font-family: 'Crimson Pro', Georgia, serif;
+        border-radius: 6px;
+    }
+
+        .search-form .form-control:focus {
+            border-color: var(--walnut);
+            box-shadow: 0 0 5px rgba(139, 111, 71, 0.3);
+            outline: none;
         }
 
-            /* Input Odaklanma (Focus) Efekti */
-            .search-form .form-control:focus {
-                border-color: #00d9ff; /* Neon mavi sınır */
-                box-shadow: 0 0 8px rgba(0, 217, 255, 0.5); /* Neon parıltı */
-            }
-
-    /* Arama Butonu (Neon Mavi) */
+    /* Arama Butonu */
     .btn-search {
-        background-color: #00c3ff;
-        border-color: #00c3ff;
-        color: #0a0c1e;
+        background-color: var(--linen);
+        color: var(--espresso);
+        border: 1px solid var(--tan);
+        border-radius: 6px;
+        padding: 6px 15px;
+        font-weight: 600;
         transition: all 0.3s ease;
     }
 
         .btn-search:hover {
-            background-color: #00a9db;
-            border-color: #00a9db;
-            box-shadow: 0 0 10px #00c3ff;
-            color: #0a0c1e;
+            background-color: var(--tan);
+            color: var(--ink);
         }
 
-    /* --- MOBİL UYUMLULUK (RESPONSIVE CSS) --- */
+    /* Kategori Ekle Butonu */
+    .btn-add-new {
+        background: linear-gradient(160deg, var(--leaf), var(--leaf-dark));
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 20px;
+        font-family: 'Crimson Pro', Georgia, serif;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        box-shadow: 0 4px 10px rgba(74, 124, 89, 0.3);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-add-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(74, 124, 89, 0.4);
+            color: white;
+        }
+
+    /* ── TABLO TASARIMI ── */
+    .table-responsive {
+        background: var(--cream);
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 20px rgba(61, 43, 31, 0.08);
+        border: 1px solid rgba(139, 111, 71, 0.2);
+        margin-bottom: 50px; /* Alttan boşluk */
+    }
+
+    .table {
+        margin-bottom: 0;
+        color: var(--ink);
+    }
+
+        .table thead th {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 600;
+            color: var(--espresso);
+            border-bottom: 2px solid var(--tan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+            padding-bottom: 15px;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .table td, .table th {
+            border-top: 1px dashed rgba(139, 111, 71, 0.2);
+            vertical-align: middle;
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.05rem;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(224, 213, 190, 0.4);
+            }
+
+    /* Boş Liste Uyarısı */
+    .text-danger-custom {
+        color: var(--ember);
+        font-style: italic;
+        font-size: 0.95rem;
+        opacity: 0.8;
+    }
+
+    /* Aksiyon Butonları (Düzenle / Sil) */
+    .btn-action-edit {
+        background-color: var(--linen);
+        color: var(--espresso);
+        border: 1px solid var(--tan);
+        border-radius: 4px;
+        padding: 4px 10px;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+        .btn-action-edit:hover {
+            background-color: var(--tan);
+            color: var(--ink);
+        }
+
+    .btn-action-delete {
+        background-color: rgba(192, 98, 42, 0.1);
+        color: var(--ember);
+        border: 1px solid rgba(192, 98, 42, 0.3);
+        border-radius: 4px;
+        padding: 4px 10px;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+        .btn-action-delete:hover {
+            background-color: var(--ember);
+            color: white;
+        }
+
+    /* ── MOBİL UYUM ── */
     @@media (max-width: 768px) {
-        /* Üst kısımdaki Add New ve Search kısmını alt alta al */
         .top-action-bar
 
     {
-        flex-direction: column !important;
+        flex-direction: column;
         align-items: stretch !important;
         gap: 15px;
+        padding: 15px;
     }
 
-    /* Butonu tam genişlik yap */
-    .btn-outline-success {
-        width: 100%;
+    .search-form input[name="q"] {
+        width: 100% !important;
     }
 
-    /* Arama formunu tam genişlik yap */
-    .search-form {
-        width: 100%;
-        margin-bottom: 0; /* Container margin'i yeterli */
+    .table td, .table th {
+        font-size: 0.95rem;
+        padding: 12px 8px;
     }
-
-        /* Arama kutusundaki 300px sabit genişliği eziyoruz */
-        .search-form input[name="q"] {
-            width: 100% !important;
-        }
 
     }
 </style>
 
-
-<h1 class="text-center mb-3">Tüm Kategorilerim</h1>
-<hr />
+<h1>Kategorilerim</h1>
+<div class="header-ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line"></div>
+</div>
 
 <div class="d-flex justify-content-between align-items-center mb-4 top-action-bar">
 
-    <a asp-area="Admin" asp-action="Create" class="btn btn-outline-success">Kategori Ekle</a>
+    <a asp-area="Admin" asp-action="Create" class="btn-add-new">
+        <i class="fa-solid fa-plus"></i> Kategori Ekle
+    </a>
 
     <form asp-action="Search" method="get" class="d-flex search-form p-0 m-0">
         <input type="text"
                name="q"
                class="form-control me-2"
-               placeholder="Kitap veya Yazar Adı..."
-               style="width: 300px;" /> <button type="submit" class="btn btn-search">
+               placeholder="Kategori Adı Ara..."
+               style="width: 300px;" />
+        <button type="submit" class="btn-search">
             <i class="fas fa-search"></i> Ara
         </button>
     </form>
 </div>
 
 <div class="table-responsive">
-    <table class="table table-striped table-hover">
+    <table class="table">
         <thead>
             <tr>
                 <th>Kategori</th>
                 <th>Kitaplar</th>
-                <th style="width:200px;">İşlemler</th>
+                <th style="width:140px; text-align:center;">İşlemler</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.CategoryName</td>
+                    <td style="font-weight: 600; color: var(--espresso);">@item.CategoryName</td>
                     <td>
                         @if (item.Books != null && item.Books.Any())
                         {
                             var booksToShow = item.Books.Take(3).ToList();
                             for (int i = 0; i < booksToShow.Count; i++)
                             {
-                                @booksToShow[i].Name
+                                <span style="font-style: italic; color: var(--ink);">@booksToShow[i].Name</span>
 
                                 @if (i < booksToShow.Count - 1)
                                 {
-                                    <text>| </text>
+                                    <span style="color: var(--tan); margin: 0 4px;">|</span>
                                 }
                             }
 
                             @if (item.Books.Count() > 3)
                             {
-                                <text>...</text>
+                                <span style="color: var(--walnut); font-weight: bold; margin-left: 5px;">...</span>
                             }
                         }
                         else
                         {
-                            <span class="text-danger">Bu Kategoriye Henüz Kitap Eklenmemiş!</span>
+                            <span class="text-danger-custom">Bu Kategoriye Henüz Eser Eklenmemiş</span>
                         }
                     </td>
 
                     <td>
-                        <div class="d-flex gap-2">
-                            <a class="btn btn-danger btn-sm" asp-area="admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            <a class="btn btn-success btn-sm" asp-area="admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <div class="d-flex gap-1 justify-content-center">
+                            <a class="btn-action-edit" asp-area="admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" title="Düzenle">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a class="btn-action-delete" asp-area="admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" title="Sil">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
                         </div>
                     </td>
                 </tr>

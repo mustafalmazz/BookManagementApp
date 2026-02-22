@@ -1,351 +1,338 @@
 ﻿@model Book
 @{
-    ViewData["Title"] = "Delete Book";
+    ViewData["Title"] = "Kitap Sil";
 }
 
 <style>
-    /* Genel Sayfa Yapısı */
-    body {
-        background-color: #0a0c1e;
-        color: #e0e0e0;
+
+    @@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+    /* ── CSS DEĞİŞKENLERİ ── */
+    :root {
+        --cream: #f7f2e8;
+        --parchment: #ede4d0;
+        --linen: #e0d5be;
+        --tan: #c9b99a;
+        --walnut: #8b6f47;
+        --mahogany: #6b4f37;
+        --espresso: #3d2b1f;
+        --ink: #2a1f16;
+        --ember: #c0622a; /* Silme işlemi için vurgu rengi (Kiremit/Kızıl) */
     }
 
-    /* --- Kart Yapısı (Sadeleştirildi) --- */
+    /* Sayfa Arka Planı (Keten Dokusu) */
+    body {
+        background-color: var(--parchment);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        color: var(--ink);
+        font-family: 'Crimson Pro', Georgia, serif;
+    }
+
+    /* --- Kart Yapısı --- */
     .delete-card {
-        background: #10152f;
-        /* Çerçeve opaklığı düşürüldü, daha soft bir sınır */
-        border: 1px solid rgba(255, 0, 106, 0.3);
+        background: var(--cream);
+        border: 1px solid rgba(192, 98, 42, 0.3);
         border-radius: 12px;
-        /* Gölge siyah ağırlıklı yapıldı, neon parlaması azaltıldı */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 30px rgba(61, 43, 31, 0.15);
         padding: 40px;
         max-width: 900px;
-        margin: 40px auto;
+        margin: 40px auto; /* Mobilde de ortalanması için margin ayarı */
+        position: relative;
     }
 
-    /* Başlık (Glow efekti kaldırıldı) */
+    /* Başlık */
     .warning-title {
-        color: #ffffff;
-        font-weight: 600;
+        font-family: 'Playfair Display', Georgia, serif;
+        color: var(--espresso);
+        font-weight: 700;
         text-align: center;
         margin-bottom: 20px;
-        font-size: 1.8rem;
-        /* Neon text-shadow kaldırıldı, temiz beyaz yazı */
+        font-size: 2rem;
     }
 
+    /* İkon (Kafatası yerine daha profesyonel uyarı ikonu) */
     .warning-icon {
-        font-size: 3rem;
-        color: #ff006a; /* Renk korundu */
+        font-size: 3.5rem;
+        color: var(--ember);
         display: block;
         text-align: center;
-        margin-bottom: 20px;
-        opacity: 0.8; /* Biraz daha mat */
-        /* Animasyon kaldırıldı: Göz yormaması için */
+        margin-bottom: 15px;
+        opacity: 0.9;
     }
 
     /* Açıklama Metni */
     .warning-text {
-        color: #8899b0; /* Gri-mavi tonu, okuması kolay */
+        color: var(--ink);
         text-align: center;
         margin-bottom: 30px;
-        font-size: 1rem;
+        font-size: 1.15rem;
+        line-height: 1.6;
     }
 
     .highlight-name {
-        color: #e0e0e0;
+        color: var(--espresso);
         font-weight: 700;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 1.25rem;
+        font-style: italic;
     }
 
-    /* Ayırıcı */
-    hr {
-        border-color: #3f4c6b; /* Kırmızı yerine koyu mavi/gri */
-        opacity: 0.5;
-        margin: 20px 0 30px 0;
+    /* Dekoratif Ayırıcı Çizgi */
+    .header-ornament {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin: 30px 0;
+    }
+
+    .ornament-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--walnut), transparent);
+        width: 150px;
+    }
+
+    .ornament-diamond {
+        width: 6px;
+        height: 6px;
+        background: var(--walnut);
+        transform: rotate(45deg);
     }
 
     /* --- Kitap Görseli --- */
     .book-image-container {
         text-align: center;
-        background: #0d1126; /* Karttan bir tık koyu */
+        background: var(--linen);
         padding: 15px;
         border-radius: 8px;
-        border: 1px solid #1f2a52;
+        border: 1px dashed rgba(139, 111, 71, 0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .book-image {
         max-width: 100%;
         height: auto;
-        max-height: 300px;
+        max-height: 280px;
         border-radius: 4px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        box-shadow: 2px 4px 15px rgba(61, 43, 31, 0.2);
     }
 
     /* --- Kitap Bilgileri --- */
     .book-info h3 {
-        color: #ffffff;
-        font-size: 1.5rem;
+        font-family: 'Playfair Display', Georgia, serif;
+        color: var(--espresso);
+        font-size: 1.7rem;
+        font-weight: 600;
         margin-bottom: 15px;
     }
 
     .book-info p {
-        color: #a0b0d0;
-        font-size: 1rem;
-        margin-bottom: 8px;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-        padding-bottom: 8px;
+        color: var(--ink);
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        border-bottom: 1px dashed rgba(139, 111, 71, 0.2);
+        padding-bottom: 10px;
     }
 
     .book-info strong {
-        color: #7080a0;
+        color: var(--walnut);
         margin-right: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.95rem;
     }
 
-    /* --- Butonlar (Soft/Outline Tarzı) --- */
-
-    /* Silme Butonu: Varsayılan hali şeffaf, hover olunca doluyor */
+    /* --- Butonlar --- */
     .btn-danger {
-        background-color: transparent;
-        border: 1px solid #ff006a;
-        color: #ff006a;
+        background-color: rgba(192, 98, 42, 0.1);
+        border: 1px solid rgba(192, 98, 42, 0.5);
+        color: var(--ember);
         width: 100%;
         padding: 12px;
         font-weight: 600;
+        font-size: 1.05rem;
+        letter-spacing: 0.05em;
         transition: all 0.3s ease;
+        border-radius: 6px;
     }
 
         .btn-danger:hover {
-            background-color: #ff006a;
+            background-color: var(--ember);
             color: #ffffff;
-            box-shadow: 0 0 15px rgba(255, 0, 106, 0.3);
+            box-shadow: 0 5px 15px rgba(192, 98, 42, 0.3);
         }
 
-    /* İptal Butonu */
     .btn-secondary {
-        background-color: transparent;
-        border: 1px solid #4a5568;
-        color: #a0b0d0;
+        background-color: var(--linen);
+        border: 1px solid var(--tan);
+        color: var(--espresso);
         width: 100%;
         padding: 12px;
-        font-weight: 500;
+        font-weight: 600;
+        font-size: 1.05rem;
+        letter-spacing: 0.05em;
         transition: all 0.3s ease;
+        border-radius: 6px;
     }
 
         .btn-secondary:hover {
-            border-color: #a0b0d0;
-            color: #ffffff;
-            background-color: rgba(255,255,255,0.05);
+            background-color: var(--tan);
+            color: var(--ink);
+            border-color: var(--walnut);
         }
 
-    /* --- MOBİL GÖRÜNÜM OPTİMİZASYONU --- */
+    /* =========================================
+           MOBİL GÖRÜNÜM OPTİMİZASYONU (TAM RESPONSIVE)
+           ========================================= */
+
+    /* Tablet ve Büyük Telefonlar */
+    @@media (max-width: 992px) {
+        .delete-card
+
+    {
+        margin: 30px 20px;
+        padding: 30px;
+    }
+
+    }
+
+    /* Standart Mobil Ekranlar */
     @@media (max-width: 768px) {
         .delete-card
 
     {
-        padding: 18px 14px;
-        margin: 12px;
-        border-radius: 8px;
+        padding: 25px 20px;
+        margin: 20px 15px;
     }
 
     .warning-icon {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
+        font-size: 3rem;
+        margin-bottom: 10px;
     }
 
     .warning-title {
-        font-size: 1.2rem;
-        margin-bottom: 8px;
-        line-height: 1.3;
+        font-size: 1.6rem;
     }
 
     .warning-text {
-        font-size: 0.82rem;
-        margin-bottom: 12px;
-        line-height: 1.4;
+        font-size: 1.05rem;
     }
 
-    hr {
-        margin: 10px 0 12px 0;
+    .header-ornament {
+        margin: 20px 0;
     }
 
-    /* Kitap görseli daha büyük ve ortalı */
+    .ornament-line {
+        width: 80px;
+    }
+
     .book-image-container {
-        padding: 12px;
-        margin-bottom: 12px;
+        margin-bottom: 20px;
+        padding: 10px;
     }
 
     .book-image {
-        max-height: 200px;
+        max-height: 220px;
     }
 
-    /* Kitap bilgileri ortalanmış ve daha okunaklı */
+    /* Mobilde yazıları ortala */
     .book-info {
         text-align: center;
-        margin-bottom: 0 !important;
     }
 
         .book-info h3 {
-            font-size: 1.15rem;
-            margin-bottom: 10px;
-            line-height: 1.3;
+            font-size: 1.5rem;
         }
 
-        .book-info p {
-            font-size: 0.92rem;
-            margin-bottom: 5px;
-            padding-bottom: 5px;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .book-info strong {
-            font-size: 0.92rem;
-        }
-
-    /* Tüm br'leri gizle */
-    br {
-        display: none;
-    }
-
-    /* Butonlar */
-    .btn-danger,
-    .btn-secondary {
-        padding: 11px;
-        font-size: 0.92rem;
-    }
-
-    /* Buton container boşluğunu azalt */
     .row.g-3 {
-        margin-top: 12px !important;
-        row-gap: 8px !important;
-    }
-
-    .row.align-items-start {
-        row-gap: 0 !important;
-    }
-
-    .col-md-4.mb-4 {
-        margin-bottom: 12px !important;
-    }
-
-    .col-md-8 {
-        padding-top: 0 !important;
-    }
-
-    /* Görsel yok placeholder */
-    .book-image-container .p-4 {
-        padding: 1.2rem !important;
-        font-size: 0.88rem;
-    }
-
-    .book-image-container .fa-2x {
-        font-size: 1.8rem !important;
+        row-gap: 12px !important;
+        margin-top: 15px !important;
     }
 
     }
 
-    /* Çok küçük ekranlar için (mobil yatay/küçük telefonlar) */
-    @@media (max-width: 576px) {
+    /* Çok Küçük Ekranlar (iPhone SE vb.) */
+    @@media (max-width: 480px) {
         .delete-card
 
     {
-        padding: 16px 12px;
-        margin: 10px;
+        padding: 20px 15px;
+        margin: 15px 10px;
     }
 
     .warning-icon {
-        font-size: 1.6rem;
-        margin-bottom: 6px;
+        font-size: 2.5rem;
     }
 
     .warning-title {
-        font-size: 1.1rem;
-        margin-bottom: 6px;
+        font-size: 1.4rem;
     }
 
     .warning-text {
-        font-size: 0.78rem;
-        margin-bottom: 10px;
+        font-size: 0.95rem;
     }
 
     .book-image {
         max-height: 180px;
     }
 
-    .book-info h3 {
-        font-size: 1.05rem;
-        margin-bottom: 8px;
-    }
-
-    .book-info p {
-        font-size: 0.88rem;
-        margin-bottom: 4px;
-        padding-bottom: 4px;
-    }
-
-    .btn-danger,
-    .btn-secondary {
+    .btn-danger, .btn-secondary {
+        font-size: 0.95rem;
         padding: 10px;
-        font-size: 0.88rem;
-    }
-
-    .row.g-3 {
-        margin-top: 10px !important;
     }
 
     }
 </style>
 
 <div class="delete-card">
-    <i class="fas fa-trash-alt warning-icon"></i>
 
     <h1 class="warning-title">Kitap Silme Onayı</h1>
-
+    <div class="header-ornament">
+        <div class="ornament-line"></div>
+        <div class="ornament-diamond"></div>
+        <div class="ornament-line"></div>
+    </div>
     <p class="warning-text">
-        Bu işlem geri alınamaz. <span class="highlight-name">"@Model.Name"</span> adlı kitabı sistemden kalıcı olarak silmek istediğinize emin misiniz?
+       
+        Kütüphanenizden <span class="highlight-name">"@Model.Name"</span> adlı eseri kalıcı olarak çıkarmak istediğinize emin misiniz?
     </p>
 
-    <hr />
 
-    <div class="row align-items-start">
-        <div class="col-md-4 mb-4 mb-md-0">
+    <div class="row align-items-center">
+
+        <div class="col-12 col-md-5 mb-4 mb-md-0">
             <div class="book-image-container">
-                @if (!string.IsNullOrEmpty(Model.Image))
-                {
-                    <img src="@Model.Image" class="book-image" alt="@Model.Name" />
-                }
-                else
-                {
-                    <div class="p-4 text-muted"><i class="fas fa-image fa-2x mb-2"></i><br>Görsel Yok</div>
-                }
+                <img src="@(string.IsNullOrEmpty(Model.Image) ? "/images/ResimBulunamadi.png" : Model.Image)" class="book-image" alt="@Model.Name" />
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-12 col-md-7">
             <div class="book-info mb-4">
                 <h3>@Model.Name</h3>
                 <p><strong>Yazar:</strong> @Model.Author</p>
                 <p><strong>Kategori:</strong> @Model.Category?.CategoryName</p>
+                <p><strong>Sayfa:</strong> @Model.TotalPages</p>
             </div>
-            <br />
-            <br />
-            <br />
-            <br />
+
             <div class="row g-3 mt-4">
-                <div class="col-md-6">
-                    <a asp-controller="Books" asp-action="List" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> İptal & Geri Dön
-                    </a>
-                </div>
-                <div class="col-md-6">
-                    <form method="post" asp-action="DeleteConfirm">
+                <div class="col-6 col-sm-6">
+                    <form method="post" asp-action="DeleteConfirm" class="m-0">
                         @Html.AntiForgeryToken()
                         <input type="hidden" asp-for="Id" />
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-check"></i> Evet, Sil
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="fa-solid fa-trash"></i> Eseri Sil
                         </button>
                     </form>
+                    
+                </div>
+                <div class="col-6 col-sm-6">
+                    <a asp-controller="Books" asp-action="List" class="btn btn-secondary text-center d-block">
+                        <i class="fa-solid fa-arrow-left"></i> Geri Dön
+                    </a>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
