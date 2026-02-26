@@ -339,9 +339,6 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li>
-                                <a class="dropdown-item logout-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-                                    Kütüphaneyi Yönet
-                                </a>
                                 <a class="dropdown-item logout-item" asp-area="" asp-controller="Profile" asp-action="Index">
                                     Profil Özetim
                                 </a>
@@ -372,13 +369,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="Admin" asp-action="Create" asp-controller="Books">
-                                    Kitap Ekle
+                                <a class="dropdown-item" asp-area="Admin" asp-action="List" asp-controller="Books">
+                                    Kitapları Yönet
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="Admin" asp-action="Create" asp-controller="Category">
-                                    Kategori Ekle
+                                <a class="dropdown-item" asp-area="Admin" asp-action="List" asp-controller="Category">
+                                    Kategorileri Yönet
                                 </a>
                             </li>
                         </ul>

@@ -5,9 +5,9 @@
 
 <style>
     /* ============================================================
-           KİTAP LİSTESİ — Kütüphane Konsepti
-           Typography: Playfair Display + DM Serif Text
-        ============================================================ */
+               KİTAP LİSTESİ — Kütüphane Konsepti
+               Typography: Playfair Display + DM Serif Text
+           ============================================================ */
 
     @@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
     /* ── CSS DEĞİŞKENLERİ ── */
@@ -239,8 +239,11 @@
             border-color: rgba(139, 111, 71, 0.2);
         }
 
-    /* ── MOBİL UYUM ── */
+    /* ── MOBİL UYUM (SADECE BURAYA MÜDAHALE EDİLDİ) ── */
     @@media (max-width: 768px) {
+        .hide-on-mobile {
+            display: none !important;
+        }
         .top-action-bar
 
     {
@@ -255,17 +258,39 @@
     }
 
     .book-cover-img {
-        width: 50px;
+        width: 45px; /* Resmi biraz daha küçülttük */
     }
 
+    /* 1. KURAL: Açıklama Sütununu Mobilde Gizle */
+    .desc-col {
+        display: none !important;
+    }
+
+    /* 2. KURAL: Yatay kaydırmayı engellemek için font ve boşluk ayarları */
     .table td, .table th {
-        font-size: 0.95rem;
-        padding: 10px 5px;
+        font-size: 0.85rem; /* Mobilde yazılar biraz daha küçük */
+        padding: 8px 4px; /* Boşluklar daraltıldı */
+        white-space: normal !important; /* Uzun metinlerin alt satıra geçmesine izin ver */
+    }
+
+    .table thead th {
+        font-size: 0.75rem;
+    }
+
+    /* 3. KURAL: Aksiyon butonlarını yatay yerine dikey (alt alta) hizala */
+    .mobile-actions {
+        flex-direction: row !important;
+        align-items: center;
+        gap: 5px !important;
+    }
+
+    .btn-action-edit, .btn-action-delete {
+        padding: 3px 5px;
+        width: auto; /* Butonların tıklanma alanını genişlettik */
     }
 
     }
 </style>
-
 
 <h1>Kütüphanem</h1>
 <div class="header-ornament">
@@ -288,7 +313,7 @@
                value="@ViewBag.SearchQuery" />
 
         <button type="submit" class="btn-search">
-            <i class="fas fa-search"></i> Ara
+            <i class="fas fa-search hide-on-mobile"></i> Ara
         </button>
     </form>
 </div>
@@ -299,12 +324,12 @@
             <tr>
                 <th>Kapak</th>
                 <th>Kitap</th>
-                <th>Yazar</th>
-                <th>Puan</th>
-                <th>Açıklama</th>
+                <th class="hide-on-mobile">Yazar</th>
+                <th class="hide-on-mobile">Puan</th>
+                <th class="desc-col">Açıklama</th>
                 <th>Kategori</th>
-                <th>Sayfa</th>
-                <th style="width:140px; text-align:center;">İşlemler</th>
+                <th class= "hide-on-mobile">Sayfa</th>
+                <th style="width:100px; text-align:center;">İşlemler</th>
             </tr>
         </thead>
         <tbody>
@@ -313,11 +338,11 @@
                 <tr>
                     <td><img src="@(string.IsNullOrEmpty(item.Image) ? "/images/ResimBulunamadi.png" : item.Image)" class="book-cover-img" alt="@item.Name" /></td>
                     <td style="font-weight: 600; color: var(--espresso);">@item.Name</td>
-                    <td style="font-style: italic;">@item.Author</td>
-                    <td>
+                    <td class="hide-on-mobile" style="font-style: italic;">@item.Author</td>
+                    <td class="hide-on-mobile">
                         @item.Rate
                     </td>
-                    <td title="@item.Description">
+                    <td class="desc-col" title="@item.Description">
                         @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 45)
                         {
                             @($"{item.Description.Substring(0, 45)}...")
@@ -328,9 +353,12 @@
                         }
                     </td>
                     <td><span style="background: var(--linen); padding: 3px 8px; border-radius: 4px; font-size:0.85rem;">@item.Category?.CategoryName</span></td>
-                    <td>@item.TotalPages</td>
+                    <td class="hide-on-mobile">@item.TotalPages</td>
                     <td>
-                        <div class="d-flex gap-1 justify-content-center">
+                        <div class="d-flex gap-1 justify-content-center mobile-actions">
+                            <a class="btn-action-edit" asp-area="" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" title="Görüntüle">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
                             <a class="btn-action-edit" asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" title="Düzenle">
                                 <i class="fa-solid fa-pen"></i>
                             </a>

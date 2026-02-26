@@ -5,266 +5,333 @@
 }
 
 <style>
-    /* --- GENEL TEMA VE ARKA PLAN --- */
+    /* ============================================================
+           KİTAP EKLE — Kütüphane Konsepti
+           Typography: Playfair Display + Crimson Pro
+        ============================================================ */
+
+    @@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+    /* ── CSS DEĞİŞKENLERİ ── */
+    :root {
+        --cream: #f7f2e8;
+        --parchment: #ede4d0;
+        --linen: #e0d5be;
+        --tan: #c9b99a;
+        --walnut: #8b6f47;
+        --mahogany: #6b4f37;
+        --espresso: #3d2b1f;
+        --ink: #2a1f16;
+        --leaf: #4a7c59;
+        --leaf-dark: #2e5940;
+        --ember: #c0622a;
+    }
+
+    /* Sayfa Arka Planı (Keten Dokusu) */
     body {
-        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
-        font-family: 'Georgia', serif;
-        color: #4a3f35;
+        background-color: var(--parchment);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        color: var(--ink);
+        font-family: 'Crimson Pro', Georgia, serif;
     }
 
+    /* ── BAŞLIK VE AYIRICI ── */
     h1 {
-        color: #4a3f35;
-        font-weight: 800;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        color: var(--espresso);
+        text-align: center;
         margin-top: 20px;
+        margin-bottom: 5px;
     }
 
-    hr {
-        border-color: #8b6f47;
-        opacity: 0.2;
-        max-width: 800px;
-        margin: 15px auto 30px auto;
+    .header-ornament {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
     }
 
-    /* --- HIZLI ARAMA KUTUSU (GOOGLE BOOKS) --- */
+    .ornament-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--walnut), transparent);
+        width: 150px;
+    }
+
+    .ornament-diamond {
+        width: 6px;
+        height: 6px;
+        background: var(--walnut);
+        transform: rotate(45deg);
+    }
+
+    /* ── HIZLI ARAMA KUTUSU (GOOGLE BOOKS) ── */
     .search-card {
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(10px);
-        border: 2px solid rgba(139, 111, 71, 0.1);
-        border-radius: 20px;
-        box-shadow: 0 5px 20px rgba(107, 85, 65, 0.1);
+        background: var(--cream);
+        border: 1px dashed rgba(139, 111, 71, 0.4);
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(61, 43, 31, 0.05);
         padding: 25px;
         max-width: 800px;
         margin: 0 auto 30px auto;
     }
 
     .search-card-title {
-        font-size: 1.2rem;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
         font-weight: 700;
-        color: #4a3f35;
+        color: var(--espresso);
         margin-bottom: 15px;
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
+    .search-input {
+        border-radius: 6px 0 0 6px !important;
+        border: 1px solid var(--tan) !important;
+        background-color: var(--parchment) !important;
+        color: var(--ink) !important;
+        font-family: 'Crimson Pro', Georgia, serif;
+        padding: 12px 15px;
+    }
+
+        .search-input:focus {
+            background-color: #fff !important;
+            box-shadow: 0 0 5px rgba(139, 111, 71, 0.3) !important;
+            border-color: var(--walnut) !important;
+            outline: none;
+        }
+
     .btn-search {
-        background: linear-gradient(135deg, #8b6f47, #6b5541);
-        color: #fff;
-        border: none;
+        background-color: var(--linen);
+        color: var(--espresso);
+        border: 1px solid var(--tan);
+        border-left: none; /* Input ile bitişik dursun */
         font-weight: 600;
         padding: 10px 25px;
-        border-radius: 0 10px 10px 0;
+        border-radius: 0 6px 6px 0 !important;
         transition: all 0.3s ease;
     }
 
         .btn-search:hover {
-            background: linear-gradient(135deg, #a0785a, #8b6f47);
-            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.2);
-            color: #fff;
+            background-color: var(--tan);
+            color: var(--ink);
         }
 
-    .search-input {
-        border-radius: 10px 0 0 10px !important;
-        border: 2px solid #e8dcc8 !important;
-        background-color: #fff !important;
-        color: #4a3f35 !important;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    #searchStatus span {
+        font-family: 'Crimson Pro', serif;
+        font-style: italic;
     }
 
-        .search-input:focus {
-            box-shadow: 0 0 10px rgba(139, 111, 71, 0.15) !important;
-            border-color: #8b6f47 !important;
-        }
-
-    /* --- FORM STİLLERİ --- */
+    /* ── FORM STİLLERİ ── */
     .add-book-form {
-        background: #fff9f0;
-        border-radius: 20px;
+        background: var(--cream);
+        border-radius: 16px;
         padding: 40px;
         max-width: 800px;
         margin: 0 auto 50px auto;
-        box-shadow: 0 10px 30px rgba(107, 85, 65, 0.15);
-        border: 2px solid rgba(139, 111, 71, 0.05);
-        position: relative;
+        box-shadow: 0 10px 30px rgba(61, 43, 31, 0.08);
+        border: 1px solid rgba(139, 111, 71, 0.2);
     }
 
         .add-book-form .form-label {
-            color: #8b6f47;
+            color: var(--espresso);
             font-weight: 600;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.1rem;
             margin-bottom: 8px;
-            font-size: 0.95rem;
+            display: block;
         }
 
         .add-book-form .form-control,
         .add-book-form .form-select {
-            background-color: #fff;
-            color: #4a3f35;
-            border: 2px solid #e8dcc8;
-            border-radius: 10px;
+            background-color: var(--parchment);
+            color: var(--ink);
+            border: 1px solid var(--tan);
+            border-radius: 6px;
             padding: 12px 15px;
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.05rem;
             transition: all 0.3s ease;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
             .add-book-form .form-control:focus,
             .add-book-form .form-select:focus {
                 background-color: #fff;
-                color: #4a3f35;
-                border-color: #8b6f47;
-                box-shadow: 0 0 10px rgba(139, 111, 71, 0.15);
+                border-color: var(--walnut);
+                box-shadow: 0 0 5px rgba(139, 111, 71, 0.3);
                 outline: 0;
             }
 
-            .add-book-form .form-control::file-selector-button {
-                background: #8b6f47;
-                border: none;
-                color: #fff;
-                padding: 8px 16px;
-                border-radius: 6px;
-                transition: all 0.3s ease;
-                margin-right: 15px;
-                font-weight: 600;
-                cursor: pointer;
-            }
+        /* Select Ok Tasarımı */
+        .add-book-form .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%238b6f47' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 16px 12px;
+        }
 
-            .add-book-form .form-control:hover::file-selector-button {
-                background: #6b5541;
-            }
+        /* Dosya Yükleme Alanı */
+        .add-book-form .form-control[type="file"] {
+            padding: 8px;
+        }
 
-    /* Kaydet Butonu */
+        .add-book-form .form-control::file-selector-button {
+            background-color: var(--linen);
+            border: 1px solid var(--tan);
+            color: var(--espresso);
+            padding: 6px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+            font-weight: 600;
+            font-family: 'Crimson Pro', Georgia, serif;
+            cursor: pointer;
+        }
+
+        .add-book-form .form-control:hover::file-selector-button {
+            background-color: var(--tan);
+            color: var(--ink);
+        }
+
+    /* Hata Mesajı */
+    .text-danger {
+        color: var(--ember) !important;
+        font-size: 0.9rem;
+        font-style: italic;
+        margin-top: 4px;
+        display: block;
+    }
+
+    /* ── KAYDET BUTONU VE GERİ LİNKİ ── */
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
     .btn-submit {
-        background: linear-gradient(135deg, #8b6f47, #6b5541);
+        background: linear-gradient(160deg, var(--leaf), var(--leaf-dark));
         border: none;
-        color: #fff;
+        color: #ffffff;
         transition: all 0.3s ease;
-        font-weight: 700;
-        width: 100%;
-        padding: 15px;
-        font-size: 1.2rem;
-        border-radius: 15px;
-        margin-top: 25px;
-        font-family: 'Georgia', serif;
+        font-weight: 600;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        border-radius: 6px;
+        letter-spacing: 0.05em;
+        box-shadow: 0 4px 10px rgba(74, 124, 89, 0.3);
+        flex: 2;
     }
 
         .btn-submit:hover {
-            background: linear-gradient(135deg, #a0785a, #8b6f47);
-            box-shadow: 0 10px 20px rgba(107, 85, 65, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(74, 124, 89, 0.4);
+            background: linear-gradient(160deg, #5a9469, var(--leaf));
             color: #fff;
-            transform: translateY(-3px);
         }
 
-    /* Seçilen Resim Alanı */
+    .btn-secondary {
+        background-color: var(--linen);
+        border: 1px solid var(--tan);
+        color: var(--espresso);
+        padding: 12px 20px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        text-decoration: none;
+        flex: 1;
+        text-align: center;
+    }
+
+        .btn-secondary:hover {
+            background-color: var(--tan);
+            color: var(--ink);
+            border-color: var(--walnut);
+        }
+
+    /* Google Seçilen Resim Alanı */
     #imagePreviewContainer {
-        background-color: #f5f0e8;
-        border: 2px dashed #a0785a !important;
-        border-radius: 10px !important;
-        padding: 15px !important;
+        background: var(--linen);
+        border: 1px dashed rgba(139, 111, 71, 0.4);
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 15px;
         display: flex;
         align-items: center;
+        justify-content: flex-start;
     }
 
     /* =========================================
-           YENİ EKLENEN RESPONSIVE (MOBİL) AYARLARI
+           MOBİL GÖRÜNÜM OPTİMİZASYONU
            ========================================= */
 
-    /* Tablet Görünümü (992px altı) */
-    @@media (max-width: 992px) {
+    @@media (max-width: 768px) {
         .add-book-form, .search-card
 
     {
-        padding: 30px;
+        padding: 25px 20px;
+        margin-left: 15px;
+        margin-right: 15px;
+        border-radius: 12px;
     }
 
-    }
-
-    /* Mobil Görünüm (768px altı) */
-    @@media (max-width: 768px) {
-        h1
-
-    {
-        font-size: 1.8rem;
-        margin-top: 10px;
-    }
-
-    .add-book-form {
-        padding: 20px 15px;
-        border-radius: 15px;
-    }
-
-    .search-card {
-        padding: 20px 15px;
-        border-radius: 15px;
-    }
-
-    /* Form içindeki yan yana olan kolonları mobilde alt alta diz (Zaten Bootstrap row-col mantığı bunu yapar ama boşlukları düzenliyoruz) */
-    .row > .col-md-6,
-    .row > .col-md-4 {
-        margin-bottom: 15px !important;
-    }
-
-    /* Resim Önizleme kutusunu mobilde dikey yap */
-    #imagePreviewContainer {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-    }
-
-        #imagePreviewContainer span {
-            margin-left: 0 !important;
-            font-size: 0.9rem;
-        }
-
-    /* Dosya Yükleme Butonu Mobilde taşmasın */
-    .add-book-form .form-control[type="file"] {
-        font-size: 0.85rem;
-        padding: 8px;
-    }
-
-    .add-book-form .form-control::file-selector-button {
-        padding: 6px 10px;
-        margin-right: 10px;
-        font-size: 0.85rem;
-    }
-
-    }
-
-    /* Çok küçük ekranlar (480px altı) */
-    @@media (max-width: 480px) {
-        /* Arama inputu ve butonunu mobilde alt alta al */
-        .search-card .input-group
-
-    {
+    .search-card .input-group {
         flex-direction: column;
     }
 
-    .search-card .search-input {
-        border-radius: 10px !important;
+    .search-input {
+        border-radius: 6px !important;
         margin-bottom: 10px;
         width: 100%;
     }
 
-    .search-card .btn-search {
-        border-radius: 10px !important;
+    .btn-search {
+        border-radius: 6px !important;
         width: 100%;
-        padding: 12px;
+        border-left: 1px solid var(--tan); /* Input altalta inince sol kenarlığı geri getir */
     }
 
-    .btn-submit {
-        font-size: 1.1rem;
-        padding: 12px;
+    #imagePreviewContainer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        justify-content: center;
+    }
+
+        #imagePreviewContainer span {
+            margin-left: 0 !important;
+        }
+
+    .action-buttons {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .btn-submit, .btn-secondary {
+        width: 100%;
     }
 
     }
 </style>
 
-<div class="container-fluid px-3 px-md-4 mt-4">
+<div class="container px-3 px-md-0 mt-4">
 
-    <h1 class="text-center">Kütüphaneye Kitap Ekle</h1>
-    <hr />
+    <h1>Kütüphaneye Eser Ekle</h1>
+    <div class="header-ornament">
+        <div class="ornament-line"></div>
+        <div class="ornament-diamond"></div>
+        <div class="ornament-line"></div>
+    </div>
 
     <div class="search-card">
         <div class="search-card-title">
-            <i class="fa-solid fa-magnifying-glass" style="color: #a0785a;"></i> Google Kitaplardan Hızlı Ekle
+            <i class="fa-solid fa-magnifying-glass" style="color: var(--walnut);"></i> Google Kitaplardan Hızlı Ekle
         </div>
         <div class="input-group">
             <input type="text" id="googleSearchInput" class="form-control search-input" placeholder="Kitap Adı veya ISBN Giriniz..." />
@@ -324,32 +391,38 @@
             </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Kategori</label>
-            <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
-                <option value="">-- Kategori Seçiniz --</option>
-            </select>
-            <span asp-validation-for="CategoryId" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" asp-for="Image">Kitap Kapağı (Resim)</label>
-
-            <div id="imagePreviewContainer" style="display:none;">
-                <img id="googleImagePreview" src="" style="max-height: 120px; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
-                <span style="color: #6b5541; margin-left: 15px; font-weight: 500;">
-                    <i class="fa-solid fa-check-circle" style="color: #4caf50;"></i> Google'dan kapak resmi otomatik seçildi.
-                    <br><small class="text-muted" style="font-weight: normal;">Değiştirmek isterseniz aşağıdan farklı bir dosya yükleyebilirsiniz.</small>
-                </span>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Kategori</label>
+                <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
+                    <option value="">-- Kategori Seçiniz --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
 
-            <input class="form-control mt-2" type="file" name="ImageFile" id="imageFileInput" />
-            <span asp-validation-for="Image" class="text-danger"></span>
+            <div class="col-md-6 mb-3">
+                <label class="form-label" asp-for="Image">Kitap Kapağı (Resim)</label>
+
+                <div id="imagePreviewContainer" style="display:none;">
+                    <img id="googleImagePreview" src="" style="max-height: 80px; border-radius: 4px; box-shadow: 2px 2px 8px rgba(61, 43, 31, 0.2);" />
+                    <span style="color: var(--walnut); margin-left: 15px; font-size: 0.95rem;">
+                        <i class="fa-solid fa-check-circle" style="color: var(--leaf);"></i> Kapak resmi bulundu.
+                    </span>
+                </div>
+
+                <input class="form-control mt-2" type="file" name="ImageFile" id="imageFileInput" accept="image/*" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-submit">
-            <i class="fa-solid fa-book-medical"></i> Kitabı Kütüphaneme Ekle
-        </button>
+        <div class="action-buttons">
+            <a asp-action="List" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Kütüphaneye Dön
+            </a>
+            <button type="submit" class="btn btn-submit">
+                <i class="fa-solid fa-book-medical"></i> Eseri Kütüphaneme Ekle
+            </button>
+        </div>
     </form>
 
 </div>
@@ -360,11 +433,11 @@
         var statusLabel = document.getElementById("searchStatus");
 
         if (!query) {
-            statusLabel.innerHTML = "<span style='color: #d32f2f;'><i class='fa-solid fa-triangle-exclamation'></i> Lütfen kitap adı veya ISBN girin.</span>";
+            statusLabel.innerHTML = "<span style='color: var(--ember);'><i class='fa-solid fa-triangle-exclamation'></i> Lütfen kitap adı veya ISBN girin.</span>";
             return;
         }
 
-        statusLabel.innerHTML = "<span style='color: #ed6c02;'><i class='fa-solid fa-spinner fa-spin'></i> Tozlu raflarda aranıyor...</span>";
+        statusLabel.innerHTML = "<span style='color: var(--walnut);'><i class='fa-solid fa-spinner fa-spin'></i> Tozlu raflarda aranıyor...</span>";
 
         fetch('/Admin/Books/GetBookFromGoogle?query=' + encodeURIComponent(query))
             .then(response => response.json())
@@ -384,17 +457,18 @@
                          document.getElementById("imagePreviewContainer").style.display = "none";
                     }
 
-                    statusLabel.innerHTML = "<span style='color: #2e7d32;'><i class='fa-solid fa-check'></i> Kitap bilgileri başarıyla dolduruldu!</span>";
+                    statusLabel.innerHTML = "<span style='color: var(--leaf);'><i class='fa-solid fa-check'></i> Kitap bilgileri başarıyla dolduruldu!</span>";
                 } else {
-                    statusLabel.innerHTML = "<span style='color: #d32f2f;'><i class='fa-solid fa-xmark'></i> Kitap bulunamadı. Lütfen ISBN veya tam ad ile tekrar deneyin.</span>";
+                    statusLabel.innerHTML = "<span style='color: var(--ember);'><i class='fa-solid fa-xmark'></i> Eser bulunamadı. Lütfen ISBN veya tam ad ile tekrar deneyin.</span>";
                 }
             })
             .catch(error => {
                 console.error('Hata:', error);
-                statusLabel.innerHTML = "<span style='color: #d32f2f;'><i class='fa-solid fa-wifi'></i> Bir hata oluştu. İnternet bağlantınızı kontrol edin.</span>";
+                statusLabel.innerHTML = "<span style='color: var(--ember);'><i class='fa-solid fa-wifi'></i> Bir hata oluştu. İnternet bağlantınızı kontrol edin.</span>";
             });
     }
 
+    // Kullanıcı kendi resim yüklerse Google'dan gelen resmi gizle ve temizle
     document.getElementById("imageFileInput").addEventListener('change', function() {
         if(this.files.length > 0){
              document.getElementById("imagePreviewContainer").style.display = "none";

@@ -9,7 +9,7 @@
     /* --- VALIDATION CSS --- */
     .text-danger {
         color: #dc3545;
-        font-size: 0.8rem; /* Hata mesajını biraz küçülttük */
+        font-size: 0.8rem;
         margin-top: 3px;
         font-weight: 600;
         display: block;
@@ -26,19 +26,22 @@
         .field-validation-error::before {
             font-family: 'Font Awesome 5 Free';
             font-weight: 900;
-            content: "\f06a"; /* Ünlem ikonu */
+            content: "\f06a";
         }
 
     @@keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-5px);
-        }
+        from
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     }
 
     /* --- GENEL AYARLAR --- */
@@ -49,11 +52,10 @@
         position: relative;
         margin: 0;
         padding: 0;
-        /* --- MERKEZLEME GÜNCELLEMESİ (Flexbox) --- */
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 20px; /* Mobilde kenarlara yapışmaması için */
+        padding: 20px;
     }
 
         body::before {
@@ -68,11 +70,11 @@
             z-index: 0;
         }
 
-    /* --- WRAPPER (Kapsayıcı) --- */
+    /* --- MASAÜSTÜ İÇİN DAHA KOMPAKT WRAPPER --- */
     .register-wrapper {
-        position: relative; /* Fixed yerine Relative */
+        position: relative;
         width: 100%;
-        max-width: 500px; /* Masaüstü genişliği */
+        max-width: 420px; /* 500px'den 420px'e düşürüldü */
         z-index: 1;
         margin: auto;
         animation: fadeInScale 0.8s ease;
@@ -80,10 +82,10 @@
 
     .register-container {
         background: #fff9f0;
-        border-radius: 30px;
-        box-shadow: 20px 20px 60px rgba(107, 85, 65, 0.3), -10px -10px 30px rgba(255, 255, 255, 0.8);
+        border-radius: 20px; /* 30px'den 20px'e düşürüldü */
+        box-shadow: 15px 15px 40px rgba(107, 85, 65, 0.2), -5px -5px 20px rgba(255, 255, 255, 0.8);
         overflow: hidden;
-        border: 3px solid #e8dcc8;
+        border: 2px solid #e8dcc8; /* 3px'den 2px'e */
         position: relative;
     }
 
@@ -93,14 +95,14 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 8px;
+            height: 6px; /* 8px'den 6px'e */
             background: linear-gradient(90deg, #8b6f47 0%, #6b5541 50%, #a0785a 100%);
         }
 
-    /* --- HEADER --- */
+    /* --- HEADER SIKIŞTIRILDI --- */
     .register-header {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
-        padding: 40px 40px;
+        padding: 30px 30px; /* 40px 40px'den küçültüldü */
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -108,7 +110,7 @@
 
         .register-header::before {
             position: absolute;
-            font-size: 15rem;
+            font-size: 10rem; /* 15rem'den 10rem'e */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -121,35 +123,35 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 50px;
+            height: 30px; /* 50px'den 30px'e */
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%23fff9f0" d="M0,50 Q360,0 720,50 T1440,50 L1440,100 L0,100 Z"></path></svg>') no-repeat bottom;
             background-size: cover;
         }
 
     .register-icon {
-        width: 100px; /* Masaüstü boyutu korundu */
-        height: 100px; /* Masaüstü boyutu korundu */
+        width: 70px; /* 100px'den 70px'e */
+        height: 70px;
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
-        border-radius: 25px;
+        border-radius: 18px; /* 25px'den 18px'e */
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 25px;
-        font-size: 3rem;
+        margin: 0 auto 15px; /* Alt boşluk azaltıldı */
+        font-size: 2rem; /* 3rem'den 2rem'e */
         color: #f5f0e8;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         position: relative;
         z-index: 1;
     }
 
     .register-title {
         color: #f5f0e8;
-        font-size: 2.5rem;
+        font-size: 2rem; /* 2.5rem'den 2rem'e */
         font-weight: 800;
         margin: 0;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         letter-spacing: 1px;
         position: relative;
         z-index: 1;
@@ -157,34 +159,34 @@
 
     .register-subtitle {
         color: rgba(245, 240, 232, 0.9);
-        font-size: 1rem;
-        margin-top: 10px;
+        font-size: 0.9rem; /* 1rem'den 0.9'a */
+        margin-top: 5px;
         font-style: italic;
         position: relative;
         z-index: 1;
     }
 
-    /* --- FORM --- */
+    /* --- FORM SIKIŞTIRILDI --- */
     .register-form {
-        padding: 40px;
+        padding: 25px 35px 30px 35px; /* Paddingler daraltıldı */
     }
 
     .form-group {
-        margin-bottom: 25px;
+        margin-bottom: 15px; /* 25'ten 15'e */
         position: relative;
     }
 
     .form-label {
         display: block;
         color: #4a3f35;
-        font-size: 1rem;
+        font-size: 0.9rem; /* 1rem'den 0.9'a */
         font-weight: 700;
-        margin-bottom: 12px;
+        margin-bottom: 6px; /* 12'den 6'ya */
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
         .form-label i {
@@ -197,52 +199,52 @@
 
     .form-control {
         width: 100%;
-        padding: 16px 20px 16px 50px;
-        border: 3px solid #e8dcc8;
-        border-radius: 15px;
-        font-size: 1rem;
+        padding: 12px 15px 12px 40px; /* Padding daraltıldı */
+        border: 2px solid #e8dcc8; /* 3'ten 2'ye */
+        border-radius: 12px; /* 15'ten 12'ye */
+        font-size: 0.95rem; /* 1rem'den 0.95'e */
         font-family: 'Georgia', serif;
         background: #f5ede0;
         color: #4a3f35;
         transition: all 0.3s ease;
-        box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1);
+        box-shadow: inset 1px 1px 4px rgba(107, 85, 65, 0.08);
     }
 
         .form-control:focus {
             outline: none;
             border-color: #8b6f47;
             background: #fff;
-            box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1), 0 0 0 4px rgba(139, 111, 71, 0.1);
-            transform: translateY(-2px);
+            box-shadow: inset 1px 1px 4px rgba(107, 85, 65, 0.08), 0 0 0 3px rgba(139, 111, 71, 0.1);
+            transform: translateY(-1px);
         }
 
     .input-icon {
         position: absolute;
-        left: 18px;
+        left: 15px; /* 18'den 15'e */
         top: 50%;
         transform: translateY(-50%);
         color: #8b6f47;
-        font-size: 1.2rem;
+        font-size: 1rem; /* 1.2'den 1'e */
         pointer-events: none;
         z-index: 5;
     }
 
-    /* --- BUTONLAR --- */
+    /* --- BUTONLAR SIKIŞTIRILDI --- */
     .btn {
         width: 100%;
-        padding: 18px 30px;
+        padding: 12px 20px; /* 18px 30px'den daraltıldı */
         border: none;
-        border-radius: 15px;
-        font-size: 1.1rem;
+        border-radius: 12px; /* 15'ten 12'ye */
+        font-size: 0.95rem; /* 1.1'den 0.95'e */
         font-weight: 700;
         font-family: 'Georgia', serif;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
         cursor: pointer;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
-        margin-top: 15px;
+        margin-top: 10px; /* 15'ten 10'a */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -254,18 +256,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
     .btn-primary {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         color: #f5f0e8;
-        box-shadow: 0 6px 20px rgba(107, 85, 65, 0.4);
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.3);
     }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(107, 85, 65, 0.5);
+            box-shadow: 0 8px 20px rgba(107, 85, 65, 0.4);
         }
 
     /* Divider & Google */
@@ -273,16 +275,16 @@
         display: flex;
         align-items: center;
         text-align: center;
-        margin: 20px 0;
+        margin: 15px 0 10px 0; /* Boşluklar azaltıldı */
         color: #8b6f47;
         font-style: italic;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
         .divider::before, .divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid rgba(139, 111, 71, 0.3);
+            border-bottom: 1px solid rgba(139, 111, 71, 0.2);
         }
 
         .divider::before {
@@ -298,7 +300,8 @@
         color: #4a3f35;
         border: 2px solid #e8dcc8;
         text-decoration: none;
-        padding: 15px; /* Mobilde küçülecek */
+        padding: 12px 20px; /* Buton içi daraltıldı */
+        box-shadow: 0 3px 10px rgba(107, 85, 65, 0.08);
     }
 
         .btn-google:hover {
@@ -325,80 +328,85 @@
         }
 
     @@keyframes fadeInScale {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
+        from
 
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
+    {
+        opacity: 0;
+        transform: scale(0.9);
     }
 
-    /* --- MOBİL İÇİN KÜÇÜLTME (COMPACT) MODU --- */
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    /* --- MOBİL GÖRÜNÜM (AYNEN KORUNDU) --- */
     @@media (max-width: 768px) {
-        body {
-            padding: 10px;
-        }
+        body
 
-        .register-wrapper {
-            max-width: 100%;
-        }
-        /* Paddingler azaltıldı (Daha sıkı görünüm) */
-        .register-header {
-            padding: 25px 20px;
-        }
+    {
+        padding: 10px;
+    }
 
-        .register-form {
-            padding: 25px 20px;
-        }
-        /* Yazı boyutları küçültüldü */
-        .register-title {
-            font-size: 1.6rem;
-        }
+    .register-wrapper {
+        max-width: 100%;
+    }
 
-        .register-subtitle {
-            font-size: 0.9rem;
-        }
-        /* İkon boşluğu azaltıldı ama BOYUTU AYNI KALDI (İstek üzerine) */
-        .register-icon {
-            margin-bottom: 15px;
-            /* width ve height değiştirilmedi: 100px */
-        }
-        /* Form elemanları sıkılaştırıldı */
-        .form-group {
-            margin-bottom: 15px;
-        }
+    .register-header {
+        padding: 25px 20px;
+    }
 
-        .form-label {
-            font-size: 0.9rem;
-            margin-bottom: 6px;
-        }
+    .register-form {
+        padding: 25px 20px;
+    }
 
-        .form-control {
-            padding: 12px 15px 12px 45px; /* Yükseklik azaltıldı */
-            font-size: 0.95rem;
-        }
+    .register-title {
+        font-size: 1.6rem;
+    }
 
-        .input-icon {
-            font-size: 1rem;
-        }
-        /* Butonlar küçültüldü */
-        .btn {
-            padding: 12px;
-            font-size: 1rem;
-            margin-top: 10px;
-        }
+    .register-subtitle {
+        font-size: 0.9rem;
+    }
 
-        .btn-google {
-            padding: 12px;
-            font-size: 0.95rem;
-        }
-        /* Linkler */
-        .divider {
-            margin: 15px 0;
-        }
+    .register-icon {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    .form-control {
+        padding: 12px 15px 12px 45px;
+        font-size: 0.95rem;
+    }
+
+    .input-icon {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: 12px;
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+
+    .btn-google {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+
+    .divider {
+        margin: 15px 0;
+    }
+
     }
 </style>
 
@@ -416,7 +424,7 @@
 
         <div class="register-form">
             <form method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 15px; text-align: center;"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 10px; text-align: center;"></div>
 
                 <div class="form-group">
                     <label asp-for="UserName" class="form-label">
@@ -493,7 +501,7 @@
                     </span>
                 </a>
                 <div style="text-align: center; margin-top: 15px;">
-                    <p style="color: #6b5541; font-size: 0.9rem;">
+                    <p style="color: #6b5541; font-size: 0.9rem; margin-bottom: 0;">
                         Zaten bir hesabınız var mı?
                         <a asp-action="Login" style="color: #8b6f47; font-weight: bold; text-decoration: none;">Giriş Yap</a>
                     </p>
@@ -510,7 +518,7 @@
 
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
-                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1.2)';
+                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1.1)';
                 this.parentElement.querySelector('.input-icon').style.color = '#8b6f47';
             });
 
@@ -518,11 +526,6 @@
                 this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1)';
                 this.parentElement.querySelector('.input-icon').style.color = '#8b6f47';
             });
-        });
-
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function(e) {
-            const submitBtn = this.querySelector('.btn-primary');
         });
     });
 </script>

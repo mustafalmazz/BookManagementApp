@@ -32,10 +32,11 @@
             z-index: 0;
         }
 
+    /* MASAÜSTÜ İÇİN DAHA KOMPAKT WRAPPER */
     .login-wrapper {
         position: relative;
         width: 100%;
-        max-width: 480px;
+        max-width: 420px; /* 480px'den 420px'e düşürüldü */
         z-index: 1;
         animation: fadeInScale 0.8s ease;
         margin: auto;
@@ -43,10 +44,10 @@
 
     .login-container {
         background: #fff9f0;
-        border-radius: 30px;
-        box-shadow: 20px 20px 60px rgba(107, 85, 65, 0.3), -10px -10px 30px rgba(255, 255, 255, 0.8);
+        border-radius: 20px; /* 30px'den 20px'e */
+        box-shadow: 15px 15px 40px rgba(107, 85, 65, 0.2), -5px -5px 20px rgba(255, 255, 255, 0.8);
         overflow: hidden;
-        border: 3px solid #e8dcc8;
+        border: 2px solid #e8dcc8; /* 3px'den 2px'e */
         position: relative;
     }
 
@@ -56,13 +57,14 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 8px;
+            height: 6px; /* 8px'den 6px'e */
             background: linear-gradient(90deg, #8b6f47 0%, #6b5541 50%, #a0785a 100%);
         }
 
+    /* HEADER KISMI SIKIŞTIRILDI */
     .login-header {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
-        padding: 50px 40px;
+        padding: 35px 30px; /* 50px 40px'den küçültüldü */
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -70,7 +72,7 @@
 
         .login-header::before {
             position: absolute;
-            font-size: 15rem;
+            font-size: 10rem; /* 15rem'den 10rem'e */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -83,35 +85,37 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 50px;
+            height: 30px; /* 50px'den 30px'e */
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%23fff9f0" d="M0,50 Q360,0 720,50 T1440,50 L1440,100 L0,100 Z"></path></svg>') no-repeat bottom;
             background-size: cover;
         }
 
     .login-icon {
-        width: 90px;
-        height: 90px;
+        width: 70px; /* 90px'den 70px'e */
+        height: 70px;
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
-        border-radius: 25px;
+        border-radius: 18px; /* 25px'den 18px'e */
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 25px;
-        font-size: 3rem;
-        color: #f5f0e8;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        border: 3px solid rgba(255, 255, 255, 0.3);
+        margin: 0 auto 15px; /* Alt boşluk 25'ten 15'e */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         position: relative;
         z-index: 1;
     }
 
+        .login-icon img {
+            width: 45px !important; /* 60px'den 45px'e */
+        }
+
     .login-title {
         color: #f5f0e8;
-        font-size: 2.5rem;
+        font-size: 2rem; /* 2.5rem'den 2rem'e */
         font-weight: 800;
         margin: 0;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         letter-spacing: 1px;
         position: relative;
         z-index: 1;
@@ -119,33 +123,34 @@
 
     .login-subtitle {
         color: rgba(245, 240, 232, 0.9);
-        font-size: 1rem;
-        margin-top: 10px;
+        font-size: 0.9rem; /* 1rem'den 0.9'a */
+        margin-top: 5px;
         font-style: italic;
         position: relative;
         z-index: 1;
     }
 
+    /* FORM KISMI SIKIŞTIRILDI */
     .login-form {
-        padding: 40px 40px 50px 40px;
+        padding: 25px 35px 35px 35px; /* 40px paddingler daraltıldı */
     }
 
     .form-group {
-        margin-bottom: 25px;
+        margin-bottom: 20px; /* 25'ten 20'ye */
         position: relative;
     }
 
     .form-label {
         display: block;
         color: #4a3f35;
-        font-size: 1rem;
+        font-size: 0.9rem; /* 1rem'den 0.9'a */
         font-weight: 700;
-        margin-bottom: 12px;
+        margin-bottom: 8px; /* 12'den 8'e */
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
         .form-label i {
@@ -158,80 +163,44 @@
 
     .form-control {
         width: 100%;
-        padding: 16px 20px 16px 50px;
-        border: 3px solid #e8dcc8;
-        border-radius: 15px;
-        font-size: 1rem;
+        padding: 12px 15px 12px 40px; /* Padding daraltıldı */
+        border: 2px solid #e8dcc8; /* 3'ten 2'ye */
+        border-radius: 12px; /* 15'ten 12'ye */
+        font-size: 0.95rem; /* 1rem'den 0.95'e */
         font-family: 'Georgia', serif;
         background: #f5ede0;
         color: #4a3f35;
         transition: all 0.3s ease;
-        box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1);
+        box-shadow: inset 1px 1px 4px rgba(107, 85, 65, 0.08);
     }
 
         .form-control:focus {
             outline: none;
             border-color: #8b6f47;
             background: #fff;
-            box-shadow: inset 2px 2px 5px rgba(107, 85, 65, 0.1), 0 0 0 4px rgba(139, 111, 71, 0.1);
-            transform: translateY(-2px);
+            box-shadow: inset 1px 1px 4px rgba(107, 85, 65, 0.08), 0 0 0 3px rgba(139, 111, 71, 0.1);
+            transform: translateY(-1px);
         }
 
     .input-icon {
         position: absolute;
-        left: 18px;
+        left: 15px; /* 18'den 15'e */
         top: 50%;
         transform: translateY(-50%);
         color: #8b6f47;
-        font-size: 1.2rem;
+        font-size: 1rem; /* 1.2'den 1'e */
         pointer-events: none;
         z-index: 5;
     }
 
-    .error-message {
-        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(200, 35, 51, 0.05) 100%);
-        border-left: 4px solid #dc3545;
-        color: #721c24;
-        padding: 15px 20px;
-        border-radius: 10px;
-        margin-bottom: 25px;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-        .error-message i {
-            font-size: 1.3rem;
-        }
-
-    /* BAŞARI MESAJI İÇİN YENİ STİL */
-    .success-message {
-        background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(21, 87, 36, 0.05) 100%);
-        border-left: 4px solid #28a745;
-        color: #155724;
-        padding: 15px 20px;
-        border-radius: 10px;
-        margin-bottom: 25px;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        animation: fadeInScale 0.5s ease;
-    }
-
-        .success-message i {
-            font-size: 1.3rem;
-        }
-
-    /* ŞİFREMİ UNUTTUM LİNK STİLİ */
+    /* ŞİFREMİ UNUTTUM */
     .forgot-password-link {
         display: block;
         text-align: right;
-        margin-top: 8px;
+        margin-top: 6px;
         color: #8b6f47;
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-style: italic;
         transition: all 0.3s ease;
     }
@@ -241,22 +210,23 @@
             text-decoration: underline;
         }
 
+    /* BUTON GRUBU */
     .button-group {
         display: flex;
-        gap: 15px;
-        margin-top: 35px;
+        gap: 12px; /* 15'ten 12'ye */
+        margin-top: 25px; /* 35'ten 25'e */
     }
 
     .btn {
         flex: 1;
-        padding: 16px 30px;
+        padding: 12px 20px; /* 16px 30px'den daraltıldı */
         border: none;
-        border-radius: 15px;
-        font-size: 1rem;
+        border-radius: 12px; /* 15'ten 12'ye */
+        font-size: 0.95rem; /* 1rem'den 0.95'e */
         font-weight: 700;
         font-family: 'Georgia', serif;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
         cursor: pointer;
         transition: all 0.3s ease;
         position: relative;
@@ -265,7 +235,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
     }
 
         .btn span {
@@ -276,12 +246,12 @@
     .btn-primary {
         background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
         color: #f5f0e8;
-        box-shadow: 0 6px 20px rgba(107, 85, 65, 0.4);
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.3);
     }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(107, 85, 65, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 85, 65, 0.4);
         }
 
         .btn-primary:active {
@@ -291,33 +261,33 @@
     .btn-outline {
         background: transparent;
         color: #6b5541;
-        border: 3px solid #8b6f47;
-        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.2);
+        border: 2px solid #8b6f47; /* 3'ten 2'ye */
+        box-shadow: 0 3px 10px rgba(107, 85, 65, 0.15);
     }
 
         .btn-outline:hover {
             background: #8b6f47;
             color: #f5f0e8;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(107, 85, 65, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.25);
         }
 
-    /* YENİ EKLENEN GOOGLE STİLLERİ */
+    /* GOOGLE BUTONU */
     .divider {
         display: flex;
         align-items: center;
         text-align: center;
-        margin: 25px 0 15px 0;
+        margin: 18px 0 12px 0; /* Boşluklar azaltıldı */
         color: #8b6f47;
         font-style: italic;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
         .divider::before,
         .divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid rgba(139, 111, 71, 0.3);
+            border-bottom: 1px solid rgba(139, 111, 71, 0.2);
         }
 
         .divider::before {
@@ -333,20 +303,48 @@
         background: #fff;
         color: #4a3f35;
         border: 2px solid #e8dcc8;
-        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.1);
-        margin-top: 10px;
+        box-shadow: 0 3px 10px rgba(107, 85, 65, 0.08);
+        margin-top: 5px;
     }
 
         .btn-google:hover {
             background: #f5ede0;
             border-color: #8b6f47;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(107, 85, 65, 0.15);
+            box-shadow: 0 5px 15px rgba(107, 85, 65, 0.15);
         }
 
         .btn-google i {
             color: #DB4437;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+        }
+
+    /* UYARI MESAJLARI DAHA KOMPAKT */
+    .error-message, .success-message {
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .error-message {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(200, 35, 51, 0.05) 100%);
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+    }
+
+    .success-message {
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(21, 87, 36, 0.05) 100%);
+        border-left: 4px solid #28a745;
+        color: #155724;
+        animation: fadeInScale 0.5s ease;
+    }
+
+        .error-message i, .success-message i {
+            font-size: 1.1rem;
         }
 
     .decorative-element {
@@ -362,81 +360,51 @@
         }
 
     @@keyframes fadeInScale {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
+        from
 
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
+    {
+        opacity: 0;
+        transform: scale(0.9);
     }
 
-    /* --- MOBİL İÇİN KÜÇÜLTME AYARLARI --- */
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    /* --- MOBİL UYUMLULUK --- */
     @@media (max-width: 768px) {
-        body {
-            padding: 10px;
-        }
+        .login-wrapper
 
-        .login-wrapper {
-            max-width: 100%;
-        }
-        /* Paddingleri azalttık (Daha sıkı) */
-        .login-header {
-            padding: 25px 20px;
-        }
+    {
+        max-width: 100%;
+    }
 
-        .login-form {
-            padding: 25px 20px;
-        }
-        /* Yazı boyutlarını küçülttük */
-        .login-title {
-            font-size: 1.5rem;
-        }
+    .login-header {
+        padding: 25px 20px;
+    }
 
-        .login-subtitle {
-            font-size: 0.85rem;
-        }
+    .login-form {
+        padding: 25px 20px;
+    }
 
-        .login-icon {
-            margin-bottom: 15px; /* Resmi etkilemeden çerçeve marjını kıstık */
-        }
-        /* Form elemanlarını sıkılaştırdık */
-        .form-group {
-            margin-bottom: 15px;
-        }
+    .login-title {
+        font-size: 1.6rem;
+    }
 
-        .form-label {
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
 
-        .form-control {
-            padding: 12px 15px 12px 45px; /* Yüksekliği azalttık */
-            font-size: 0.95rem;
-        }
+    .btn {
+        width: 100%;
+        padding: 12px;
+    }
 
-        .input-icon {
-            font-size: 1rem;
-        }
-        /* Butonları küçülttük */
-        .button-group {
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px; /* Buton yüksekliğini düşürdük */
-            font-size: 0.95rem;
-        }
-
-        .btn-google {
-            padding: 12px;
-            font-size: 0.95rem;
-        }
     }
 </style>
 
@@ -446,7 +414,7 @@
 
         <div class="login-header">
             <div class="login-icon">
-                <img src="/images/library.png" style="width:60px;" />
+                <img src="/images/library.png" />
             </div>
             <h1 class="login-title">Giriş Yap</h1>
             <p class="login-subtitle">Dijital kütüphanenize hoş geldiniz</p>
@@ -506,14 +474,12 @@
                 <div class="button-group">
                     <button type="submit" class="btn btn-primary">
                         <span>
-                            <i class="fas fa-sign-in-alt"></i>
-                            Giriş Yap
+                            <i class="fas fa-sign-in-alt"></i> Giriş Yap
                         </span>
                     </button>
                     <a class="btn btn-outline" asp-action="Register">
                         <span>
-                            <i class="fas fa-user-plus"></i>
-                            Kayıt Ol
+                            <i class="fas fa-user-plus"></i> Kayıt Ol
                         </span>
                     </a>
                 </div>
@@ -522,8 +488,7 @@
 
                 <a asp-action="GoogleLogin" asp-controller="Account" class="btn btn-google">
                     <span>
-                        <i class="fab fa-google"></i>
-                        Google ile Giriş Yap
+                        <i class="fab fa-google"></i> Google ile Giriş Yap
                     </span>
                 </a>
 
@@ -537,7 +502,7 @@
         const inputs = document.querySelectorAll('.form-control');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
-                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1.2)';
+                this.parentElement.querySelector('.input-icon').style.transform = 'translateY(-50%) scale(1.1)';
                 this.parentElement.querySelector('.input-icon').style.color = '#8b6f47';
             });
             input.addEventListener('blur', function() {
