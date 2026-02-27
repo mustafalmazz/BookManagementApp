@@ -209,6 +209,11 @@ namespace BookManagementApp.Controllers
                 books = books.Where(b => b.CategoryId == categoryId);
                 ViewData["CurrentCategory"] = categoryId; // Sayfalama yaparken kategori kaybolmasın diye view'a gönderiyoruz
             }
+            var selectedCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+            if (selectedCategory != null)
+            {
+                ViewBag.CategoryName = selectedCategory.CategoryName;
+            }
 
             // 3. Manuel Sayfa Sayısı Filtresi (Min - Max)
             if (minPage != null)

@@ -340,16 +340,35 @@
                     <td style="font-weight: 600; color: var(--espresso);">@item.Name</td>
                     <td class="hide-on-mobile" style="font-style: italic;">@item.Author</td>
                     <td class="hide-on-mobile">
-                        @item.Rate
-                    </td>
-                    <td class="desc-col" title="@item.Description">
-                        @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 45)
+                        @if (item.Rate != null && item.Rate > 0)
                         {
-                            @($"{item.Description.Substring(0, 45)}...")
+                            @item.Rate
                         }
                         else
                         {
-                            @item.Description
+                            <span style="color: #666666; font-style: italic; font-size: 0.9rem;">
+                                Puan yok
+                            </span>
+                        }
+                    </td>
+
+                    <td class="desc-col" title="@item.Description">
+                        @if (!string.IsNullOrEmpty(item.Description))
+                        {
+                            @if (item.Description.Length > 45)
+                            {
+                                @($"{item.Description.Substring(0, 45)}...")
+                            }
+                            else
+                            {
+                                @item.Description
+                            }
+                        }
+                        else
+                        {
+                            <span style="color: #666666; font-style: italic; font-size: 0.9rem;">
+                                Açıklama eklenmedi...
+                            </span>
                         }
                     </td>
                     <td><span style="background: var(--linen); padding: 3px 8px; border-radius: 4px; font-size:0.85rem;">@item.Category?.CategoryName</span></td>

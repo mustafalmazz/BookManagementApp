@@ -394,6 +394,7 @@
 
         .container-custom {
             flex-direction: column;
+            gap: 5px;
         }
 
         .mobile-filter-toggle {
@@ -507,16 +508,21 @@
 <div class="page-header">
     <div class="container text-center">
         <h1>
-            Dijital Kütüphanem
+            @if (!string.IsNullOrEmpty(ViewBag.CategoryName as string))
+            {
+                <text><i>@ViewBag.CategoryName</i> </text>
+            }
+            else
+            {
+                <text>Dijital Kütüphanem</text>
+            }
             <br />
             @if (hasBooks)
             {
                 var totalRecords = (int)(ViewData["TotalRecords"] ?? 0);
                 <small style="font-size:1.2rem; font-weight:400; color:#f5f0e8;">
                     Toplam @totalRecords kitabınız bulunuyor
-                    
                 </small>
-               
             }
             else if (!isDatabaseEmpty)
             {
