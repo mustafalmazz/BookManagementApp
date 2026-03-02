@@ -52,7 +52,7 @@ namespace BookManagementApp.Controllers
         }
         public async Task<IActionResult> GoogleBooks(string q, int page = 1)
         {
-            int pageSize = 12;
+            int pageSize = 15;
 
             // Arama boşsa boş dön
             if (string.IsNullOrWhiteSpace(q))

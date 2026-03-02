@@ -915,7 +915,7 @@
                                 <label for="authorInput" style="color: #8b6f47; font-weight: 600; margin-bottom: 5px;">
                                     <i class="fa-solid fa-feather"></i> Yazar
                                 </label>
-                                <input type="text" id="authorInput" class="form-control" value="@Model.Book.Author" 
+                                <input type="text" id="editAuthorInput" class="form-control" value="@Model.Book.Author" 
                                        style="border: 2px solid #8b6f47; border-radius: 10px; font-family: 'Georgia', serif;">
                             </div>
                             <div class="col-md-6">
@@ -1146,7 +1146,8 @@
         saveInfoBtn.addEventListener('click', function () {
             const bookId = @Model.Book.Id;
             const newBookName = document.getElementById('bookNameInput').value;
-            const newAuthor = document.getElementById('authorInput').value;
+                const newAuthor = document.getElementById('editAuthorInput').value;
+                  formData.append('Author', newAuthor);
             const newCategoryId = document.getElementById('categorySelect').value;
             const newPages = document.getElementById('pagesInput').value;
             const imageFile = document.getElementById('bookImageInput').files[0];
