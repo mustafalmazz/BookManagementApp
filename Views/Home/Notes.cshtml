@@ -1,325 +1,436 @@
-﻿@using BookManagementApp.Areas.Admin.Models
-@model Book
+﻿@model Book
 @{
     ViewData["Title"] = Model.Name + " - Not Al";
 }
 
 <style>
+
     /* --- MEVCUT TEMA GENEL AYARLARI --- */
-    body {
-        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
-        font-family: 'Georgia', serif;
-        color: #4a3f35;
+        body {
+                background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+                font-family: 'Georgia', serif;
+                color: #4a3f35;
+
     }
-    /* --- BAŞLIK SÜSLEMESİ (İletişim Sayfası Stili) --- */
-    .header-ornament {
+
+    .success-alert {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        border: 1px solid #a8d5b5;
+        border-left: 5px solid #28a745;
+        border-radius: 10px;
+        padding: 14px 20px;
+        margin-bottom: 25px;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 10px;
-        margin-bottom: 15px;
+        gap: 12px;
+        color: #155724;
+        font-family: 'Georgia', serif;
+        font-size: 1rem;
+        font-weight: 600;
+        box-shadow: 0 3px 10px rgba(40, 167, 69, 0.15);
     }
 
-    .ornament-line {
-        height: 1px;
+        .success-alert i {
+            font-size: 1.2rem;
+            color: #28a745;
+            flex-shrink: 0;
+        }
+
+
+    /* --- BAŞLIK SÜSLEMESİ (İletişim Sayfası Stili) --- */
+        .header-ornament {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 10px;
+                margin-bottom: 15px;
+
+    }
+
+        .ornament-line {
+                height: 1px;
+
         /* var(--walnut) yerine sayfanın ana kahve tonunu kullandık */
-        background: linear-gradient(90deg, transparent, #8b6f47, transparent);
-        width: 150px;
+                background: linear-gradient(90deg, transparent, #8b6f47, transparent);
+                width: 150px;
+
     }
 
-    .ornament-diamond {
-        width: 6px;
-        height: 6px;
-        background: #8b6f47;
-        transform: rotate(45deg);
+        .ornament-diamond {
+                width: 6px;
+                height: 6px;
+                background: #8b6f47;
+                transform: rotate(45deg);
+
     }
-    .notes-container {
-        padding: 20px 0;
-        max-width: 1200px;
-        margin: 0 auto;
+
+        .notes-container {
+                padding: 20px 0;
+                max-width: 1200px;
+                margin: 0 auto;
+
     }
+
 
     /* --- BREADCRUMB --- */
-    .breadcrumb-wrapper {
-        background: rgba(255, 255, 255, 0.6);
-        padding: 10px 20px;
-        border-radius: 10px;
-        margin-bottom: 30px;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 2px 5px rgba(107, 85, 65, 0.05);
+        .breadcrumb-wrapper {
+                background: rgba(255, 255, 255, 0.6);
+                padding: 10px 20px;
+                border-radius: 10px;
+                margin-bottom: 30px;
+                backdrop-filter: blur(5px);
+                box-shadow: 0 2px 5px rgba(107, 85, 65, 0.05);
+
     }
 
-    .breadcrumb {
-        margin: 0;
-        padding: 0;
-        font-family: 'Georgia', serif;
-        font-size: 0.95rem;
+        .breadcrumb {
+                margin: 0;
+                padding: 0;
+                font-family: 'Georgia', serif;
+                font-size: 0.95rem;
+
     }
 
-    .breadcrumb-item a {
-        color: #8b6f47;
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s ease;
+        .breadcrumb-item a {
+                color: #8b6f47;
+                text-decoration: none;
+                font-weight: 600;
+                transition: color 0.3s ease;
+
     }
 
-        .breadcrumb-item a:hover {
-            color: #6b5541;
-        }
+            .breadcrumb-item a:hover {
+                    color: #6b5541;
 
-    .breadcrumb-item.active {
-        color: #4a3f35;
-        font-weight: 600;
     }
+
+        .breadcrumb-item.active {
+                color: #4a3f35;
+                font-weight: 600;
+
+    }
+
 
     /* --- BUTON STİLLERİ --- */
-    .btn-notes-primary {
-        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
-        border: none;
-        color: #f5f0e8;
-        padding: 10px 24px;
-        border-radius: 25px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 10px rgba(107, 85, 65, 0.3);
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        cursor: pointer;
+        .btn-notes-primary {
+                background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+                border: none;
+                color: #f5f0e8;
+                padding: 10px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                box-shadow: 0 4px 10px rgba(107, 85, 65, 0.3);
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                cursor: pointer;
+
     }
 
-        .btn-notes-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(107, 85, 65, 0.5);
-            background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
-            color: #f5f0e8;
+                .btn-notes-primary:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 6px 15px rgba(107, 85, 65, 0.5);
+                        background: linear-gradient(135deg, #a0785a 0%, #8b6f47 100%);
+                        color: #f5f0e8;
+
         }
+
 
     /* --- EDİTÖR KART YAPISI --- */
-    .editor-card {
-        background: #fff9f0;
-        border-radius: 8px 20px 20px 8px;
-        overflow: hidden;
-        box-shadow: -3px 0 10px rgba(0,0,0,0.05), 10px 10px 30px rgba(107, 85, 65, 0.15);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 30px;
-        border-left: 16px solid #6b5541;
+        .editor-card {
+                background: #fff9f0;
+                border-radius: 8px 20px 20px 8px;
+                overflow: hidden;
+                box-shadow: -3px 0 10px rgba(0,0,0,0.05), 10px 10px 30px rgba(107, 85, 65, 0.15);
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 30px;
+                border-left: 16px solid #6b5541;
+
     }
 
-        .editor-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #8b6f47, #6b5541);
-            z-index: 10;
+                .editor-card::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 4px;
+                        background: linear-gradient(90deg, #8b6f47, #6b5541);
+                        z-index: 10;
+
         }
+
 
     /* --- EDİTÖR ARAÇ ÇUBUĞU (TOOLBAR) --- */
-    .editor-toolbar {
-        background: linear-gradient(135deg, #f5ede0 0%, #e8dcc8 100%);
-        padding: 15px 20px;
-        border-bottom: 2px solid rgba(139, 111, 71, 0.2);
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        align-items: center;
-        position: relative;
-        z-index: 5;
+        .editor-toolbar {
+                background: linear-gradient(135deg, #f5ede0 0%, #e8dcc8 100%);
+                padding: 15px 20px;
+                border-bottom: 2px solid rgba(139, 111, 71, 0.2);
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                align-items: center;
+                position: relative;
+                z-index: 5;
+
     }
 
-    .toolbar-btn {
-        background: #fff9f0;
-        border: 1px solid #d4c5b0;
-        color: #8b6f47;
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 1rem;
+        .toolbar-btn {
+                background: #fff9f0;
+                border: 1px solid #d4c5b0;
+                color: #8b6f47;
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-size: 1rem;
+
     }
 
-        .toolbar-btn:hover {
-            background: #8b6f47;
-            color: #fff9f0;
-            border-color: #8b6f47;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(139, 111, 71, 0.2);
-        }
+            .toolbar-btn:hover {
+                    background: #8b6f47;
+                    color: #fff9f0;
+                    border-color: #8b6f47;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(139, 111, 71, 0.2);
 
-    .toolbar-divider {
-        width: 2px;
-        height: 24px;
-        background-color: #d4c5b0;
-        margin: 0 5px;
     }
 
-    .toolbar-select {
-        background: #fff9f0;
-        border: 1px solid #d4c5b0;
-        color: #4a3f35;
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-family: 'Georgia', serif;
-        outline: none;
-        cursor: pointer;
-        transition: border-color 0.2s ease;
+        .toolbar-divider {
+                width: 2px;
+                height: 24px;
+                background-color: #d4c5b0;
+                margin: 0 5px;
+
     }
 
-        .toolbar-select:focus {
-            border-color: #8b6f47;
-        }
+        .toolbar-select {
+                background: #fff9f0;
+                border: 1px solid #d4c5b0;
+                color: #4a3f35;
+                padding: 6px 12px;
+                border-radius: 8px;
+                font-family: 'Georgia', serif;
+                outline: none;
+                cursor: pointer;
+                transition: border-color 0.2s ease;
 
-    .toolbar-color-picker {
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        border: 1px solid #d4c5b0;
-        border-radius: 8px;
-        cursor: pointer;
-        background: #fff9f0;
     }
+
+            .toolbar-select:focus {
+                    border-color: #8b6f47;
+
+    }
+
+        .toolbar-color-picker {
+                width: 36px;
+                height: 36px;
+                padding: 0;
+                border: 1px solid #d4c5b0;
+                border-radius: 8px;
+                cursor: pointer;
+                background: #fff9f0;
+
+    }
+
 
     /* --- HIZLI RENK SEÇİCİ BUTONLAR --- */
-    .color-dot {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        border: 2px solid #e8dcc8;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        padding: 0;
-        margin-left: 2px;
+        .color-dot {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                border: 2px solid #e8dcc8;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                padding: 0;
+                margin-left: 2px;
+
     }
 
-        .color-dot:hover {
-            transform: scale(1.15);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+                .color-dot:hover {
+                        transform: scale(1.15);
+                        box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+
         }
 
-    .color-blue {
-        background-color: #2563eb;
+        .color-black {
+                background-color: #141414;
+
     }
 
-    .color-red {
-        background-color: #dc2626;
+        .color-blue {
+                background-color: #2563eb;
+
     }
 
-    .color-green {
-        background-color: #16a34a;
+        .color-red {
+                background-color: #dc2626;
+
     }
+
+        .color-green {
+                background-color: #16a34a;
+
+    }
+
+
+
+        .color-purple {
+                background-color: #8B00FF;
+
+    }
+
 
     /* --- GERÇEK ÇİZGİLİ DEFTER EFEKTİ --- */
-    .editor-content {
-        height: 700px;
-        padding: 33px 30px 32px 70px;
-        font-size: 1.1rem;
-        line-height: 32px;
-        color: #332b24;
-        outline: none;
-        overflow-y: auto;
-        background-color: #fff5e4;
-        background-image: linear-gradient(90deg, transparent 50px, rgba(186, 110, 94, 0.4) 50px, rgba(186, 110, 94, 0.4) 52px, transparent 52px), linear-gradient(rgba(139, 111, 71, 0.2) 1px, transparent 1px);
-        background-size: 100% 100%, 100% 32px;
-        background-attachment: local;
-        box-shadow: inset 0 0 20px rgba(139, 111, 71, 0.04);
+        .editor-content {
+                height: 700px;
+                padding: 33px 30px 32px 70px;
+                font-size: 1.1rem;
+                line-height: 32px;
+                color: #332b24;
+                outline: none;
+                overflow-y: auto;
+                background-color: #fff5e4;
+                background-image: linear-gradient(90deg, transparent 50px, rgba(186, 110, 94, 0.4) 50px, rgba(186, 110, 94, 0.4) 52px, transparent 52px), linear-gradient(rgba(139, 111, 71, 0.2) 1px, transparent 1px);
+                background-size: 100% 100%, 100% 32px;
+                background-attachment: local;
+                box-shadow: inset 0 0 20px rgba(139, 111, 71, 0.04);
+
     }
 
-        /* --- ÖZEL SCROLLBAR TASARIMI --- */
-        .editor-content::-webkit-scrollbar {
-            width: 10px;
-        }
 
-        .editor-content::-webkit-scrollbar-track {
-            background: #fff5e4;
-            border-left: 1px solid rgba(139, 111, 71, 0.2);
-        }
+    /* --- ÖZEL SCROLLBAR TASARIMI --- */
+            .editor-content::-webkit-scrollbar {
+                    width: 10px;
 
-        .editor-content::-webkit-scrollbar-thumb {
-            background: #a0785a;
-            border-radius: 5px;
-        }
+    }
 
-            .editor-content::-webkit-scrollbar-thumb:hover {
-                background: #8b6f47;
-            }
+            .editor-content::-webkit-scrollbar-track {
+                    background: #fff5e4;
+                    border-left: 1px solid rgba(139, 111, 71, 0.2);
 
-        .editor-content * {
-            line-height: 32px !important;
-        }
+    }
 
-        .editor-content ul, .editor-content ol {
-            margin-top: 0;
-            margin-bottom: 0;
-        }
+            .editor-content::-webkit-scrollbar-thumb {
+                    background: #a0785a;
+                    border-radius: 5px;
 
-        .editor-content:empty:before {
-            content: attr(placeholder);
-            color: #b08d6a;
-            font-style: italic;
-            opacity: 0.7;
-        }
+    }
+
+                .editor-content::-webkit-scrollbar-thumb:hover {
+                        background: #8b6f47;
+
+    }
+
+            .editor-content * {
+                    line-height: 32px !important;
+
+    }
+
+            .editor-content ul, .editor-content ol {
+                    margin-top: 0;
+                    margin-bottom: 0;
+
+    }
+
+            .editor-content:empty:before {
+                    content: attr(placeholder);
+                    color: #b08d6a;
+                    font-style: italic;
+                    opacity: 0.7;
+
+    }
+
 
     /* --- RESPONSIVE AYARLARI (TELEFON/TABLET İÇİN ÖZEL) --- */
-    @@media (max-width: 992px) {
-        .editor-content {
-            height: 500px;
-            padding-left: 55px;
-        }
+        @@media (max-width: 992px) {
+                .editor-content
+
+    {
+                    height: 500px;
+                    padding-left: 55px;
+
     }
 
-    @@media (max-width: 768px) {
-        .editor-card {
-            border-left-width: 10px; /* Mobilde kitap sırtını daralttık */
-        }
+
+    }
+
+        @@media (max-width: 768px) {
+                .editor-card    
+
+    {
+                border-left-width: 10px;
+
+    }
 
         .editor-toolbar {
-            gap: 6px; /* Butonlar arası boşluğu daralttık sığması için */
-            padding: 10px 15px;
-        }
+                gap: 8px; /* Biraz daha rahat nefes alsın */
+                padding: 12px 15px;
+                justify-content: center; /* Mobilde butonları ortala */
 
-        .toolbar-btn, .toolbar-color-picker {
-            width: 32px;
-            height: 32px;
-            font-size: 0.9rem;
-        }
-
-        .color-dot {
-            width: 20px;
-            height: 20px;
-        }
-        /* Tablet boyutu için çizgiyi 50px'den 35px'e çektik */
-        .editor-content {
-            padding-left: 50px;
-            background-image: linear-gradient(90deg, transparent 35px, rgba(186, 110, 94, 0.4) 35px, rgba(186, 110, 94, 0.4) 37px, transparent 37px), linear-gradient(rgba(139, 111, 71, 0.2) 1px, transparent 1px);
-        }
     }
 
-    @@media (max-width: 576px) {
-        .toolbar-select {
-            max-width: 120px; /* Telefonda font seçicinin çok yer kaplamasını önler */
-            padding: 4px 8px;
-            font-size: 0.85rem;
-        }
-        /* Telefonlar için kırmızı çizgiyi çok daha sola çektik (20px) ve soldaki boşluğu azalttık */
+        .toolbar-btn, .toolbar-color-picker {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+
+    }
+
+        .color-dot {
+                width: 22px;
+                height: 22px;
+                margin-left: 4px;
+
+    }
+
         .editor-content {
-            padding-left: 35px;
-            padding-right: 15px;
-            background-image: linear-gradient(90deg, transparent 20px, rgba(186, 110, 94, 0.4) 20px, rgba(186, 110, 94, 0.4) 22px, transparent 22px), linear-gradient(rgba(139, 111, 71, 0.2) 1px, transparent 1px);
-        }
+                padding-left: 50px;
+                background-image: linear-gradient(90deg, transparent 35px, rgba(186, 110, 94, 0.4) 35px, rgba(186, 110, 94, 0.4) 37px, transparent 37px), linear-gradient(rgba(139, 111, 71, 0.2) 1px, transparent 1px);
+
+    }
+
+
+    }
+
+        @@media (max-width: 576px) {
+        .success-alert
+
+    {
+        font-size: 0.9rem;
+        padding: 12px 15px;
+        gap: 10px;
+    }
+
+            .toolbar-select {
+                    max-width: 120px; /* Telefonda font seçicinin çok yer kaplamasını önler */
+                    padding: 4px 8px;
+                    font-size: 0.85rem;
+
+    }
+
+
+    /* Telefonlar için kırmızı çizgiyi çok daha sola çektik (20px) ve soldaki boşluğu azalttık */
+            .editor-content {
+                    padding-left: 35px;
+                    padding-right: 15px;
+                    background-image: linear-gradient(90deg, transparent 20px, rgba(186, 110, 94, 0.4) 20px, rgba(186, 110, 94, 0.4) 22px, transparent 22px), linear-gradient(rgba(139, 111, 71, 0.2) 1px, transparent 1px);
+
+    }
+
+
     }
 </style>
 
@@ -345,7 +456,13 @@
                 <div class="ornament-line"></div>
             </div>
         </div>
-
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="success-alert">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+        }
         <form asp-action="Notes" method="post" id="noteForm">
 
             <input type="hidden" asp-for="Id" />
@@ -377,11 +494,13 @@
 
                             <div class="toolbar-divider"></div>
 
-                            <input type="color" class="toolbar-color-picker" onchange="formatText('foreColor', this.value)" title="Özel Renk" value="#332b24">
+                            @* <input type="color" class="toolbar-color-picker" onchange="formatText('foreColor', this.value)" title="Özel Renk" value="#332b24"> *@
 
+                            <button type="button" class="color-dot color-black" onclick="formatText('foreColor', '#141414')" title="Siyah"></button>
                             <button type="button" class="color-dot color-blue" onclick="formatText('foreColor', '#2563eb')" title="Mavi"></button>
                             <button type="button" class="color-dot color-red" onclick="formatText('foreColor', '#dc2626')" title="Kırmızı"></button>
                             <button type="button" class="color-dot color-green" onclick="formatText('foreColor', '#16a34a')" title="Yeşil"></button>
+                            <button type="button" class="color-dot color-purple" onclick="formatText('foreColor', '#8B00FF')" title="Mor"></button>
 
                             <div class="toolbar-divider"></div>
 
@@ -415,6 +534,18 @@
 </div>
 
 <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const successAlert = document.querySelector(".success-alert");
+        if (successAlert) {
+            setTimeout(function () {
+                successAlert.style.transition = "opacity 0.5s ease";
+                successAlert.style.opacity = "0";
+                setTimeout(function () {
+                    successAlert.style.display = "none";
+                }, 500);
+            }, 5000);
+        }
+    });
     // Düzenleme komutlarını çalıştıran fonksiyon
     function formatText(command, value = null) {
         document.execCommand(command, false, value);

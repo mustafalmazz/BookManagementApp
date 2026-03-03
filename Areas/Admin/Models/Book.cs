@@ -23,7 +23,7 @@ namespace BookManagementApp.Models
         [Display(Name = "Yazar Adı")]
         public string Author { get; set; } = string.Empty;
 
-        [StringLength(1600)]
+        [StringLength(1600,ErrorMessage ="En fazla 1600 karakter girebilirsiniz!")]
         [Display(Name = "Açıklama")]
         public string? Description { get; set; }
         [Display(Name = "Kitap Notlarım")]

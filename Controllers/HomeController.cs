@@ -480,6 +480,7 @@ namespace BookManagementApp.Controllers
             }
             existingBook.Notes = model.Notes;
             _context.SaveChanges();
+            TempData["SuccessMessage"] = "Notunuz başarıyla kaydedildi.";
             return RedirectToAction("Notes", new { id = model.Id });
         }
 

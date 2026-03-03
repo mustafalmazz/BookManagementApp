@@ -365,11 +365,7 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label" asp-for="Notes">Kişisel Notlarım</label>
-            <input class="form-control" asp-for="Notes" placeholder="Daha sonra da eklenebilir." />
-            <span asp-validation-for="Notes" class="text-danger"></span>
-        </div>
+       
 
         <div class="row">
             <div class="col-md-4 mb-3">
@@ -386,7 +382,7 @@
 
             <div class="col-md-4 mb-3">
                 <label class="form-label" asp-for="Price">Kitap Fiyatı (₺)</label>
-                <input class="form-control" asp-for="Price" type="number" step="0.01" placeholder="İsteğe bağlı" />
+                <input class="form-control" asp-for="Price" type="number" step="0.01" placeholder="Örn: 199" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
         </div>
