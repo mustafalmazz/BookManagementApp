@@ -213,6 +213,9 @@
 
     /* ── MOBİL UYUM ── */
     @@media (max-width: 768px) {
+        .hide-on-mobile {
+            display: none !important;
+        }
         .top-action-bar
 
     {
@@ -254,7 +257,7 @@
                placeholder="Kategori Adı Ara..."
                style="width: 300px;" />
         <button type="submit" class="btn-search">
-            <i class="fas fa-search"></i> Ara
+            <i class="fas fa-search hide-on-mobile"></i> Ara
         </button>
     </form>
 </div>

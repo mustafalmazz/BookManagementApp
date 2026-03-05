@@ -9,6 +9,9 @@
         flex: 1;
     }
 
+    /* =========================================================
+           MASAÜSTÜ FOOTER STİLLERİ
+           ========================================================= */
     .book-footer {
         background: linear-gradient(135deg, #6b5541 0%, #4a3b2a 100%);
         color: #f5f0e8;
@@ -274,91 +277,101 @@
 
     }
 
-    .decorative-book-icon {
-        position: absolute;
-        font-size: 8rem;
-        opacity: 0.05;
-        color: #ffd782;
-        z-index: 0;
+
+    /* =========================================================
+           MOBİL ALT NAVİGASYON (BOTTOM NAV) STİLLERİ
+           ========================================================= */
+    .mobile-bottom-nav {
+        display: none; /* Masaüstünde tamamen gizli */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc8 100%);
+        box-shadow: 0 -4px 20px rgba(107, 85, 65, 0.2);
+        z-index: 1050;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 5px 15px 5px; /* Alt boşluk (iOS çentiği vb. için) */
+        border-top: 1px solid rgba(139, 111, 71, 0.2);
     }
 
-        .decorative-book-icon.left {
-            bottom: 20%;
-            left: 5%;
-            transform: rotate(-15deg);
+    .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: rgba(139, 111, 71, 0.7); /* Pasif ikon rengi */
+        font-family: 'Georgia', serif;
+        font-size: 0.75rem;
+        gap: 4px;
+        transition: all 0.3s ease;
+        flex: 1;
+    }
+
+        .bottom-nav-item i {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
         }
 
-        .decorative-book-icon.right {
-            top: 10%;
-            right: 5%;
-            transform: rotate(15deg);
+        .bottom-nav-item.active {
+            color: #4a3f35; /* Aktif olduğunda koyu kahve */
+            font-weight: bold;
         }
 
-    @@media (max-width: 768px) {
+            .bottom-nav-item.active i {
+                transform: translateY(-2px);
+                color: #8b6f47;
+            }
+
+    /* Ortadaki Belirgin Ekle Butonu */
+    .bottom-nav-item-center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -45px; /* Butonu çubuğun üstüne taşır */
+    }
+
+    .center-action-btn {
+        background: linear-gradient(135deg, #8b6f47 0%, #6b5541 100%);
+        color: #f5f0e8;
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.6rem;
+        box-shadow: 0 4px 15px rgba(107, 85, 65, 0.5);
+        text-decoration: none;
+        border: 4px solid #f5f0e8; /* Butonun etrafında beyaz/krem bir halka */
+        transition: transform 0.3s ease;
+    }
+
+        .center-action-btn:hover {
+            transform: scale(1.05);
+            color: #ffd782;
+        }
+
+
+    /* =========================================================
+           MOBİL GÖRÜNÜM GEÇİŞİ (991px ve Altı)
+           ========================================================= */
+    @@media (max-width: 991.98px) {
         .book-footer
 
     {
-        padding: 30px 0 0 0;
-        margin-top: 40px;
+        display: none !important; /* Büyük masaüstü footer'ını gizle */
     }
 
-    .footer-brand-text {
-        font-size: 1.4rem;
+    .mobile-bottom-nav {
+        display: flex; /* Alt mobil barı göster */
     }
 
-    .footer-logo {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-    }
-
-    .footer-section-title {
-        font-size: 1.1rem;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-    }
-
-    /* --- MOBİL İÇİN YAN YANA YERLEŞİM (Linkler & İletişim) --- */
-    /* Linkleri daha kompakt yap */
-    .footer-links li {
-        margin-bottom: 8px;
-    }
-
-    .footer-links a {
-        font-size: 0.9rem;
-    }
-
-    .contact-info li {
-        margin-bottom: 10px;
-        font-size: 0.9rem;
-    }
-
-    .social-section {
-        margin-top: 20px;
-    }
-
-    .social-title {
-        font-size: 1rem;
-        text-align: center;
-    }
-
-    .social-icons {
-        justify-content: center;
-    }
-
-        .social-icons a {
-            width: 35px;
-            height: 35px;
-            font-size: 1rem;
-        }
-
-    .footer-divider {
-        margin: 20px 0;
-    }
-
-    .footer-quote {
-        padding: 15px;
-        font-size: 0.9rem;
+    body {
+        /* İçeriğin mobil barın altında kalmasını önlemek için sayfa sonuna boşluk ekler */
+        padding-bottom: 75px;
     }
 
     }
@@ -444,3 +457,49 @@
         </div>
     </div>
 </footer>
+
+<nav class="mobile-bottom-nav">
+    <a href="/Home/Index" class="bottom-nav-item" id="nav-home">
+        <i class="fa-solid fa-house"></i>
+        <span>Kitaplığım</span>
+    </a>
+    <a href="/Home/GoogleBooks" class="bottom-nav-item" id="nav-explore">
+        <i class="fa-solid fa-compass"></i>
+        <span>Keşfet</span>
+    </a>
+
+    <div class="bottom-nav-item-center">
+        <a href="/Home/GoogleBooks" class="center-action-btn" title="Hızlı Ekle">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+
+    <a href="/Profile/Index" class="bottom-nav-item" id="nav-profile">
+        <i class="fa-solid fa-user"></i>
+        <span>Profil</span>
+    </a>
+    <a href="/Pomodoro/Index" class="bottom-nav-item" id="nav-focus">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span>Odaklan</span>
+    </a>
+</nav>
+
+<script>
+    // Mobil alt barda kullanıcının bulunduğu sayfaya göre ikonu renklendirme (aktif yapma)
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname.toLowerCase();
+
+        if (currentPath.includes('/home/index') || currentPath === '/') {
+            document.getElementById('nav-home').classList.add('active');
+        }
+        else if (currentPath.includes('/googlebooks')) {
+            document.getElementById('nav-explore').classList.add('active');
+        }
+        else if (currentPath.includes('/profile')) {
+            document.getElementById('nav-profile').classList.add('active');
+        }
+       else if (currentPath.includes('/pomodoro')) {
+            document.getElementById('nav-focus').classList.add('active');
+        }
+    });
+</script>
