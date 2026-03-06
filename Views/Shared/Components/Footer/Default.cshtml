@@ -10,8 +10,8 @@
     }
 
     /* =========================================================
-           MASAÜSTÜ FOOTER STİLLERİ
-           ========================================================= */
+               MASAÜSTÜ FOOTER STİLLERİ
+               ========================================================= */
     .book-footer {
         background: linear-gradient(135deg, #6b5541 0%, #4a3b2a 100%);
         color: #f5f0e8;
@@ -279,8 +279,8 @@
 
 
     /* =========================================================
-           MOBİL ALT NAVİGASYON (BOTTOM NAV) STİLLERİ
-           ========================================================= */
+               MOBİL ALT NAVİGASYON (BOTTOM NAV) STİLLERİ
+               ========================================================= */
     .mobile-bottom-nav {
         display: none; /* Masaüstünde tamamen gizli */
         position: fixed;
@@ -301,12 +301,15 @@
         flex-direction: column;
         align-items: center;
         text-decoration: none;
-        color: rgba(139, 111, 71, 0.7); /* Pasif ikon rengi */
+        color: rgba(139, 111, 71, 0.7);
         font-family: 'Georgia', serif;
         font-size: 0.75rem;
         gap: 4px;
         transition: all 0.3s ease;
         flex: 1;
+        cursor: pointer;
+        background: none;
+        border: none;
     }
 
         .bottom-nav-item i {
@@ -315,7 +318,7 @@
         }
 
         .bottom-nav-item.active {
-            color: #4a3f35; /* Aktif olduğunda koyu kahve */
+            color: #4a3f35;
             font-weight: bold;
         }
 
@@ -330,7 +333,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: -45px; /* Butonu çubuğun üstüne taşır */
+        margin-top: -45px;
     }
 
     .center-action-btn {
@@ -345,7 +348,7 @@
         font-size: 1.6rem;
         box-shadow: 0 4px 15px rgba(107, 85, 65, 0.5);
         text-decoration: none;
-        border: 4px solid #f5f0e8; /* Butonun etrafında beyaz/krem bir halka */
+        border: 4px solid #f5f0e8;
         transition: transform 0.3s ease;
     }
 
@@ -356,21 +359,117 @@
 
 
     /* =========================================================
-           MOBİL GÖRÜNÜM GEÇİŞİ (991px ve Altı)
+           MOBİL AÇILIR MENÜ (ACTION SHEET) STİLLERİ
            ========================================================= */
+    .mobile-action-sheet-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        backdrop-filter: blur(3px);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .mobile-action-sheet {
+        position: fixed;
+        bottom: -100%; /* Başlangıçta ekranın altında gizli */
+        left: 0;
+        right: 0;
+        background: #f5f0e8;
+        border-radius: 20px 20px 0 0;
+        z-index: 1045; /* Overlay üstünde, bottom nav altında */
+        padding: 20px 0 85px 0; /* Alt boşluk bottom nav için */
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+        transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+        /* Menü açıkken devreye giren sınıflar */
+        .mobile-action-sheet.show {
+            bottom: 0;
+        }
+
+    .mobile-action-sheet-overlay.show {
+        display: block;
+        opacity: 1;
+    }
+
+    .action-sheet-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .action-sheet-handle {
+        width: 40px;
+        height: 5px;
+        background: #d4c5b0;
+        border-radius: 5px;
+        margin: 0 auto 15px auto;
+    }
+
+    .action-sheet-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .action-sheet-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 25px;
+        color: #4a3f35;
+        text-decoration: none;
+        font-family: 'Georgia', serif;
+        font-size: 1.05rem;
+        font-weight: 500;
+        border-bottom: 1px solid rgba(139, 111, 71, 0.1);
+        transition: background 0.2s ease;
+    }
+
+        .action-sheet-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-sheet-item:active {
+            background: rgba(139, 111, 71, 0.1);
+        }
+
+        .action-sheet-item i {
+            width: 30px;
+            font-size: 1.2rem;
+            color: #8b6f47;
+            text-align: center;
+            margin-right: 15px;
+        }
+
+        .action-sheet-item.danger {
+            color: #dc3545;
+        }
+
+            .action-sheet-item.danger i {
+                color: #dc3545;
+            }
+
+
+    /* =========================================================
+               MOBİL GÖRÜNÜM GEÇİŞİ (991px ve Altı)
+               ========================================================= */
     @@media (max-width: 991.98px) {
         .book-footer
 
     {
-        display: none !important; /* Büyük masaüstü footer'ını gizle */
+        display: none !important;
     }
 
     .mobile-bottom-nav {
-        display: flex; /* Alt mobil barı göster */
+        display: flex;
     }
 
     body {
-        /* İçeriğin mobil barın altında kalmasını önlemek için sayfa sonuna boşluk ekler */
         padding-bottom: 75px;
     }
 
@@ -458,35 +557,72 @@
     </div>
 </footer>
 
+
+<div class="mobile-action-sheet-overlay" id="menuOverlay"></div>
+<div class="mobile-action-sheet" id="mobileMenuSheet">
+    <div class="action-sheet-header">
+        <div class="action-sheet-handle"></div>
+    </div>
+    <ul class="action-sheet-list">
+        <li>
+            <a href="/Profile/Index" class="action-sheet-item">
+                <i class="fa-solid fa-user"></i> Profil Özetim
+            </a>
+        </li>
+        <li>
+            <a href="/Admin/Books/List" class="action-sheet-item">
+                <i class="fa-solid fa-book"></i> Kitapları Yönet
+            </a>
+        </li>
+        <li>
+            <a href="/Admin/Category/List" class="action-sheet-item">
+                <i class="fa-solid fa-layer-group"></i> Kategorileri Yönet
+            </a>
+        </li>
+        <li>
+            <a href="/SuperAdmin/Dashboard/Index" class="action-sheet-item">
+                <i class="fa-solid fa-gear"></i> Sistemi Yönet
+            </a>
+        </li>
+        <li>
+            <a href="/Account/Logout" class="action-sheet-item danger">
+                <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+            </a>
+        </li>
+    </ul>
+</div>
+
 <nav class="mobile-bottom-nav">
     <a href="/Home/Index" class="bottom-nav-item" id="nav-home">
         <i class="fa-solid fa-house"></i>
         <span>Kitaplığım</span>
     </a>
+
     <a href="/Home/GoogleBooks" class="bottom-nav-item" id="nav-explore">
         <i class="fa-solid fa-compass"></i>
         <span>Keşfet</span>
     </a>
 
     <div class="bottom-nav-item-center">
-        <a href="/Home/GoogleBooks" class="center-action-btn" title="Hızlı Ekle">
+        <a href="/Admin/Books/Create" class="center-action-btn" title="Hızlı Ekle">
             <i class="fa-solid fa-plus"></i>
         </a>
     </div>
 
-    <a href="/Profile/Index" class="bottom-nav-item" id="nav-profile">
-        <i class="fa-solid fa-user"></i>
-        <span>Profil</span>
-    </a>
     <a href="/Pomodoro/Index" class="bottom-nav-item" id="nav-focus">
         <i class="fa-solid fa-stopwatch"></i>
         <span>Odaklan</span>
     </a>
+
+    <button type="button" class="bottom-nav-item" id="nav-menu-btn">
+        <i class="fa-solid fa-bars"></i>
+        <span>Menü</span>
+    </button>
 </nav>
 
 <script>
-    // Mobil alt barda kullanıcının bulunduğu sayfaya göre ikonu renklendirme (aktif yapma)
     document.addEventListener('DOMContentLoaded', function() {
+        // 1. AKTİF İKON RENKLENDİRMESİ
         const currentPath = window.location.pathname.toLowerCase();
 
         if (currentPath.includes('/home/index') || currentPath === '/') {
@@ -495,11 +631,25 @@
         else if (currentPath.includes('/googlebooks')) {
             document.getElementById('nav-explore').classList.add('active');
         }
-        else if (currentPath.includes('/profile')) {
-            document.getElementById('nav-profile').classList.add('active');
-        }
-       else if (currentPath.includes('/pomodoro')) {
+        else if (currentPath.includes('/pomodoro')) {
             document.getElementById('nav-focus').classList.add('active');
         }
+
+        // 2. MOBİL AÇILIR MENÜ (ACTION SHEET) MANTIĞI
+        const menuBtn = document.getElementById('nav-menu-btn');
+        const menuSheet = document.getElementById('mobileMenuSheet');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        function toggleMenu() {
+            menuSheet.classList.toggle('show');
+            menuOverlay.classList.toggle('show');
+            menuBtn.classList.toggle('active');
+        }
+
+        // Menü butonuna tıklanınca aç
+        menuBtn.addEventListener('click', toggleMenu);
+
+        // Boşluğa (overlay'e) tıklanınca menüyü kapat
+        menuOverlay.addEventListener('click', toggleMenu);
     });
 </script>

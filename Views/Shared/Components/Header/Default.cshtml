@@ -46,13 +46,12 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            margin-right: 0; /* Flex dağılımı için sıfırlandı */
+            margin-right: 0;
         }
 
     /* --- NAVİGASYON LİNKLERİ (Eşit Dağılım Ayarı) --- */
     .navbar-nav {
         align-items: center;
-        /* BURASI DEĞİŞTİ: Linkleri eşit aralıklarla yayar */
         justify-content: space-evenly;
         width: 100%;
     }
@@ -63,12 +62,11 @@
         font-size: 0.95rem;
         font-weight: 500;
         padding: 8px 12px !important;
-        /* Margin kaldırıldı, flex space-evenly halledecek */
         margin: 0;
         border-radius: 6px;
         transition: all 0.3s ease;
         position: relative;
-        white-space: nowrap; /* Linklerin kırılmasını önler */
+        white-space: nowrap;
     }
 
         .book-navbar .nav-link::before {
@@ -98,7 +96,7 @@
             color: #ffd782 !important;
         }
 
-    /* --- ARAMA FORMU --- */
+    /* --- ARAMA FORMU (MASAÜSTÜ) --- */
     .book-search-form {
         margin-left: auto;
         display: flex;
@@ -185,6 +183,7 @@
     }
 
     }
+
     @@keyframes fadeInDropdown {
         from
 
@@ -210,101 +209,124 @@
             border-radius: 6px;
         }
 
-    /* --- MOBİL AYARLAR (DOKUNULMADI) --- */
-    .book-navbar .navbar-toggler {
-        border: 1px solid rgba(245, 240, 232, 0.5) !important;
-        padding: 5px 10px;
-        outline: none;
-        box-shadow: none;
-    }
-
-    .book-navbar .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23f5f0e8' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-        width: 1em;
-        height: 1em;
-    }
-
-    @@media (max-width: 768px) {
-        .book-navbar .nav-link
+    /* =========================================================
+           MOBİL GÖRÜNÜM (991px ve ALTI) - SADECE ARAMA VE LOGO
+           ========================================================= */
+    @@media (max-width: 991.98px) {
+        /* 1. Üstteki Hamburger İkonunu Gizle */
+        .navbar-toggler
 
     {
-        text-align: center;
-        margin: 2px 0;
-        padding: 10px 0 !important;
+        display: none !important;
     }
 
-    .mobile-search-form {
-        flex-grow: 1;
-        margin: 0 10px;
-        position: relative;
+    /* 2. Açılır Linkleri Tamamen Gizle (Artık Alt Barda Var) */
+    .navbar-collapse {
+        display: none !important;
     }
 
-        .mobile-search-input {
-            width: 100%;
-            border: 2px solid rgba(245, 240, 232, 0.3);
-            border-radius: 20px;
-            padding: 8px 35px 8px 15px;
-            background: rgba(255, 255, 255, 0.15);
-            /* Yazı rengini beyaz/krem yapıyoruz */
-            color: #f5f0e8 !important;
-            font-size: 0.95rem;
-            outline: none;
-        }
-            /* Placeholder (İpucu Yazısı) Rengi - DÜZELTİLDİ */
-            .mobile-search-input::placeholder {
-                color: #f5f0e8 !important; /* Rengi zorla krem yap */
-                opacity: 0.8; /* Hafif saydamlık (Gri görünmemesi için yüksek tutuldu) */
-            }
-            /* Bazı mobil tarayıcılar (Safari/Chrome) için özel ön ek */
-            .mobile-search-input::-webkit-input-placeholder {
-                color: #f5f0e8 !important;
-                opacity: 0.8;
-            }
-
-            .mobile-search-input:focus {
-                background: rgba(255, 255, 255, 0.25);
-                border-color: #ffd782;
-            }
-
-    .mobile-search-btn-icon {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        color: #f5f0e8;
-        padding: 0;
+    /* 3. Container'ı yeniden düzenle (Logo Solda, Arama Sağda) */
+    .book-navbar .container-fluid {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        padding: 0 15px; /* Mobilde kenar boşluğu eklendi */
     }
 
     .book-navbar .navbar-brand {
         font-size: 1.1rem;
+        margin-right: 15px;
+        padding: 0; /* Bootstrapin default paddingini sıfırladık */
     }
+
+        /* Logodaki yazıyı mobilde gizleyelim ki arama kutusuna yer kalsın */
+        .book-navbar .navbar-brand span {
+            display: none !important;
+        }
+
+    /* --- 4. YENİ PROFESYONEL MOBİL ARAMA FORMU --- */
+    .mobile-search-form {
+        flex-grow: 1;
+        position: relative;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .mobile-search-input {
+        width: 100%;
+        height: 40px; /* Sabit ve dengeli yükseklik */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px; /* Tam yuvarlak hap görünümü */
+        padding: 0 40px 0 15px; /* Sağdan buton kadar (40px) boşluk bıraktık, buton üstüne binmesin */
+        background: rgba(255, 255, 255, 0.12); /* Hafif transparan şık arka plan */
+        color: #f5f0e8 !important;
+        font-size: 0.9rem;
+        outline: none;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+    }
+
+        /* Placeholder (İpucu Yazısı) Rengi */
+        .mobile-search-input::placeholder,
+        .mobile-search-input::-webkit-input-placeholder {
+            color: rgba(245, 240, 232, 0.6) !important;
+            font-style: normal;
+        }
+
+        /* Arama Kutusuna Tıklanınca */
+        .mobile-search-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 215, 130, 0.6); /* Açık sarımsı sınır */
+            box-shadow: 0 0 10px rgba(255, 215, 130, 0.15); /* Hafif parlama efekti */
+        }
+
+    /* Kutu İçindeki Arama İkonu Butonu */
+    .mobile-search-btn-icon {
+        position: absolute;
+        right: 2px; /* Kutunun içine sıfırladık */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        background: transparent;
+        border: none;
+        color: rgba(245, 240, 232, 0.8);
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .mobile-search-btn-icon:hover,
+        .mobile-search-btn-icon:active {
+            color: #ffd782; /* Tıklanınca sararır */
+            background: rgba(255, 255, 255, 0.1);
+        }
 
     }
 </style>
 
 <header>
-    <nav class="navbar navbar-expand-lg navbar-toggleable-sm book-navbar">
+    <nav class="navbar navbar-expand-lg book-navbar">
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                 <img src="/images/library.png" style="width:35px;" />
-                <span class="d-none d-md-block">DijitalKütüphanem</span>
+                <span>DijitalKütüphanem</span>
             </a>
 
             <form class="mobile-search-form d-flex d-lg-none" asp-controller="Home" asp-action="@targetAction" method="get">
-                <input class="mobile-search-input" type="search" name="q" placeholder="@placeholderText" aria-label="Search" value="@ViewData["CurrentSearch"]">
+                <input class="mobile-search-input" type="search" name="q" placeholder="Ara..." aria-label="Search" value="@ViewData["CurrentSearch"]" autocomplete="off">
                 <button type="submit" class="mobile-search-btn-icon">
-                    <i class="bi bi-search"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="navbar-collapse collapse" id="navbarContent">
+            <div class="navbar-collapse collapse d-none d-lg-flex" id="navbarContent">
                 <ul class="navbar-nav flex-grow-1">
 
                     <li class="nav-item dropdown">
@@ -383,7 +405,7 @@
 
                     <li>
                         <a class="nav-link" asp-area="" asp-action="SendMeMessage" asp-controller="Home" role="button">
-                             İletişim
+                            İletişim
                         </a>
                     </li>
                 </ul>
