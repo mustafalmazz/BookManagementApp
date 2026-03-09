@@ -336,7 +336,6 @@
         pointer-events: none;
     }
 
-    /* RESPONSIVE AYARLAR */
     @@media (max-width: 768px) {
         .page-header h1 {
             font-size: 2rem;
@@ -348,18 +347,29 @@
 
         .container-custom {
             flex-direction: column;
+            display: flex;
+            min-height: calc(100vh - 220px); /* Üst ve alt menü payı çıkarıldı */
+        }
+        /* İçeriğin tam oturması için flex veriyoruz */
+        .books-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
+        .empty-state {
+            margin: auto !important;
+        }
         .search-sidebar {
             width: 100%;
             position: relative;
             top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
         }
 
         .books-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 24px;
         }
 
         .book-card .card-img-top {
